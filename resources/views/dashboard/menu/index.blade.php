@@ -1,6 +1,6 @@
 @php
     // Fungsi helper untuk memeriksa apakah rute saat ini cocok dengan nama rute yang diberikan
-    $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal-blue/50' : 'bg-royal-blue';
+    $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal-blue' : 'bg-royal-blue/70';
 @endphp
 
 @extends('layouts.dashboard')
@@ -17,11 +17,11 @@
         <h2 class="text-lg font-semibold text-dark-blue">Menu</h2>
         <div class="grid grid-cols-2 gap-6 py-4">
             <ul class="flex items-center gap-4">
-                <li class="bg-royal-blue rounded-md px-4 py-1">
-                    <a href="" class="flex items-center gap-4 text-white"><x-icon name="coffee" /> Coffe</a>
+                <li class="rounded-md px-4 py-1 {{ $isActive('dashboard.menu') }}">
+                    <a href="" class="flex items-center gap-4 text-white "><x-icon name="coffee" /> Coffe</a>
                 </li>
-                <li class="bg-royal-blue rounded-md px-4 py-1">
-                    <a href="" class="flex items-center gap-4 text-white"><x-icon name="noodles" /> Mie</a>
+                <li class="rounded-md px-4 py-1 {{ $isActive('dashboard.menu.mie') }}">
+                    <a href="" class="flex items-center gap-4 text-white "><x-icon name="noodles" /> Mie</a>
                 </li>
             </ul>
         </div>

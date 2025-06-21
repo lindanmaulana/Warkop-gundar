@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Support\Facades\Route;
+require __DIR__ . '//routeCategory.php'; 
 
 
 Route::get('/', function () {
@@ -25,6 +27,9 @@ Route::middleware(['auth', 'role:admin'])
     ->prefix('/dashboard/admin')
     ->group(function () {
         Route::get('/', fn () => 'Admin Dashboard');
+        Route::get("/category", [CategoryController::class, 'index'])->name('dashboard.admin.category');
+        Route::get("/category/create", [CategoryController::class, 'create'])->name('dashboard.admin.category.create');
+        Route::get('/category/{category}/update', [CategoryController::class, 'edit'])->name('dashboard.admin.category.update');
     });
 
 Route::middleware(['auth', 'role:admin,customer'])

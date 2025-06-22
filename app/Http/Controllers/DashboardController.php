@@ -4,19 +4,23 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\Product;
 
 class DashboardController extends Controller
 {
     public function index() {
-        return view('dashboard.index');
+        $totalCategory = Category::count();
+        $categories = Category::withCount('product')->get();
+
+        return view('dashboard.index', compact('categories', 'totalCategory'));
     }
 
     public function showDashboardMenu() {
-        return view('dashboard.menu.index');
-    }
+        $categories = Category::all();
 
-    public function showDashboardMenuCoffe() {
-        return view('dashboard.menu.menuCoffe');
+        $products = Product::with('category')->get();
+
+        return view('dashboard.menu.index', compact('categories', 'products'));
     }
 
     public function showDashboardAdminCategory() {

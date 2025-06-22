@@ -3,9 +3,11 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Support\Facades\Route;
 require __DIR__ . '//routeCategory.php'; 
+require __DIR__ . '//routeProduct.php'; 
 
 
 Route::get('/', function () {
@@ -37,5 +39,7 @@ Route::middleware(['auth', 'role:admin,customer'])
     ->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('/menu', [DashboardController::class, 'showDashboardMenu'])->name('dashboard.menu');
-        Route::get('/menu/coffe', [DashboardController::class, 'showDashboardMenuCoffe'])->name('dashboard.menu.coffe');
+        Route::get('/menu/{categoryId}/product', [ProductController::class, 'index'])->name('dashboard.menu.product');
+        Route::get('/menu/product/create', [ProductController::class, 'create'])->name('dashboard.menu.product.create');
+        Route::get('/menu/product/{product}/update', [ProductController::class, 'edit'])->name('dashboard.menu.product.update');
 });

@@ -9,8 +9,8 @@
         <p class="text-sm text-black/60">Warkop favoritmu, selalu ada untukmu.</p>
         <div class="space-y-6 w-full py-8">
             <div class="space-y-4">
-                <label for="username" class="block w-full text-sm">
-                    <input type="text" placeholder="username..." name="email" class="w-full outline-none bg-soft-blue-gray border-b active:border-black focus:border-black border-black/50 px-2 pb-2">
+                <label for="email" class="block w-full text-sm">
+                    <input type="email" placeholder="example@gmail.com" name="email" class="w-full outline-none bg-soft-blue-gray border-b active:border-black focus:border-black border-black/50 px-2 pb-2">
                 </label>
                 <label for="password" class="block w-full text-sm">
                     <input type="password" placeholder="******" name="password" class="w-full outline-none bg-soft-blue-gray border-b active:border-black focus:border-black border-black/50 px-2 pb-2">

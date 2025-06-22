@@ -1,5 +1,4 @@
 @php
-    // Fungsi helper untuk memeriksa apakah rute saat ini cocok dengan nama rute yang diberikan
     $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'text-royal-blue' : 'text-royal-blue/50';
 @endphp
 
@@ -17,12 +16,14 @@
                             Dashboard
                         </a>
                     </li>
+                    @if(auth()->check() && auth()->user()->role->value === 'admin')
                     <li class="w-full group">
                         <a href="{{ route('dashboard.admin.category') }}" class="w-full flex items-center gap-4 text-lg font-semibold pl-6 py-2 rounded-md group-hover:bg-royal-blue/20 transition-all duration-300 ease-in-out {{ $isActive('dashboard.admin.category') }}">
                             <x-icon name="category" />
                             Category
                         </a>
                     </li>
+                    @endif
                     <li class="w-full group">
                         <a href="{{ route('dashboard.menu') }}" class="w-full flex items-center gap-4 text-lg font-semibold pl-6 py-2 rounded-md group-hover:bg-royal-blue/20 transition-all duration-300 ease-in-out {{ $isActive('dashboard.menu') }}">
                             <x-icon name="toolskitchen" />

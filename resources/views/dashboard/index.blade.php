@@ -7,29 +7,29 @@
 @endsection
 
 @section('content')
-<div>
+<div class="">
     <h2 class="text-lg font-semibold text-dark-blue">Overview</h2>
-    <div class="grid grid-cols-2 gap-6 py-4">
-        <div class="bg-royal-blue p-5 border-dark-blue/20 rounded-3xl space-y-5">
+    <div class="grid grid-cols-4 gap-6 py-4">
+        <div class="bg-white border border-dark-blue/20 p-5 rounded-3xl space-y-5 *:text-royal-blue">
             <div class="flex items-center justify-between">
-                <h3 class="font-semibold text-white text-base">Coffe</h3>
-                <x-icon name="coffee" class="text-white" />
+                <h3 class="font-semibold text-base">Category</h3>
             </div>
             <div>
-                <h3 class="text-white">Total</h3>
-                <p class="text-2xl text-white">10</p>
+                <h3>Total</h3>
+                <p class="text-2xl ">{{ $totalCategory }}</p>
             </div>
         </div>
-        <div class="bg-white border border-dark-blue/20 p-5 rounded-3xl space-y-5">
-            <div class="flex items-center justify-between">
-                <h3 class="font-semibold text-royal-blue text-base">Mie</h3>
-                <x-icon name="coffee" class="text-royal-blue" />
+        @foreach($categories as $category)
+            <div class="bg-royal-blue border border-dark-blue/20 p-5 rounded-3xl space-y-5 *:text-white">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-semibold  text-base">{{ $category->name }}</h3>
+                </div>
+                <div>
+                    <h3 class="">Total Produk</h3>
+                    <p class="text-2xl ">{{ $category->product_count }}</p>
+                </div>
             </div>
-            <div>
-                <h3 class="text-royal-blue">Total</h3>
-                <p class="text-2xl text-royal-blue">30</p>
-            </div>
-        </div>
+        @endforeach
     </div>
 </div>
 @endsection

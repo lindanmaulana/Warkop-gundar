@@ -6,19 +6,20 @@ $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal
 @extends('layouts.dashboard')
 
 @section('header')
-<div class="py-10">
-    <h2 class="text-xl font-semibold text-dark-blue">Dashboard</h2>
+<div class="mt-10 mb-4">
+    <h2 class="text-3xl font-semibold text-royal-blue">Edit Kategori</h2>
+    <p class="text-dark-blue mt-1">Perbarui nama kategori jika diperlukan</p>
 </div>
 @endsection
 
 @section('content')
 <div class="space-y-4">
     <div class="p-2 flex items-center justify-between">
-        <h2 class="text-2xl font-semibold text-dark-blue">Edit Kategori</h2>
-        <a href="{{ route('dashboard.admin.category') }}" class="bg-dark-blue px-2 rounded py-1 text-white flex items-center gap-1 text-sm"><x-icon name="arrow-left" />Back</a>
+        <h2 class="text-xl font-semibold text-royal-blue">Kategori</h2>
+        <a href="{{ route('dashboard.categories') }}" class="bg-dark-blue hover:bg-dark-blue/70 px-3 rounded py-1 text-white flex items-center gap-1 text-sm"><x-icon name="arrow-left" />Back</a>
     </div>
     <div class="flex flex-col gap-4 bg-white p-2 rounded-lg shadow-sm shadow-dark-blue/10">
-        <form action="{{ route('category.update', $category) }}" method="POST" class="space-y-6">
+        <form action="{{ route('categories.update', $category) }}" method="POST" class="space-y-6">
             @csrf
             @method('PATCH')
             <div class="space-y-3">

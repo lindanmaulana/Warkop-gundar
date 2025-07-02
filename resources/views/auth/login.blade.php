@@ -1,9 +1,9 @@
 @extends('layouts.auth')
 
 @section('content')
-<div class="w-[70%]">
+<div class="shadow-md shadow-gray-300 px-4 py-6 w-[400px] min-h-[400px] flex flex-col items-center justify-center rounded-md">
     <h2 class="text-lg font-semibold">Warkop Gundar</h2>
-    <form method="POST" action="{{ route('auth.login')}}" class="w-full rounded-md py-10">
+    <form method="POST" action="{{ route('auth.login')}}" class="w-full rounded-md py-10 px-8">
         @csrf
         <h3 class="text-xl font-semibold">Wellcome Back!</h3>
         <p class="text-sm text-black/60">Warkop favoritmu, selalu ada untukmu.</p>
@@ -17,7 +17,7 @@
                 </label>
             </div>
             <div class="space-y-1">
-                <button class="w-full bg-black rounded-md text-white py-2 text-xs font-semibold">Login Now</button>
+                <button class="w-full bg-black rounded-md text-white py-2 text-xs font-semibold cursor-pointer">Login Now</button>
                 <p class="text-sm text-black/60">Baru di sini? Yuk, <a href="{{ route('auth.register') }}" class="text-royal-blue">daftar gratis!</a></p>
             </div>
         </div>

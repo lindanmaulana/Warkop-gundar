@@ -11,12 +11,12 @@ class CategoryController extends Controller
     {
         $categories = Category::all();
 
-        return view('dashboard.admin.category.index', compact('categories'));
+        return view('dashboard.category.index', compact('categories'));
     }
 
     public function create()
     {
-        return view('dashboard.admin.category.create');
+        return view('dashboard.category.create');
     }
 
     public function store(Request $request)
@@ -28,7 +28,7 @@ class CategoryController extends Controller
 
         Category::create($validatedData);
 
-        return redirect()->route('dashboard.admin.category')->with('success', 'Kategori berhasil di tambahkan.');
+        return redirect()->route('dashboard.categories')->with('success', 'Kategori berhasil di tambahkan.');
     }
 
     public function show(string $id)
@@ -38,7 +38,7 @@ class CategoryController extends Controller
 
     public function edit(Category $category)
     {
-        return view('dashboard.admin.category.update', compact('category'));
+        return view('dashboard.category.update', compact('category'));
     }
 
     public function update(Request $request, Category $category)
@@ -50,13 +50,13 @@ class CategoryController extends Controller
 
         $category->update($validatedData);
 
-        return redirect()->route('dashboard.admin.category')->with('success', 'Kategori berhasil di edit.');
+        return redirect()->route('dashboard.categories')->with('success', 'Kategori berhasil di edit.');
     }
 
     public function destroy(Category $category)
     {
         Category::destroy($category->id);
 
-        return redirect()->route('dashboard.admin.category')->with('success', 'Kategori berhasil di hapus.');
+        return redirect()->route('dashboard.categories')->with('success', 'Kategori berhasil di hapus.');
     }
 }

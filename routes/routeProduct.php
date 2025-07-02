@@ -12,3 +12,29 @@ Route::middleware(['auth', 'role:admin,customer'])
         Route::patch('/{product}/update', [ProductController::class, 'update'])->name('products.update');
         Route::delete('/{product}/destroy', [ProductController::class, 'destroy'])->name('products.destroy');
     });
+
+
+Route::middleware(['auth'])
+    ->group(function () {
+        Route::prefix('/dashboard')
+            ->group(function () {
+
+                Route::middleware(['role:admin'])->group(function () {
+                    Route::get('/menu/products/create', [ProductController::class, 'create'])->name('dashboard.menu.products.create');
+                    Route::get('/menu/products/{product}/edit', [ProductController::class, 'edit'])->name('dashboard.menu.products.edit');
+                });
+
+                Route::middleware(['role:admin,customer'])->group(function () {
+                    Route::get('/menu/products', [ProductController::class, 'index'])->name('dashboard.menu.products');
+                    Route::get('/menu/{categoryId}/products/list', [ProductController::class, 'getByCategory'])->name('dashboard.menu.products.list');
+                });
+            });
+
+        Route::middleware(['role:admin'])
+            ->prefix('/products')
+            ->group(function () {
+                Route::post('/store', [ProductController::class, 'store'])->name('products.store');
+                Route::patch('/{product}/update', [ProductController::class, 'update'])->name('products.update');
+                Route::delete('/{product}/destroy', [ProductController::class, 'destroy'])->name('products.destroy');
+            });
+    });

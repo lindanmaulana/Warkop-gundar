@@ -9,6 +9,7 @@
 
 <body>
     @yield('layout')
+    @yield('script')
 </body>
 
 </html>

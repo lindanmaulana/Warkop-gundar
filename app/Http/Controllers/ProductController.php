@@ -3,22 +3,43 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class ProductController extends Controller
 {
-    public function index(string $categoryId)
+    public function index(Request $request)
     {
-        $category = Category::find($categoryId);
+        $queryCategoryId = $request->query('category');
 
-        if(!$category) {
+        $categories = Category::all();
+
+        $productsQuery = Product::with('category');
+
+        if($queryCategoryId) {
+            $productsQuery->where('category_id', $queryCategoryId);
+        }
+
+        $products = $productsQuery->get();
+
+        return view('dashboard.menu.product.index', compact('categories', 'products'));
+    }
+
+    public function getByCategory(string $categoryId)
+    {
+        $category = Category::where('id', $categoryId)->firstOrFail();
+
+        if (!$category) {
             abort(404, 'Kategori tidak ditemukan.');
         }
 
-        $products = Product::where('category_id', $categoryId)->get();
+        $products = Product::where('category_id', $category->id)->get();
 
-        return view('dashboard.menu.product', compact('category','products'));
+        return view('dashboard.menu.product.productByCategory', compact('category', 'products'));
     }
 
     /**
@@ -46,7 +67,7 @@ class ProductController extends Controller
 
         Product::create($validatedData);
 
-        return redirect()->route('dashboard.menu')->with('success', 'Produk berhasil di tambahkan.');
+        return redirect()->route('dashboard.menu.products')->with('success', 'Produk berhasil di tambahkan.');
     }
 
     /**
@@ -81,7 +102,7 @@ class ProductController extends Controller
 
         $product->update($validatedData);
 
-        return redirect()->route('dashboard.menu')->with('success', 'Produk berhasil di perbarui.');
+        return redirect()->route('dashboard.menu.products')->with('success', 'Produk berhasil di perbarui.');
     }
 
     /**
@@ -89,8 +110,30 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        Product::destroy($product->id);
+        try {
+            DB::transaction(function () use ($product) {
 
-        return redirect()->route('dashboard.menu')->with('success', 'Produk berhasil di hapus.');
+                $affectedOrderIds = OrderItem::where('product_id', $product->id)
+                    ->pluck('order_id')
+                    ->unique();
+
+
+                OrderItem::where('product_id', $product->id)->delete();
+
+                $product->delete(); 
+
+                foreach ($affectedOrderIds as $orderId) {
+                    $remainingItemsCount = OrderItem::where('order_id', $orderId)->count();
+
+                    if ($remainingItemsCount === 0) {
+                        Order::destroy($orderId); 
+                    }
+                }
+            });
+
+            return redirect()->route('dashboard.menu.products')->with('success', 'Produk dan item pesanan terkait berhasil dihapus.');
+        } catch (Throwable $e) {
+            return redirect()->back()->with('error', 'Gagal menghapus produk: ' . $e->getMessage());
+        }
     }
 }

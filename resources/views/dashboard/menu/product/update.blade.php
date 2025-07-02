@@ -5,16 +5,17 @@ $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal
 @extends('layouts.dashboard')
 
 @section('header')
-<div class="py-10">
-    <h2 class="text-xl font-semibold text-dark-blue">Dashboard</h2>
+<div class="mt-10 mb-4">
+    <h2 class="text-3xl font-semibold text-royal-blue">Edit Menu</h2>
+    <p class="text-dark-blue mt-1">Perbarui informasi menu seperti nama, harga, dan kategori.</p>
 </div>
 @endsection
 
 @section('content')
 <div class="space-y-4">
     <div class="p-2 flex items-center justify-between">
-        <h2 class="text-2xl font-semibold text-dark-blue">Edit Product</h2>
-        <a href="{{ route('dashboard.menu') }}" class="bg-dark-blue px-2 rounded py-1 text-white flex items-center gap-1 text-sm"><x-icon name="arrow-left" />Back</a>
+        <h2 class="text-xl font-semibold text-royal-blue">Edit Product</h2>
+        <a href="{{ route('dashboard.menu.products') }}" class="bg-dark-blue px-3 rounded py-1 text-white flex items-center gap-1 text-sm"><x-icon name="arrow-left" />Back</a>
     </div>
     <div class="flex flex-col gap-4 bg-white px-2 py-6 rounded-lg shadow-sm shadow-dark-blue/10">
         <form action="{{ route('products.update', $product->id) }}" method="POST" class="space-y-6">
@@ -33,7 +34,7 @@ $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal
                     <span class="text-dark-blue font-semibold">Category:</span>
                     <select id="category" name="category_id" class="w-full border-2 border-dark-blue/20 px-4 py-1 rounded-sm">
                         @foreach($categories as $category)
-                            <option value="{{ $category->id }}" {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }} >{{ $category->name }}</option>
+                        <option value="{{ $category->id }}" {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                         @endforeach
                     </select>
                 </label>

@@ -1,16 +1,22 @@
 @extends('layouts.auth')
 
 @section('content')
-<div class="w-[70%]">
+<div class="shadow-md shadow-gray-300 px-4 py-6 w-[400px] min-h-[400px] flex flex-col items-center justify-center rounded-md">
     <h2 class="text-lg font-semibold">Warkop Gundar</h2>
-    <form method="POST" action="{{ route('auth.register')}}" class="w-full rounded-md py-10">
+    <form method="POST" action="{{ route('auth.register')}}" class="w-full rounded-md py-10 px-8">
         @csrf
         <h3 class="text-xl font-semibold">Wellcome Back!</h3>
         <p class="text-sm text-black/60">Warkop favoritmu, selalu ada untukmu.</p>
         <div class="space-y-6 w-full py-8">
             <div class="space-y-4">
                 <label for="name" class="block w-full text-sm">
-                    <input type="name" placeholder="username..." name="name" class="w-full outline-none bg-soft-blue-gray border-b active:border-black focus:border-black border-black/50 px-2 pb-2">
+                    <input type="text" placeholder="name..." name="name" class="w-full outline-none bg-soft-blue-gray border-b active:border-black focus:border-black border-black/50 px-2 pb-2">
+                    @error('name')
+                        <span class="text-xs text-red-500 px-2">{{ $message }}</span>
+                    @enderror
+                </label>
+                <label for="phoone" class="block w-full text-sm">
+                    <input type="text" placeholder="08xxx" name="phone" class="w-full outline-none bg-soft-blue-gray border-b active:border-black focus:border-black border-black/50 px-2 pb-2">
                     @error('name')
                         <span class="text-xs text-red-500 px-2">{{ $message }}</span>
                     @enderror

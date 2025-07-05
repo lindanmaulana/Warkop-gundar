@@ -11,4 +11,14 @@
     --color-soft-blue-gray: #f5f7fc;
     --color-royal-blue: #2347fa;
     --color-dark-blue: #343d6b;
+    --color-primary: #FF902B;
+    --color-secondary: #2F2105;
+    --color-accents: #F9D9AA;
+    --color-peach: #F6EBDA;
+}
+
+@layer components {
+    .transition-global {
+        @apply transition-all duration-300 ease-in-out
+    }
 }

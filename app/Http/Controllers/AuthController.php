@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserRole;
 use App\Mail\SendOtpMail;
 use App\Models\Otp;
 use Illuminate\Http\Request;
@@ -69,7 +70,17 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect()->intended(route("dashboard"));
+            $user = Auth::user();
+
+            if ($user->role === UserRole::Admin) {
+                return redirect()->intended(route("dashboard"));
+
+            } else if ($user->role === UserRole::Customer) {
+                return redirect()->intended(route("home"));
+                
+            } else {
+                return redirect()->intended(route("home"));
+            }
         }
 
         return back()->withErrors([
@@ -108,6 +119,12 @@ class AuthController extends Controller
 
         $otpData->delete();
 
-        return redirect()->route('dashboard')->with('message', 'Akun berhasil di verifikasi');
+        if ($user->role === UserRole::Admin) {
+            return redirect()->intended(route("dashboard"));
+        } else if ($user->role === UserRole::Customer) {
+            return redirect()->intended(route("home"))->with('message', 'Akun berhasil di verifikasi');;
+        } else {
+            return redirect()->intended(route("home"))->with('message', 'Akun berhasil di verifikasi');;
+        }
     }
 }

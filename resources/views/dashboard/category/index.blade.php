@@ -74,15 +74,17 @@ $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal
 @section('script')
 
     <script>
-        const handleHideAlert = () => {
-            const alert = document.getElementById('alert')
+        const alertComponent = document.getElementById('alert')
 
-            setTimeout(() => {
-                alert.style.display = "none"
-            }, 1500);
+        const handleHideAlert = (alert) => {
+            if(alert) {
+                setTimeout(() => {
+                    alert.style.display = "none"
+                }, 1500);
+            }
         }
 
-        handleHideAlert()
+        handleHideAlert(alertComponent)
     </script>
 
 @endsection

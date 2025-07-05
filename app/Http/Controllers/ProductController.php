@@ -8,6 +8,9 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
 use Throwable;
 
 class ProductController extends Controller
@@ -20,7 +23,7 @@ class ProductController extends Controller
 
         $productsQuery = Product::with('category');
 
-        if($queryCategoryId) {
+        if ($queryCategoryId) {
             $productsQuery->where('category_id', $queryCategoryId);
         }
 
@@ -57,15 +60,33 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:150',
+            'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'description' => 'nullable|string',
             'price' => 'nullable|numeric|min:0',
             'stock' => 'nullable|numeric|min:0'
         ]);
 
-        Product::create($validatedData);
+        $imagePath = null;
+
+        if ($request->hasFile('image_url')) {
+            $image = $request->file('image_url');
+
+            $fileName = 'product_' . Str::random(10) . '.' . $image->getClientOriginalExtension();
+
+            $imagePath = $image->storeAs('products', $fileName, 'public');
+        }
+
+        $product = new Product();
+        $product->category_id = $request->category_id;
+        $product->name = $request->name;
+        $product->image_url = $imagePath;
+        $product->description = $request->description;
+        $product->price = $request->price;
+        $product->stock = $request->stock;
+        $product->save();
 
         return redirect()->route('dashboard.menu.products')->with('success', 'Produk berhasil di tambahkan.');
     }
@@ -73,9 +94,9 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Product $product)
     {
-        //
+        return view('dashboard.payment.show', compact('product'));
     }
 
     /**
@@ -95,12 +116,33 @@ class ProductController extends Controller
         $validatedData = $request->validate([
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:150',
+            'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'description' => 'nullable|string',
             'price' => 'nullable|numeric|min:0',
             'stock' => 'nullable|numeric|min:0'
         ]);
 
+        $imagePath = $product->image_url;
+
+        if ($request->hasFile('image_url')) {
+            $image = $request->file('image_url');
+
+            if ($product->image_url) {
+                Storage::disk('public')->delete($product->image_url);
+            }
+
+            $fileName = 'product_' . Str::random(10) . '.' . $image->getClientOriginalExtension();
+
+            $imagePath = $image->storeAs('products', $fileName, 'public');
+        }
+
+        unset($validatedData['image_url']);
+
         $product->update($validatedData);
+
+        $product->image_url = $imagePath;
+        $product->save();
+
 
         return redirect()->route('dashboard.menu.products')->with('success', 'Produk berhasil di perbarui.');
     }
@@ -120,13 +162,13 @@ class ProductController extends Controller
 
                 OrderItem::where('product_id', $product->id)->delete();
 
-                $product->delete(); 
+                $product->delete();
 
                 foreach ($affectedOrderIds as $orderId) {
                     $remainingItemsCount = OrderItem::where('order_id', $orderId)->count();
 
                     if ($remainingItemsCount === 0) {
-                        Order::destroy($orderId); 
+                        Order::destroy($orderId);
                     }
                 }
             });

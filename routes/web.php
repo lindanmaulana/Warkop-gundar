@@ -13,11 +13,7 @@ require __DIR__ . '//routeProduct.php';
 require __DIR__ . '//routeUser.php';
 require __DIR__ . '//routeOrder.php';
 require __DIR__ . '//routePayment.php';
-
-
-Route::get('/', function () {
-    return redirect()->route('auth.login');
-});
+require __DIR__ . '/home/routeHome.php';
 
 Route::get('/dev/otp', function () {
     return view('components/');
@@ -39,12 +35,12 @@ Route::middleware(['auth', 'otp.not.verified'])->group(function () {
 
 Route::post("/logout", [AuthController::class, 'logout'])->name('auth.logout');
 
-Route::middleware(['auth', 'role:admin,customer'])
+Route::middleware(['auth', 'role:admin'])
     ->prefix('/dashboard')
     ->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-        Route::middleware('role:admin,customer')->group(function () {
+        Route::middleware('role:admin')->group(function () {
             Route::get('/setting', [DashboardController::class, 'showDashboardSetting'])->name('dashboard.setting');
         });
     });

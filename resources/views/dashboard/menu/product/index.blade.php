@@ -20,7 +20,7 @@ $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal
         <div class="flex items-center gap-2">
             <form id="categoryFilterForm" action="{{ route('dashboard.menu.products') }}" method="GET">
                 <select name="category" id="category_filter" class="bg-dark-blue text-white px-2 rounded py-1">
-                    <option value="" {{ request('')}} >All</option>
+                    <option value="" {{ empty(request('category')) ? 'selected' : ''}}>All</option>
 
                     @foreach($categories as $category)
                     <option
@@ -51,6 +51,7 @@ $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal
         <table class="w-full text-left rounded-md overflow-hidden">
             <thead class=" *:text-gray-400 *:border-b *:border-dark-blue/10">
                 <th class="font-normal py-2 px-6">No</th>
+                <th class="font-normal p-2">Gambar</th>
                 <th class="font-normal p-2">Nama</th>
                 <th class="font-normal p-2">Kategori</th>
                 <th class="font-normal p-2">Harga</th>
@@ -64,6 +65,13 @@ $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal
                 @foreach($products as $product)
                 <tr class=" hover:bg-dark-blue/20 divide-y divide-gray-200 text-gray-800 *:text-sm *:font-medium">
                     <td class="py-4 px-6">{{ $no++ }}</td>
+                    <td class="px-2 py-4 text-dark-blue" id="table-image">
+                        @if($product->image_url)
+                        <img src="{{ asset('storage/'. $product->image_url )}}" alt="{{ $product->name }}" class="w-24">
+                        @else
+                        <img src="/images/image-placeholder.png" alt="{{ $product->name }}" class="w-24">
+                        @endif
+                    </td>
                     <td class="px-2 py-4 text-dark-blue">{{ $product->name }}</td>
                     <td class="px-2 py-4 text-dark-blue">{{ $product->category->name }}</td>
                     <td class="px-2 py-4 text-dark-blue">{{ $product->price }}</td>
@@ -72,6 +80,7 @@ $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal
                     <td class="px-2 py-4 text-dark-blue">
                         <div class="flex items-center justify-center gap-3 *:text-sm">
                             <a href="{{ route('dashboard.menu.products.edit', $product->id) }}" class="text-royal-blue font-medium cursor-pointer">Edit</a>
+                            <a href="{{ route('dashboard.menu.products', $product->id) }}" class="text-green-500 font-medium cursor-pointer">Detail</a>
                             <form action="{{ route('products.destroy', $category) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
@@ -100,6 +109,7 @@ $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal
 
 @section('script')
 <script>
+    const alertComponent = document.getElementById('alert')
     let cartLocalStorage = localStorage.getItem('cart')
     let cart = cartLocalStorage ? JSON.parse(cartLocalStorage) : []
 
@@ -140,25 +150,32 @@ $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal
         localStorage.setItem('cart', cartNew)
     }
 
-
-    const handleHideAlert = () => {
-        const alert = document.getElementById('alert')
-
-        setTimeout(() => {
-            alert.style.display = "none"
-        }, 1000);
+    const handleHideAlert = (alert) => {
+        if (alert) {
+            setTimeout(() => {
+                alert.style.display = "none"
+            }, 1500);
+        }
     }
-
-    handleHideAlert()
-
 
     document.addEventListener('DOMContentLoaded', () => {
         const categoryFilterForm = document.getElementById('categoryFilterForm')
         const categoryFilter = document.getElementById('category_filter')
 
-        categoryFilter.addEventListener('change', () => {
-            categoryFilterForm.submit();
+        categoryFilter.addEventListener('change', function() {
+            const categorySelected = this.value
+            const baseUrl = "{{ route('dashboard.menu.products') }}"
+
+            let newUrl = baseUrl
+
+            if (categorySelected !== "") {
+                newUrl += "?category=" + categorySelected
+            }
+
+            window.location.href = newUrl
         })
     })
+
+    handleHideAlert(alertComponent)
 </script>
 @endsection

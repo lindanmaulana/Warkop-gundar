@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Payment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class PaymentController extends Controller
 {
@@ -23,7 +25,7 @@ class PaymentController extends Controller
      */
     public function create()
     {
-        //
+        return view('dashboard.payment.create');
     }
 
     /**
@@ -31,7 +33,34 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $request->merge([
+            'is_active' => $request->has('is_active') ? $request->input('is_active') : 0
+        ]);
+
+        $request->validate([
+            'name' => 'required|string',
+            'qr_code_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'is_active' => 'required|boolean'
+        ]);
+
+        $imagePath = null;
+
+        if($request->hasFile('qr_code_url')) {
+            $image = $request->file('qr_code_url');
+
+            $fileName = 'payment_' . Str::random(10) . '.' . $image->getClientOriginalExtension();
+
+            $imagePath = $image->storeAs('payments', $fileName, 'public');
+        }
+
+        $payment = new Payment();
+        $payment->name = $request->name;
+        $payment->qr_code_url = $imagePath;
+        $payment->is_active = $request->is_active;
+        $payment->save();
+
+        return redirect()->route('dashboard.payments')->with('message', 'Tipe Pembayaran berhasil di buat.');
     }
 
     /**

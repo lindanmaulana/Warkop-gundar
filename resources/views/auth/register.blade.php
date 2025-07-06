@@ -28,13 +28,13 @@
                     @enderror
                 </label>
                 <label for="password" class="block w-full text-sm">
-                    <input type="password" placeholder="******" name="password" class="w-full outline-none bg-soft-blue-gray border-b active:border-black focus:border-black border-black/50 px-2 pb-2">
+                    <input type="password" placeholder="password***" name="password" class="w-full outline-none bg-soft-blue-gray border-b active:border-black focus:border-black border-black/50 px-2 pb-2">
                     @error('password')
                         <span class="text-xs text-red-500 px-2">{{ $message }}</span>
                     @enderror
                 </label>
                 <label for="password-confirmation" class="block w-full text-sm">
-                    <input type="password" placeholder="******" name="password_confirmation" class="w-full outline-none bg-soft-blue-gray border-b active:border-black focus:border-black border-black/50 px-2 pb-2">
+                    <input type="password" placeholder="confirm password***" name="password_confirmation" class="w-full outline-none bg-soft-blue-gray border-b active:border-black focus:border-black border-black/50 px-2 pb-2">
                     @error('password_confirmation')
                         <span class="text-xs text-red-500 px-2">{{ $message }}</span>
                     @enderror

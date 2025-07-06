@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -11,7 +12,28 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home.index');
+        $productsLatest = Product::latest()->take(3)->get();
+        $productsForYou = Product::latest()->skip(3)->take(9)->get();
+        return view('home.index', compact('productsLatest', 'productsForYou'));
+    }
+
+    public function showMenu() {
+
+        $products = Product::where('stock', '>', 0)->get();
+
+        $productsFood = Product::whereHas('category', function($query) {
+            $query->where('name', 'makanan');
+        })->get();
+
+        $productsCoffe = Product::whereHas('category', function($query) {
+            $query->where('name', 'minuman');
+        })->get();
+
+        return view('home.menu', compact('products', 'productsFood', 'productsCoffe'));
+    }
+
+    public function showCart() {
+        return view('home.cart');
     }
 
     /**

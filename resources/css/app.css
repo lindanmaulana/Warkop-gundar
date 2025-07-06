@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -6,19 +6,43 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+        "Noto Color Emoji";
+    /* --font-poppins-regular: poppins-regular, 'sans-serif';
+    --font-poppins-semibold: poppins-semibold, 'sans-serif'; */
     --color-soft-blue-gray: #f5f7fc;
     --color-royal-blue: #2347fa;
     --color-dark-blue: #343d6b;
-    --color-primary: #FF902B;
-    --color-secondary: #2F2105;
-    --color-accents: #F9D9AA;
-    --color-peach: #F6EBDA;
+    --color-primary: #ff902b;
+    --color-secondary: #2f2105;
+    --color-accents: #f9d9aa;
+    --color-peach: #f6ebda;
+    --color-pale-peach: #F9D9AA;
 }
 
 @layer components {
     .transition-global {
-        @apply transition-all duration-300 ease-in-out
+        @apply transition-all duration-300 ease-in-out;
     }
+}
+
+@font-face {
+    font-family: poppins-regular; 
+    src: url("/fonts/Poppins-Regular.ttf") format("ttf"),
+        url("/fonts/Poppins-Regular.woff") format("woff"),
+        url("/fonts/Poppins-Regular.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: poppins-semibold;
+    src: url("/fonts/Poppins-SemiBold.ttf") format("ttf"),
+        url("/fonts/Poppins-SemiBold.woff") format("woff"),
+        url("/fonts/Poppins-SemiBold.woff2") format("woff2");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
 }

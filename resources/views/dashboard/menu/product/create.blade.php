@@ -1,7 +1,3 @@
-@php
-$isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal-blue' : 'bg-royal-blue/70';
-@endphp
-
 @extends('layouts.dashboard')
 
 @section('header')

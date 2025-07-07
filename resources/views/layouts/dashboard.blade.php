@@ -13,7 +13,7 @@
 
                     <ul class="w-full py-14 flex flex-col items-center">
                         <li class="w-full group">
-                            <a href="{{ route('dashboard') }}" class="w-full flex items-center gap-4 text-lg font-semibold pl-6 py-2 rounded-md group-hover:bg-royal-blue/20 transition-all duration-300 ease-in-out {{ $isActive('dashboard') }}">
+                            <a href="{{ route('dashboard') }}" class="w-full flex items-center gap-4 text-lg font-semibold pl-6 py-2 rounded-md group-hover:bg-royal-blue/20 transition-all duration-300 ease-in-out {{ $isActive('dashboard') }}"">
                                 <x-icon name="home" />
                                 Dashboard
                             </a>

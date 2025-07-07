@@ -50,7 +50,7 @@
 
                     <div class="flex items-center justify-between">
                         <span class="bg-primary px-2 py-px text-sm text-soft-blue-gray">Stok {{ $product->stock }}</span>
-                        <button class="bg-primary rounded-full p-2 cursor-pointer"><x-icon name="shopping-cart" class="size-4 text-soft-blue-gray" /> </button>
+                        <button onclick="handleAddToCart(this)" data-user-id="{{ auth()->user()->id }}" data-product-id="{{ $product->id }}" data-product-category="{{ $product->category }}" data-product-name="{{ $product->name }}" data-product-price="{{ $product->price }}" data-product-image="{{ $product->image_url }}" class="bg-primary rounded-full p-2 cursor-pointer"><x-icon name="shopping-cart" class="size-4 text-soft-blue-gray" /> </button>
                     </div>
                 </article>
                 @endforeach
@@ -163,7 +163,7 @@
 
                 <div class="flex items-center justify-between">
                     <span class="bg-primary px-2 py-px text-sm text-soft-blue-gray">Stok {{ $product->stock }}</span>
-                    <button class="bg-primary rounded-full p-2 cursor-pointer"><x-icon name="shopping-cart" class="size-4 text-soft-blue-gray" /> </button>
+                    <button onclick="handleAddToCart(this)" data-user-id="{{ auth()->user()->id }}" data-product-id="{{ $product->id }}" data-product-category="{{ $product->category }}" data-product-name="{{ $product->name }}" data-product-price="{{ $product->price }}" data-product-image="{{ $product->image_url }}" class="bg-primary rounded-full p-2 cursor-pointer"><x-icon name="shopping-cart" class="size-4 text-soft-blue-gray" /> </button>
                 </div>
             </article>
             @endforeach

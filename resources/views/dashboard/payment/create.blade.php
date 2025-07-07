@@ -70,14 +70,6 @@ $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal
                         <input type="file" name="qr_code_url" id="image_url" accept="image/*" class="hidden">
                     </div>
                 </div>
-
-                <label for="description" class="flex flex-col gap-3 rounded-md">
-                    <span class="text-dark-blue font-semibold">Deskripsi: (Optional)</span>
-                    <textarea id="description" name="description" class="w-full border-2 border-dark-blue/20 px-4 py-1 rounded-sm"></textarea>
-                </label>
-                @error('description')
-                <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
-                @enderror
             </div>
             <div class="flex items-center justify-end gap-2">
                 <button type="submit" class="px-3 py-1 rounded cursor-pointer bg-royal-blue text-white font-semibold text-sm">Simpan</button>

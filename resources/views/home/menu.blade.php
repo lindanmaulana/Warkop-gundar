@@ -88,42 +88,6 @@
 <script>
     const alertComponent = document.getElementById('alert')
 
-    function handleAddToCart(buttonElement) {
-        const userId = buttonElement.dataset.userId;
-        const productId = buttonElement.dataset.productId;
-        const productName = buttonElement.dataset.productName;
-        const productPrice = parseFloat(buttonElement.dataset.productPrice);
-        const productImage = buttonElement.dataset.productImage;
-        const productCategory = JSON.parse(buttonElement.dataset.productCategory)
-
-        const exisItem = cart.findIndex(item => item.userId === userId && item.productId === productId)
-
-        if (exisItem > -1) {
-            cart[exisItem].qty += 1
-            cart[exisItem].totalPrice += productPrice
-        } else {
-            cart.push({
-                userId,
-                productId,
-                productName,
-                price: productPrice,
-                totalPrice: productPrice,
-                image_url: productImage,
-                category: productCategory.name,
-                qty: 1
-            })
-        }
-
-        Swall.fire({
-            title: "Berhasil!",
-            text: `Menu ${productName} telah ditambahkan ke keranjang.`,
-            icon: "success"
-        })
-
-        mainLocalStorage()
-        showTotalCart()
-    }
-
     const handleHideAlert = (alert) => {
         if (alert) {
             setTimeout(() => {

@@ -19,14 +19,23 @@ $bgHeader = fn () => request()->routeIs('home.menu') ? 'bg-peach/10 backdrop-blu
                 <li class="text-secondary">
                     <a href="{{ route('home.menu') }}" class="{{ $isActive('home.menu') }}">Our Menu</a>
                 </li>
-                <li class="text-secondary">
-                    <a href="">Delivery</a>
-                </li>
             </ul>
             @if(Auth::user())
-            <a href="{{ route('home.cart') }}" class="relative"><x-icon name="shopping-cart" />
-                <span id="totalCart" class="absolute -top-4 left-0 size-5 bg-green-500 rounded-full p-2 text-white flex items-center justify-center text-sm"></span>
-            </a>
+            <div class="relative flex items-center gap-2">
+                <a href="{{ route('home.cart') }}" class="relative"><x-icon name="shopping-cart" />
+                    <span id="totalCart" class="absolute -top-4 left-0 size-5 bg-green-500 rounded-full p-2 text-white flex items-center justify-center text-sm"></span>
+                </a>
+                <button onclick="handleMenu()"><x-icon name="profile" class="size-7 text-secondary cursor-pointer hover:text-secondary/70" /></button>
+
+                <ul id="menu" class="absolute top-8 right-0 *:text-sm bg-peach min-w-40 flex flex-col items-center rounded shadow py-2">
+                    <li>
+                        <a href="{{ route('home.profile') }}" class="text-green-500 hover:text-green-300">Profile</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('home.logout') }}" class="text-red-500 hover:text-red-300">Logout</a>
+                    </li>
+                </ul>
+            </div>
             @endif
         </div>
     </header>
@@ -80,6 +89,42 @@ $bgHeader = fn () => request()->routeIs('home.menu') ? 'bg-peach/10 backdrop-blu
 
     const componentTotalCart = document.getElementById('totalCart')
 
+    function handleAddToCart(buttonElement) {
+        const userId = buttonElement.dataset.userId;
+        const productId = buttonElement.dataset.productId;
+        const productName = buttonElement.dataset.productName;
+        const productPrice = parseFloat(buttonElement.dataset.productPrice);
+        const productImage = buttonElement.dataset.productImage;
+        const productCategory = JSON.parse(buttonElement.dataset.productCategory)
+
+        const exisItem = cart.findIndex(item => item.userId === userId && item.productId === productId)
+
+        if (exisItem > -1) {
+            cart[exisItem].qty += 1
+            cart[exisItem].totalPrice += productPrice
+        } else {
+            cart.push({
+                userId,
+                productId,
+                productName,
+                price: productPrice,
+                totalPrice: productPrice,
+                image_url: productImage,
+                category: productCategory.name,
+                qty: 1
+            })
+        }
+
+        Swall.fire({
+            title: "Berhasil!",
+            text: `Menu ${productName} telah ditambahkan ke keranjang.`,
+            icon: "success"
+        })
+
+        mainLocalStorage()
+        showTotalCart()
+    }
+
     const showTotalCart = () => {
         if (cart.length === 0) {
             componentTotalCart.innerHTML = ""
@@ -91,6 +136,13 @@ $bgHeader = fn () => request()->routeIs('home.menu') ? 'bg-peach/10 backdrop-blu
     function mainLocalStorage() {
         const cartNew = JSON.stringify(cart)
         localStorage.setItem('cart', cartNew)
+    }
+
+    const componentMenu = document.getElementById('menu')
+    componentMenu.classList.add('hidden')
+
+    const handleMenu = () => {
+        componentMenu.classList.toggle("hidden")
     }
 
     showTotalCart()

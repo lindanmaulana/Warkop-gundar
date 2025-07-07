@@ -13,7 +13,7 @@ require __DIR__ . '//routeProduct.php';
 require __DIR__ . '//routeUser.php';
 require __DIR__ . '//routeOrder.php';
 require __DIR__ . '//routePayment.php';
-require __DIR__ . '/home/routeHome.php';
+require __DIR__ . '//routeHome.php';
 
 Route::get('/dev/otp', function () {
     return view('components/');

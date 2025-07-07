@@ -25,7 +25,7 @@
                 <p class="text-secondary text-xl font-semibold">Total: Rp <span id="total-price"></span></p>
                 <div class="space-x-2 flex flex-col md:flex-row gap-1 *:text-center">
                     <a href="{{ route('home.menu') }}" class="bg-secondary px-2 py-1 rounded text-white cursor-pointer">Kembali Belanja</a>
-                    <a href="{{ route('dashboard.orders.checkout') }}" id="btn-complete-order" class="bg-green-500 px-2 py-1 rounded text-white cursor-pointer">Selesaikan Pesanan</a>
+                    <a href="{{ route('home.checkout') }}" id="btn-complete-order" class="bg-green-500 px-2 py-1 rounded text-white cursor-pointer">Selesaikan Pesanan</a>
                 </div>
             </div>
         </div>

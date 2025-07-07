@@ -60,9 +60,12 @@
                     <td class="px-2 py-4">
                         <div class="flex items-center gap-2">
                             <a href="{{ route('dashboard.orders.detail', $payment->id) }}" class="text-green-500 cursor-pointer"><x-icon name="receipt-text" /></a>
-                            @if(auth()->check() && auth()->user()->role->value == 'admin')
-                            <a href="{{ route('dashboard.orders.update', $payment->id) }}" class="text-royal-blue cursor-pointer"><x-icon name="pencil" /></a>
-                            @endif
+                            <a href="{{ route('dashboard.payments.update', $payment->id) }}" class="text-royal-blue cursor-pointer"><x-icon name="pencil" /></a>
+                            <form action="{{ route('payments.delete', $payment->id) }}" method="post">
+                                @csrf
+                                @method('delete')
+                                <button type="submit" class="text-red-500 cursor-pointer"><x-icon name="trash" /></button>
+                            </form>
                         </div>
                     </td>
                 </tr>
@@ -83,6 +86,7 @@
 @section('script')
 
 <script>
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const alertComponent = document.getElementById('alert')
 
     const handleHideAlert = (alert) => {

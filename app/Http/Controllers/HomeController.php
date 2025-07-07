@@ -2,10 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\BranchWarkop;
+use App\Enums\OrderStatus;
+use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Payment;
+use App\Models\PaymentProofs;
 use App\Models\Product;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rules\Enum;
+use Illuminate\Validation\ValidationException;
 
 class HomeController extends Controller
 {
@@ -19,35 +28,154 @@ class HomeController extends Controller
         return view('home.index', compact('productsLatest', 'productsForYou'));
     }
 
-    public function showMenu() {
+    public function showMenu()
+    {
 
         $products = Product::where('stock', '>', 0)->get();
 
-        $productsFood = Product::whereHas('category', function($query) {
+        $productsFood = Product::whereHas('category', function ($query) {
             $query->where('name', 'makanan');
         })->get();
 
-        $productsCoffe = Product::whereHas('category', function($query) {
+        $productsCoffe = Product::whereHas('category', function ($query) {
             $query->where('name', 'minuman');
         })->get();
 
         return view('home.menu', compact('products', 'productsFood', 'productsCoffe'));
     }
 
-    public function showCart() {
+    public function showCart()
+    {
         return view('home.cart');
     }
 
-    public function showCheckout() {
+    public function showCheckout()
+    {
         $paymentsMethod = Payment::where('is_active', 1)->get();
 
         return view('home.checkout', compact('paymentsMethod'));
     }
 
-    public function showProfile() {
+    public function showProfile()
+    {
 
         $user = Auth::user();
         return view('home.profile', compact('user'));
+    }
+
+    public function showOrder()
+    {
+        $user = Auth::user();
+
+        $orders = Order::where('user_id', $user->id)->get();
+
+        return view('home.order', compact('orders'));
+    }
+
+    public function showDetailOrder(Order $order)
+    {
+        $order->load('orderItems.product');
+        $paymentProofs = PaymentProofs::where('order_id', $order->id)->first();
+
+        return view('home.orderDetail', compact('order', 'paymentProofs'));
+    }
+
+    public function showPayment(Order $order)
+    {
+        $payments = Payment::where('is_active', 1)->get();
+        $paymentProof = PaymentProofs::where('order_id', $order->id)->first();
+
+        return view('home.payment', compact('order', 'payments', 'paymentProof'));
+    }
+
+    public function createOrder(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'cart' => 'required|array|min:1',
+                'cart.*.productId' => 'required|integer|exists:products,id',
+                'cart.*.qty' => 'required|integer|min:1',
+                'customer_information.payment_id' => 'required|integer|exists:payments,id',
+                'customer_information.branch' => ['required', new Enum(BranchWarkop::class)],
+                'customer_information.delivery_location' => 'required|string',
+                'customer_information.description' => 'nullable|string'
+            ]);
+        } catch (ValidationException $err) {
+            return response()->json([
+                'message' => 'Data order tidak valid.',
+                'errors' => $err->errors()
+            ], 422);
+        }
+
+        $cartItems = $validatedData['cart'];
+        $customerInformation = $validatedData['customer_information'];
+        $user = $request->user();
+
+        DB::beginTransaction();
+
+        try {
+            $totalOrderPrice = 0;
+            $orderItemsData = [];
+
+
+            foreach ($cartItems as $item) {
+                $product = Product::find($item['productId']);
+
+                if (!$product) throw new \Exception("Produk dengan ID '{$item['productId']}' tidak di temukan.");
+
+                if ($product->stock < $item['qty']) throw new \Exception("Stok produk '{$product->name}' tidak mencukupi. Tersisa: {$product->stock}.");
+
+                $itemPrice = $product->price;
+                $itemTotalPrice = $itemPrice * $item['qty'];
+                $totalOrderPrice += $itemTotalPrice;
+
+                $orderItemsData[] = [
+                    'product_id' => $product->id,
+                    'qty' => $item['qty'],
+                    'price' => $itemPrice,
+                ];
+
+                $product->stock -= $item['qty'];
+                $product->save();
+            }
+
+            $order = Order::create([
+                'user_id' => $user->id,
+                'payment_id' => $customerInformation['payment_id'],
+                'delivery_location' => $customerInformation['delivery_location'],
+                'branch' => $customerInformation['branch'],
+                'total_price' => $totalOrderPrice,
+                'description' => $customerInformation['description'],
+                'status' => OrderStatus::Pending->value
+            ]);
+
+            foreach ($orderItemsData as &$orderItem) {
+                $orderItem['order_id'] = $order->id;
+            }
+            unset($orderItem);
+
+            OrderItem::insert($orderItemsData);
+
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Order berhasil dibuat!',
+                'order_id' => $order->id,
+                'payment_id' => $order->payment_id,
+                'delivery_location' => $order->delivery_location,
+                'branch' => $order->branch,
+                'total_price' => $order->total_price,
+                'description' => $order->description,
+                'status' => $order->status->value
+            ], 200);
+        } catch (\Exception $err) {
+            DB::rollBack();
+
+            return response()->json([
+                'message' => 'Gagal membuat order.',
+                'error' => $err->getMessage()
+            ], 500);
+        }
     }
     /**
      * Show the form for creating a new resource.

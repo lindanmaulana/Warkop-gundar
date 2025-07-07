@@ -39,7 +39,7 @@
                                 <label for="branch" class="flex flex-col gap-2">
                                     <span class="text-dark-blue text-sm">Tipe Pembayaran:</span>
                                     @if($paymentsMethod->isNotEmpty())
-                                    <select name="branch" id="branch" class="w-full border border-dark-blue/20 px-4 py-1 rounded-lg">
+                                    <select name="payment_id" id="payment" class="w-full border border-dark-blue/20 px-4 py-1 rounded-lg">
                                         @foreach($paymentsMethod as $payment)
                                         <option value="{{ $payment->id }}">{{ $payment->name }}</option>
                                         @endforeach
@@ -124,9 +124,9 @@
         e.preventDefault()
         const target = e.target;
         const customer_information = {
-            customer_name: target.customer_name.value,
-            branch: target.branch.value,
             delivery_location: target.delivery_location.value,
+            branch: target.branch.value,
+            payment_id: target.payment_id.value,
             description: target.description.value
         }
 
@@ -136,7 +136,7 @@
         }
 
         try {
-            const response = await fetch('/order/checkout', {
+            const response = await fetch('/checkout', {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
@@ -159,7 +159,7 @@
             })
 
             localStorage.removeItem('cart')
-            window.location.replace('/dashboard/orders')
+            window.location.replace(`/order/${result.order_id}/payment`)
             return result
         } catch (err) {
             Swall.fire({

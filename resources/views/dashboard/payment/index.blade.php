@@ -16,10 +16,10 @@
         </a>
     </div>
 
-    @if(session('success'))
+    @if(session('message'))
     <div id="alert" class="bg-green-200 rounded p-4">
         <p class="text-green-700 font-semibold">
-            {{session('success')}}
+            {{session('message')}}
         </p>
     </div>
     @endif

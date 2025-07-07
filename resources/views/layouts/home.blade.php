@@ -1,7 +1,7 @@
 @extends('app')
 @php
 $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'text-primary font-semibold' : 'text-secondary';
-$bgHeader = fn () => request()->routeIs('home.menu') ? 'bg-peach/10 backdrop-blur-xs text-lg' : 'bg-peach text-lg';
+$bgHeader = fn () => request()->routeIs('home.menu', 'home.order.detail', 'home.order.payment') ? 'bg-peach/10 backdrop-blur-xs text-lg' : 'bg-peach text-lg';
 @endphp
 <div class="flex flex-col">
     <header class="w-full fixed top-0 right-0 z-50 {{ $bgHeader() }}">
@@ -27,12 +27,18 @@ $bgHeader = fn () => request()->routeIs('home.menu') ? 'bg-peach/10 backdrop-blu
                 </a>
                 <button onclick="handleMenu()"><x-icon name="profile" class="size-7 text-secondary cursor-pointer hover:text-secondary/70" /></button>
 
-                <ul id="menu" class="absolute top-8 right-0 *:text-sm bg-peach min-w-40 flex flex-col items-center rounded shadow py-2">
+                <ul id="menu" class="absolute top-8 right-0 *:text-sm bg-peach min-w-40 flex flex-col items-center gap-2 rounded shadow py-2">
                     <li>
                         <a href="{{ route('home.profile') }}" class="text-green-500 hover:text-green-300">Profile</a>
                     </li>
                     <li>
-                        <a href="{{ route('home.logout') }}" class="text-red-500 hover:text-red-300">Logout</a>
+                        <a href="{{ route('home.order') }}" class="text-green-500 hover:text-green-300">Pesanan</a>
+                    </li>
+                    <li>
+                        <form action="{{ route('auth.logout') }}" method="post">
+                            @csrf
+                            <button type="submit" class="text-red-500 hover:text-red-300">Logout</button>
+                        </form>
                     </li>
                 </ul>
             </div>

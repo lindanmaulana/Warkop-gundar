@@ -17,6 +17,10 @@
         <div class="px-4 md:px-0 md:max-w-2/3 mx-auto py-10 space-y-4">
             <ul class="w-full space-y-2 pb-4 border-b border-dark-blue/20">
                 <li class="flex items-center justify-between">
+                    <h4 class="font-semibold">Nama</h4>
+                    <p class="text-dark-blue/60">{{ $order->user->name}}</p>
+                </li>
+                <li class="flex items-center justify-between">
                     <h4 class="font-semibold">Tanggal</h4>
                     <p class="text-dark-blue/60">{{ $order->created_at->format('d M Y H:i') }}</p>
                 </li>
@@ -44,6 +48,18 @@
                     <p class="text-dark-blue/60">{{ $order->description}}</p>
                 </li>
             </ul>
+            <ul class="w-full space-y-2 pb-4 border-b border-dark-blue/20">
+                <li class="flex flex-col justify-between">
+                    <h4 class="font-semibold">Bukti Pembayaran</h4>
+                    @if($paymentProofs)
+                        <figure class="max-h-60 overflow-y-auto">
+                            <img src="{{ asset('storage/'. $paymentProofs->image_url) }}" alt="{{ $order->user->name }}">
+                        </figure>
+                    @else
+                        <p class="text-center text-sm text-red-500">Pelanggan belum melakukan pembayaran</p>
+                    @endif
+                </li>
+            </ul>
             <ul>
                 <li class="flex items-center justify-between">
                     <h4 class="font-semibold text-xl">Total</h4>
@@ -52,39 +68,6 @@
             </ul>
         </div>
     </div>
-    @if(auth()->check() && auth()->user()->role->value === 'customer')
-    <div class="relative max-w-[90%] mx-auto bg-white px-2 py-6 rounded shadow-sm shadow-dark-blue/10 text-center">
-        @php
-        $statusValue = $order->status->value;
-        @endphp
-
-        @if($statusValue === 'pending')
-        <h3 class="text-xl font-semibold text-gray-800 mb-2">Terima Kasih, Pesananmu Sudah Masuk!</h3>
-        <p class="text-gray-600">Pesananmu sedang menunggu antrean untuk kami proses.</p>
-        <p class="text-sm text-gray-500 mt-2">Mohon tunggu konfirmasi dari kami ya.</p>
-
-        @elseif($statusValue === 'processing')
-        <h3 class="text-xl font-semibold text-gray-800 mb-2">Pesananmu Sedang Diproses!</h3>
-        <p class="text-gray-600">Kami sedang meracik pesananmu dengan sepenuh hati. Sebentar lagi siap dinikmati!</p>
-        <p class="text-sm text-gray-500 mt-2">Tetap pantau statusnya ya.</p>
-
-        @elseif($statusValue === 'done')
-        <h3 class="text-xl font-semibold text-green-700 mb-2">Pesananmu Sudah Selesai!</h3>
-        <p class="text-gray-600">Terima kasih telah berbelanja di Warkop {{ $order->branch }}. Semoga puas dengan pesananmu!</p>
-        <p class="text-sm text-gray-500 mt-2">Kami tunggu orderan selanjutnya ya, Kak!</p>
-
-        @elseif($statusValue === 'cancelled')
-        <h3 class="text-xl font-semibold text-red-700 mb-2">Pesanan Dibatalkan.</h3>
-        <p class="text-gray-600">Mohon maaf, pesanan ini telah dibatalkan.</p>
-        <p class="text-sm text-gray-500 mt-2">Jika ada pertanyaan, silakan hubungi kami.</p>
-
-        @else
-        {{-- Status default atau tidak dikenal --}}
-        <h3 class="text-xl font-semibold text-gray-800 mb-2">Terima Kasih atas Pesanan Anda!</h3>
-        <p class="text-gray-600">Status pesanan Anda saat ini adalah: {{ $order->status->label() }}.</p>
-        @endif
-    </div>
-    @endif
 </div>
 @endsection
 

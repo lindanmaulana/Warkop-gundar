@@ -37,7 +37,7 @@
                 @foreach($orders as $order)
                 <tr class="hover:bg-dark-blue/20 divide-y divide-gray-200 text-gray-800">
                     <td class="px-6 py-2">{{ $no++ }}</td>
-                    <td class="px-2 py-4">{{ $order->customer_name }}</td>
+                    <td class="px-2 py-4">{{ $order->user->name }}</td>
                     <td class="px-2 py-4">{{ $order->branch }}</td>
                     <td class="px-2 py-4">{{ $order->delivery_location }}</td>
                     <td class="px-2 py-4">Rp {{ number_format($order->total_price, 0, ',', '.') }}</td>
@@ -56,15 +56,12 @@
                         <p class="text-sm rounded px-2 py-1 text-center bg-red-800 text-white">Cancelled</p>
                         @endif
                     </td>
-                    <td class="px-2 py-4 line-clamp-1 truncate max-w-[160px]">{{ $order->description }}
-                    </td>
+                    <td class="px-2 py-4 line-clamp-1 truncate max-w-[160px]">{{ $order->description }}</td>
                     <td>{{ $order->created_at->format('d M Y H:i') }}</td>
                     <td class="px-2 py-4">
                         <div class="flex items-center gap-2">
                             <a href="{{ route('dashboard.orders.detail', $order->id) }}" class="text-green-500 cursor-pointer"><x-icon name="receipt-text" /></a>
-                            @if(auth()->check() && auth()->user()->role->value == 'admin')
                             <a href="{{ route('dashboard.orders.update', $order->id) }}" class="text-royal-blue cursor-pointer"><x-icon name="pencil" /></a>
-                            @endif
                         </div>
                     </td>
                 </tr>

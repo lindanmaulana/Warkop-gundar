@@ -48,13 +48,14 @@
                         <div id="image-preview" class="relative w-full max-h-54 flex items-center justify-center border-2 rounded-lg border-gray-200 overflow-hidden">
                             <label for="image_url" class="absolute inset-0 flex items-center justify-center cursor-pointer text-center z-10 group"></label>
                             <figure class="w-full h-full rounded-md overflow-hidden scale-80">
-                                <img src="/images/qrcode-default.png" id="image-product" alt="default" class="w-full h-full object-cover">
+                                <img src="/images/qrcode-default.png" id="image-payment-preview" alt="default" class="w-full h-full object-cover">
                             </figure>
                         </div>
                         @if($payment->qr_code_url)
-                        <div id="image-preview" class="relative w-full max-h-54 flex items-center justify-center border-2 rounded-lg border-gray-200 overflow-hidden">
+                        <div id="image-qrcode" class="relative w-full max-h-54 flex items-center justify-center border-2 rounded-lg border-gray-200 overflow-hidden">
+                            <label for="image_url" class="absolute inset-0 flex items-center justify-center cursor-pointer z-10"></label>
                             <figure class="w-full h-full rounded-md overflow-hidden scale-80">
-                                <img src="{{ asset('storage/'. $payment->qr_code_url) }}" id="image-product" alt="{{ $payment->name }}" class="w-full h-full object-cover">
+                                <img src="{{ asset('storage/'. $payment->qr_code_url) }}" alt="{{ $payment->name }}" class="w-full h-full object-cover">
                             </figure>
                         </div>
                         @else
@@ -86,16 +87,13 @@
 @section('script')
 <script>
     const imagePreview = document.getElementById('image-preview')
+    const imageQrCode = document.getElementById('image-qrcode')
     const imageUpload = document.getElementById('image-upload')
 
     imagePreview.style.display = "none"
 
     const imageUrl = document.getElementById('image_url').addEventListener('change', function(event) {
-        const imageProduct = document.getElementById("image-product")
-
-        console.log({
-            event
-        })
+        const imageProduct = document.getElementById("image-payment-preview")
 
         if (event.target.files && event.target.files[0]) {
             const selectedFile = event.target.files[0]
@@ -111,8 +109,11 @@
             }
         }
 
+        if (imageQrCode) imageQrCode.style.display = "none"
+
         imagePreview.style.display = "block"
         imageUpload.style.display = "none"
+
     })
 </script>
 @endsection

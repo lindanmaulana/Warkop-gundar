@@ -7,6 +7,7 @@ use App\Enums\OrderStatus;
 use App\Enums\UserRole;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\PaymentProofs;
 use App\Models\Product;
 use Exception;
 use Illuminate\Validation\ValidationException;
@@ -41,7 +42,9 @@ class OrderController extends Controller
     public function getDetailOrder(Order $order)
     {
         $order->load('orderItems.product');
-        return view('dashboard.order.detail', compact('order'));
+        $paymentProofs = PaymentProofs::where('order_id', $order->id)->first();
+
+        return view('dashboard.order.detail', compact('order', 'paymentProofs'));
     }
 
     /**
@@ -158,7 +161,9 @@ class OrderController extends Controller
      */
     public function edit(Order $order)
     {
-        return view('dashboard.order.update', compact('order'));
+
+        $paymentProof = PaymentProofs::where('order_id', $order->id)->get();
+        return view('dashboard.order.update', compact('order', 'paymentProof'));
     }
 
     /**

@@ -14,6 +14,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\ValidationException;
 
@@ -194,6 +195,59 @@ class HomeController extends Controller
         $user->update($userValidated);
 
         return redirect()->route('home.profile')->with('message', 'Profile berhasil di perbarui.');
+    }
+
+    public function cancelOrder(Order $order)
+    {
+        $user = Auth::user();
+
+        if ($order->user_id !== $user->id) {
+            return response()->json([
+                'error' => "Anda tidak diizinkan untuk membatalkan pesanan ini.",
+            ]);
+        }
+
+        if ($order->status !== OrderStatus::Pending && $order->status != OrderStatus::cancelled) {
+            return response()->json([
+                'error' => "Pesanan sudah diproses dan tidak bisa dibatalkan.",
+            ]);
+        }
+
+        if ($order->status === OrderStatus::cancelled) {
+            return response()->json([
+                'error' => "Status Pesanan telah batal.",
+            ]);
+        }
+
+        try {
+            DB::beginTransaction();
+            $order->status = OrderStatus::cancelled;
+            $order->save();
+
+            foreach ($order->orderItems as $item) {
+                $product = Product::find($item->product_id);
+
+                if ($product) {
+                    $product->stock += $item->qty;
+                    $product->save();
+                    Log::info("Stok produk '{$product->name}' ditambahkan {$item->qty} karena pembatalan pesanan {$order->id}.");
+                }
+            }
+
+            DB::commit();
+
+            Log::channel('order_activity')->info("Pesanan ID: {$order->id} dibatalkan oleh Pengguna ID: {$user->id}.");
+
+            return response()->json([
+                'message' => "Pesanan berhasil di batalkan.",
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error("Gagal membatalkan pesanan {$order->id}: " . $e->getMessage());
+            return response()->json([
+                'error' => "Terjadi kesalahan saat membatalkan pesanan. Silakan coba lagi.",
+            ]);
+        }
     }
 
     /**

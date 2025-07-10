@@ -20,5 +20,6 @@ Route::middleware(['auth', 'role:customer'])
 
         Route::patch('/profile/{user}/update', [HomeController::class, 'updateProfile'])->name('profile.update');
         Route::post('/checkout', [HomeController::class, 'createOrder'])->name('checkout');
+        Route::post('/order/{order}/cancel', [HomeController::class, 'cancelOrder'])->name('order.cancel');
         Route::post('/upload/{order}/payment', [PaymentProofsController::class, 'store'])->name('upload.payment');
     });

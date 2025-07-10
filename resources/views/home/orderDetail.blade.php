@@ -14,8 +14,14 @@
                     <x-icon name="coffee" class="size-10 text-white" />
                 </div>
                 <h3 class="text-center text-3xl font-bold text-dark-blue">Warkop Gundar</h3>
-                <p id="order-status" class="text-sm text-center py-4" data-order-status="{{ $order->status }}"></p>
-
+                <div class="flex flex-col items-center justify-center">
+                    <p id="order-status" class="text-sm text-center py-4" data-order-status="{{ $order->status }}"></p>
+                    @if($order->status->value === "pending")
+                    <form onsubmit="confirmCancelOrder(event)">
+                        <button type="submit" data-order-id="{{ $order->id }}" class="text-red-500 cursor-pointer font-semibold">Batalkan Pesanan!</button>
+                    </form>
+                    @endif
+                </div>
                 <div class="px-4 md:px-0 md:max-w-2/3 mx-auto py-10 space-y-4">
                     <ul class="w-full space-y-2 pb-4 border-b border-dark-blue/20">
                         <li class="flex items-center justify-between">
@@ -70,7 +76,6 @@
                     </ul>
                 </div>
             </div>
-            @if(auth()->check() && auth()->user()->role->value === 'customer')
             <div class="relative max-w-1/2 mx-auto bg-pale-peach px-2 py-6 rounded shadow-sm shadow-dark-blue/10 text-center">
                 @php
                 $statusValue = $order->status->value;
@@ -92,9 +97,10 @@
                 <p class="text-sm text-gray-500 mt-2">Kami tunggu orderan selanjutnya ya, Kak!</p>
 
                 @elseif($statusValue === 'cancelled')
-                <h3 class="text-xl font-semibold text-red-700 mb-2">Pesanan Dibatalkan.</h3>
-                <p class="text-gray-600">Mohon maaf, pesanan ini telah dibatalkan.</p>
-                <p class="text-sm text-gray-500 mt-2">Jika ada pertanyaan, silakan hubungi kami.</p>
+                <h3 class="text-xl font-semibold text-red-700 mb-2">Pesanan Telah Dibatalkan</h3>
+                <p class="text-gray-600">Pesanan ini tidak dapat diproses karena telah dibatalkan.</p>
+                <p class="text-sm text-gray-500 mt-2">Jika ada pertanyaan lebih lanjut, silakan hubungi tim kami.</p>
+
 
                 @else
                 {{-- Status default atau tidak dikenal --}}
@@ -102,7 +108,6 @@
                 <p class="text-gray-600">Status pesanan Anda saat ini adalah: {{ $order->status->label() }}.</p>
                 @endif
             </div>
-            @endif
         </div>
     </div>
 </section>
@@ -112,6 +117,8 @@
 @section('script')
 @parent
 <script>
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
     const showOrderStatus = () => {
         const orderStatus = document.getElementById('order-status');
         const status = orderStatus.dataset.orderStatus
@@ -121,6 +128,59 @@
         span.innerHTML = status
 
         orderStatus.appendChild(span)
+    }
+
+    const confirmCancelOrder = (e) => {
+        e.preventDefault()
+        const button = e.submitter
+        const orderId = button.dataset.orderId
+
+        Swall.fire({
+            title: "Anda yakin ingin membatalkan Pesanan ini ? ",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Ya",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                handleCancelOrder(orderId)
+            }
+        })
+    }
+
+    const handleCancelOrder = async (orderId) => {
+        try {
+            const response = await fetch(`/order/${orderId}/cancel`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+            })
+
+            const result = await response.json()
+
+            if (result.error) throw new Error(result.error)
+
+            Swall.fire({
+                title: 'Pesanan berhasil di batalkan.',
+                icon: 'success',
+            })
+
+            console.log({
+                result
+            })
+            window.location.replace(`/order/${orderId}/detail`)
+
+            return result
+        } catch (err) {
+            console.log({
+                err
+            })
+            Swall.fire({
+                title: err.message,
+                icon: 'error',
+            })
+        }
     }
 
     showOrderStatus()

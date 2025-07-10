@@ -14,7 +14,6 @@
                     <li class="flex items-center justify-between">
                         <div>
                             <h4 class="text-secondary text-base italic">{{ $product->name }}</h4>
-                            <p>{{ $product->description }}</p>
                         </div>
 
                         <span class="font-semibold text-secondary">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
@@ -35,7 +34,6 @@
                     <li class="flex items-center justify-between">
                         <div>
                             <h4 class="text-secondary text-base italic">{{ $product->name }}</h4>
-                            <p>{{ $product->description }}</p>
                         </div>
 
                         <span class="font-semibold text-secondary">Rp {{ number_format($product->price, 0, ',', '.') }}</span>

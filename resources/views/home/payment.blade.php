@@ -26,8 +26,16 @@
                     @csrf
 
                     @if($paymentProof)
-                    <span class="block text-secondary font-semibold mb-4">Bukti Pembayaran</span>
-                    <p class="bg-green-500 p-2 text-white rounded">Pesanan mu sudah di proses</p>
+                    <p class="block text-secondary font-semibold mb-4">Bukti Pembayaran</p>
+                        @if($order->status->value == "processing")
+                        <p class="bg-green-500 p-2 text-white rounded">Pesanan mu sudah di proses</p>
+
+                        @elseif($order->status->value == "done")
+                        <p class="bg-dark-blue p-2 text-white rounded">Pesanan mu selesai</p>
+
+                        @elseif($order->status->value == "canceled")
+                        <p class="bg-red-500 p-2 text-white rounded">Pesanan mu di batalkan</p>
+                        @endif
                     @else
                     <div class="flex items-center">
                         <input type="text" name="order_id" value="{{ old('order_id', $order->id) }}" hidden>

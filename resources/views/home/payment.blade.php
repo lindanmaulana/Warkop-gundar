@@ -4,6 +4,11 @@
 @section('content')
 <section class="mt-24">
     <div class="container max-w-4xl mx-auto min-h-[400px]">
+        <div class="flex items-center justify-between border-b border-black/10 pb-4">
+            <h2 class="text-2xl font-semibold text-secondary">Pembayaran</h2>
+            <a href="{{ route('home.order') }}" class="text-sm font-semibold bg-secondary text-white px-4 py-1 rounded">Kembali</a>
+        </div>
+
         <div class="w-full h-full grid grid-cols-2 gap-4 py-10">
             <div class="h-full bg-peach shadow rounded p-6 space-y-6">
                 <label for="" class="block rounded">

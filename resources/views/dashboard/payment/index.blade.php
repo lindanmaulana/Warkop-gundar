@@ -59,7 +59,7 @@
                     <td>{{ $payment->created_at->format('d M Y H:i') }}</td>
                     <td class="px-2 py-4">
                         <div class="flex items-center gap-2">
-                            <a href="{{ route('dashboard.orders.detail', $payment->id) }}" class="text-green-500 cursor-pointer"><x-icon name="receipt-text" /></a>
+                            <a href="{{ route('dashboard.payments.detail', $payment->id) }}" class="text-green-500 cursor-pointer"><x-icon name="receipt-text" /></a>
                             <a href="{{ route('dashboard.payments.update', $payment->id) }}" class="text-royal-blue cursor-pointer"><x-icon name="pencil" /></a>
                             <form action="{{ route('payments.delete', $payment->id) }}" method="post">
                                 @csrf

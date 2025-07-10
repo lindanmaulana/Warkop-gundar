@@ -1,36 +1,93 @@
 @extends('layouts.home')
 
 @section('content')
-<section class="pt-28 pb-20">
-    <div class="container max-w-6xl mx-auto ">
-        <div class="space-y-6">
-            <div class="flex items-center justify-between border-b border-black/10 pb-6">
-                <h2 class="text-2xl font-semibold text-secondary">Keranjang</h2>
-                <p id="totalItems" class="text-xl font-semibold text-secondary"></p>
-            </div>
-            <div class="overflow-x-auto w-full bg-white p-2 rounded-lg shadow-sm shadow-dark-blue/10">
-                <table class="w-full text-left rounded-md overflow-hidden">
-                    <thead class=" ">
-                        <th class="py-2 px-6">No</th>
-                        <th class="p-2">Menu Detail</th>
-                        <th class="p-2">Qty</th>
-                        <th class="p-2">Harga</th>
-                        <th class="p-2">Total Harga</th>
-                    </thead>
-                    <tbody id="table-body"></tbody>
-                </table>
+<section class="pt-28 pb-20 bg-gray-50 min-h-screen">
+    <div class="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="space-y-8">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-6 border-b border-gray-200">
+                <h2 class="text-3xl font-extrabold text-secondary mb-2 sm:mb-0">Keranjang Belanja Anda</h2>
+                <p id="totalItems" class="text-lg font-semibold text-gray-600"></p>
             </div>
 
-            <div class="p-2 flex flex-col items-end justify-center gap-2 ">
-                <p class="text-secondary text-xl font-semibold">Total: Rp <span id="total-price"></span></p>
-                <div class="space-x-2 flex flex-col md:flex-row gap-1 *:text-center">
-                    <a href="{{ route('home.menu') }}" class="bg-secondary px-2 py-1 rounded text-white cursor-pointer">Kembali Belanja</a>
-                    <a href="{{ route('home.checkout') }}" id="btn-complete-order" class="bg-green-500 px-2 py-1 rounded text-white cursor-pointer">Selesaikan Pesanan</a>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 overflow-x-auto bg-white rounded-xl shadow-lg p-4">
+                    <table class="w-full text-left table-auto">
+                        <thead class="bg-gray-100 text-gray-700 uppercase text-sm leading-normal">
+                            <tr>
+                                <th class="py-3 px-4 text-left rounded-tl-lg">Produk</th>
+                                <th class="py-3 px-4 text-center">Harga</th>
+                                <th class="py-3 px-4 text-center">Jumlah</th>
+                                <th class="py-3 px-4 text-center">Total</th>
+                                <th class="py-3 px-4 text-center rounded-tr-lg">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body" class="text-gray-600 text-sm font-light">
+                            <tr class="border-b border-gray-200 last:border-b-0 hover:bg-gray-50 transition-colors duration-150">
+                                <td class="py-4 px-4 flex items-center gap-3">
+                                    <img src="/images/placeholder-coffee.png" alt="Es Kopi Susu Aren" class="w-16 h-16 object-cover rounded-md border border-gray-200">
+                                    <div>
+                                        <h3 class="font-medium text-secondary text-base">Es Kopi Susu Aren</h3>
+                                        <p class="text-xs text-gray-500">Minuman Kopi</p>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-4 text-center font-medium text-gray-700">Rp 20.000</td>
+                                <td class="py-4 px-4 text-center">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <button class="qty-minus text-primary hover:text-primary/80 transition-colors duration-200 focus:outline-none">
+                                            <x-icon name="minus-circle" class="size-6" />
+                                        </button>
+                                        <span class="font-semibold text-gray-700">1</span>
+                                        <button class="qty-plus text-primary hover:text-primary/80 transition-colors duration-200 focus:outline-none">
+                                            <x-icon name="plus-circle" class="size-6" />
+                                        </button>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-4 text-center font-semibold text-secondary">Rp 20.000</td>
+                                <td class="py-4 px-4 text-center">
+                                    <button class="remove-item text-red-500 hover:text-red-700 transition-colors duration-200 focus:outline-none">
+                                        <x-icon name="trash" class="size-6" />
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div id="empty-cart-message" class="hidden text-center py-16 text-gray-500">
+                        <x-icon name="shopping-bag" class="size-20 mx-auto mb-4 text-gray-300" />
+                        <p class="mb-6 text-xl font-medium">Keranjang belanjamu masih kosong.</p>
+                        <a href="{{ route('home.menu') }}" class="inline-flex items-center px-8 py-3 bg-secondary text-white font-medium rounded-lg hover:bg-secondary/90 transition-colors duration-200 shadow-md">
+                            <x-icon name="shopping-bag" class="size-5 mr-2" />
+                            Mulai Belanja Sekarang
+                        </a>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-1 bg-white rounded-xl shadow-lg p-6 h-fit sticky top-28">
+                    <h3 class="text-2xl font-bold text-secondary mb-6 border-b pb-4 border-gray-200">Ringkasan Pesanan</h3>
+                    <div class="space-y-4 mb-6">
+                        <div class="flex justify-between items-center text-gray-700">
+                            <span>Biaya Pengiriman</span>
+                            <span class="font-medium">Gratis</span>
+                        </div>
+                        <div class="flex justify-between items-center text-2xl font-bold text-primary border-t pt-4 border-gray-200">
+                            <span>Total</span>
+                            <span id="total-price">Rp 0</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-3">
+                        <a href="{{ route('home.checkout') }}" id="btn-complete-order" class="w-full bg-green-600 text-white font-semibold py-3 rounded-lg text-center hover:bg-green-700 transition-colors duration-200 shadow-md transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+                            Lanjutkan ke Pembayaran
+                        </a>
+                        <a href="{{ route('home.menu') }}" class="w-full border border-secondary text-secondary font-semibold py-3 rounded-lg text-center hover:bg-secondary hover:text-white transition-colors duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-opacity-50">
+                            Kembali Belanja
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</section>
+</section>  
 @endsection
 
 

@@ -18,6 +18,7 @@ Route::middleware(['auth', 'role:customer'])
         Route::get('/order/{order}/detail', [HomeController::class, 'showDetailOrder'])->name('home.order.detail');
         Route::get('/order/{order}/payment', [HomeController::class, 'showPayment'])->name('home.order.payment');
 
+        Route::patch('/profile/{user}/update', [HomeController::class, 'updateProfile'])->name('profile.update');
         Route::post('/checkout', [HomeController::class, 'createOrder'])->name('checkout');
         Route::post('/upload/{order}/payment', [PaymentProofsController::class, 'store'])->name('upload.payment');
     });

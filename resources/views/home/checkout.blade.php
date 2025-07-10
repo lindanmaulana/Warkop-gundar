@@ -1,73 +1,84 @@
 @extends('layouts.home')
 
 @section('content')
-<section class="pt-28 pb-20">
-    <div class="container max-w-xl mx-auto ">
-        <div class="space-y-6 pb-10 md:pb-0">
-            <div class="flex items-center justify-between">
-                <h2 class="text-lg font-semibold text-dark-blue">Checkout</h2>
-                <a href="{{ route('home.menu') }}" class="flex items-center justify-start max-w-20 gap-1 bg-dark-blue text-sm px-4 py-1 text-white rounded"><x-icon name="arrow-left" /> Back</a>
+<section class="pt-28 pb-20 bg-gray-50 min-h-screen">
+    <div class="container max-w-xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="space-y-8">
+            <div class="flex items-center justify-between pb-6 border-b border-gray-200">
+                <h2 class="text-3xl font-extrabold text-secondary">Checkout</h2>
+                <a href="{{ route('home.menu') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-secondary text-white rounded-lg shadow hover:bg-secondary/90 transition-colors duration-200">
+                    <x-icon name="arrow-left" class="size-4" />
+                    <span>Kembali Belanja</span>
+                </a>
             </div>
-            <div class="w-full flex flex-col p-2 gap-6">
-                <div class="bg-white p-4 rounded-lg shadow-sm shadow-dark-blue/10 space-y-2" id="cart-list">
-                    <h3 class="text-dark-blue font-semibold text-lg">Informasi Akun</h3>
-                    <input type="text" value="{{ old('email', Auth::user()->email) }}" class="w-full px-4 py-2 rounded-lg border border-dark-blue/20 text-dark-blue/50 text-sm" readonly>
-                    <p class="ml-1 text-xs text-dark-blue/50">Pastikan email yang Anda masukkan benar, karena kami akan menyimpan informasi pemesanan ini.</p>
+
+            <div class="w-full flex flex-col gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-lg space-y-3">
+                    <h3 class="text-xl font-bold text-secondary mb-2">Informasi Akun</h3>
+                    <label for="account_email" class="block text-secondary text-sm font-medium mb-1">Email:</label>
+                    <input type="text" id="account_email" value="{{ old('email', Auth::user()->email ?? 'user@example.com') }}" class="w-full px-4 py-2 rounded-lg border border-gray-300 bg-gray-100 text-gray-700 text-sm cursor-not-allowed" readonly>
+                    <p class="mt-2 text-xs text-gray-500">Pastikan email yang Anda masukkan benar, karena kami akan menyimpan informasi pemesanan ini.</p>
                 </div>
 
-                <div class="" id="cart-list">
-                    <form onsubmit="handleSubmit(event)" class="space-y-4">
-                        <div class="space-y-2 flex flex-col gap-4">
-                            <div class="w-full bg-white space-y-4 p-4 shadow-sm shadow-dark-blue/10 rounded-lg">
-                                <h3 class="text-dark-blue font-semibold text-lg">Informasi Pembeli</h3>
-                                <label for="customer_name" class="flex flex-col gap-2">
-                                    <span class="text-dark-blue text-sm">Nama:</span>
-                                    <input type="text" id="customer_name" name="customer_name" value="{{ old('name', Auth::user()->name) }}" class="w-full border border-dark-blue/20 text-dark-blue/50 px-4 py-1 rounded-lg" readonly>
-                                </label>
-                                <label for="branch" class="flex flex-col gap-2">
-                                    <span class="text-dark-blue text-sm">Lokasi Warkop:</span>
-                                    <select name="branch" id="branch" class="w-full border border-dark-blue/20 px-4 py-1 rounded-lg">
-                                        <option value="wg-sudirman">WG-Sudirman</option>
-                                        <option value="wg-tebet">WG-Tebet</option>
-                                        <option value="wg-depok">WG-Depok</option>
-                                    </select>
-                                </label>
-                                <label for="delivery_location" class="flex flex-col gap-2">
-                                    <span class="text-dark-blue text-sm">Lokasi Pengantaran:</span>
-                                    <input type="text" id="delivery_location" name="delivery_location" class="w-full border border-dark-blue/20 px-4 py-1 rounded-lg">
-                                </label>
-                                <label for="branch" class="flex flex-col gap-2">
-                                    <span class="text-dark-blue text-sm">Tipe Pembayaran:</span>
-                                    @if($paymentsMethod->isNotEmpty())
-                                    <select name="payment_id" id="payment" class="w-full border border-dark-blue/20 px-4 py-1 rounded-lg">
-                                        @foreach($paymentsMethod as $payment)
-                                        <option value="{{ $payment->id }}">{{ $payment->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    @else
-                                    <input type="text" class="text-red-500" placeholder="Belum ada metode pembayaran aktif untuk saat ini." disabled />
-                                    @endif
-                                </label>
-                                <label for="desc" class="flex flex-col gap-2">
-                                    <span class="text-dark-blue text-sm">Deskripsi:</span>
-                                    <textarea id="desc" name="description" class="w-full border border-dark-blue/20 px-4 py-1 rounded-lg"></textarea>
-                                </label>
-                            </div>
+                <div id="checkout-form-container">
+                    <form onsubmit="handleSubmit(event)" class="space-y-6">
+                        <div class="w-full bg-white space-y-5 p-6 shadow-lg rounded-xl">
+                            <h3 class="text-xl font-bold text-secondary mb-2">Informasi Pembeli & Pengiriman</h3>
 
-                            <div class="w-full bg-white p-4 rounded-lg shadow-sm shadow-dark-blue/10 space-y-2" id="cart-list">
-                                <div class=" border-b border-dark-blue/20">
-                                    <h3 class="text-dark-blue font-semibold text-lg">Order</h3>
-                                    <ul id="order-list" class="space-y-2 py-4"></ul>
-                                </div>
-                                <div>
-                                    <div class="flex items-center justify-between *:text-dark-blue/80">
-                                        <h4>Harga Akhir</h4>
-                                        <p class="font-semibold text-lg">Rp <span id="total-price"></span></p>
-                                    </div>
+                            <label for="customer_name" class="flex flex-col gap-2">
+                                <span class="text-secondary text-sm font-medium">Nama:</span>
+                                <input type="text" id="customer_name" name="customer_name" value="{{ old('name', Auth::user()->name ?? 'Nama Pelanggan') }}" class="w-full border border-gray-300 text-gray-800 px-4 py-2 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200" readonly>
+                            </label>
+
+                            <label for="branch" class="flex flex-col gap-2">
+                                <span class="text-secondary text-sm font-medium">Lokasi Warkop:</span>
+                                <select name="branch" id="branch" class="w-full border border-gray-300 text-gray-800 px-4 py-2 rounded-lg bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200">
+                                    <option value="wg-sudirman">WG-Sudirman</option>
+                                    <option value="wg-tebet">WG-Tebet</option>
+                                    <option value="wg-depok">WG-Depok</option>
+                                </select>
+                            </label>
+
+                            <label for="delivery_location" class="flex flex-col gap-2">
+                                <span class="text-secondary text-sm font-medium">Lokasi Pengantaran:</span>
+                                <input type="text" id="delivery_location" name="delivery_location" placeholder="Cth: Lantai 5, Depan Lift" class="w-full border border-gray-300 text-gray-800 px-4 py-2 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200" required>
+                            </label>
+
+                            <label for="payment" class="flex flex-col gap-2">
+                                <span class="text-secondary text-sm font-medium">Tipe Pembayaran:</span>
+                                @if(isset($paymentsMethod) && $paymentsMethod->isNotEmpty())
+                                <select name="payment_id" id="payment" class="w-full border border-gray-300 text-gray-800 px-4 py-2 rounded-lg bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200">
+                                    @foreach($paymentsMethod as $payment)
+                                    <option value="{{ $payment->id }}">{{ $payment->name }}</option>
+                                    @endforeach
+                                </select>
+                                @else
+                                <input type="text" class="text-red-500 bg-gray-100 px-4 py-2 rounded-lg border border-gray-300 cursor-not-allowed" value="Belum ada metode pembayaran aktif untuk saat ini." disabled />
+                                @endif
+                            </label>
+
+                            <label for="description" class="flex flex-col gap-2">
+                                <span class="text-secondary text-sm font-medium">Catatan Tambahan (opsional):</span>
+                                <textarea id="description" name="description" rows="3" placeholder="Contoh: Kopi tanpa gula, Roti bakar extra keju" class="w-full border border-gray-300 text-gray-800 px-4 py-2 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"></textarea>
+                            </label>
+                        </div>
+
+                        <div class="w-full bg-white p-6 rounded-xl shadow-lg space-y-4">
+                            <div class="border-b border-gray-200 pb-4 mb-4">
+                                <h3 class="text-xl font-bold text-secondary">Rincian Pesanan</h3>
+                                <ul id="order-list" class="space-y-3 pt-4"></ul>
+                            </div>
+                            <div>
+                                <div class="flex items-center justify-between text-secondary">
+                                    <h4 class="text-lg font-semibold">Total Pembayaran</h4>
+                                    <p class="font-bold text-3xl">Rp <span id="total-price"></span></p>
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="w-full bg-green-500 rounded text-white py-2 cursor-pointer hover:bg-green-300">Pesan Sekarang</button>
+
+                        <button type="submit" class="w-full bg-green-600 text-white font-semibold py-3 rounded-lg text-center hover:bg-green-700 transition-colors duration-200 shadow-md transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+                            Pesan Sekarang
+                        </button>
                     </form>
                 </div>
             </div>
@@ -146,10 +157,6 @@
             })
 
             const result = await response.json()
-
-            console.log({
-                result
-            })
 
             if (!response.ok) throw result
 

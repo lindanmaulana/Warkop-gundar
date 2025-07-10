@@ -26,14 +26,8 @@ Route::middleware(['auth'])
         Route::prefix('/dashboard')->group(function () {
             Route::middleware(['role:admin'])->group(function () {
                 Route::get('/orders/{order}/update', [OrderController::class, 'edit'])->name('dashboard.orders.update');
-            });
-
-            Route::middleware(['role:customer'])->group(function () {
                 Route::get('/orders/cart', [OrderController::class, 'showOrderCart'])->name('dashboard.orders.cart');
                 Route::get('/orders/checkout', [OrderController::class, 'showOrderCheckout'])->name('dashboard.orders.checkout');
-            });
-
-            Route::middleware(['role:admin,customer'])->group(function () {
                 Route::get('/orders', [OrderController::class, 'index'])->name('dashboard.orders');
                 Route::get('/orders/{order}/detail', [OrderController::class, 'getDetailOrder'])->name('dashboard.orders.detail');
             });

@@ -10,7 +10,7 @@
             </div>
             <div class="overflow-x-auto w-full bg-white p-2 rounded-lg shadow-sm shadow-dark-blue/10">
                 <table class="w-full text-left rounded-md overflow-hidden">
-                    <thead class="*:text-gray-500">
+                    <thead class="*:text-gray-500 bg-gray-300">
                         <th class="font-normal py-2 px-6">No</th>
                         <th class="font-normal px-2 py-4">Pelanggan</th>
                         <th class="font-normal px-2 py-4">Tempat</th>
@@ -51,7 +51,7 @@
                             <td class="px-2 py-4">
                                 <div class="flex items-center gap-2">
                                     <a href="{{ route('home.order.detail', $order->id) }}" class="text-green-500 cursor-pointer"><x-icon name="receipt-text" /></a>
-                                    <a href="{{ route('home.order.payment', $order->id) }}" class="text-royal-blue cursor-pointer">Pembayaran</a>
+                                    <a href="{{ route('home.order.payment', $order->id) }}" class="bg-secondary text-white px-2 py-1 text-sm rounded font-semibold cursor-pointer">Pembayaran</a>
                                 </div>
                             </td>
                         </tr>

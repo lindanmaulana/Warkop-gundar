@@ -6,53 +6,61 @@ $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal
 
 @section('header')
 <div class="py-10">
-    <h2 class="text-xl font-semibold text-dark-blue">Dashboard</h2>
+    <h2 class="text-2xl font-semibold text-dark-blue">Edit Pesanan</h2>
+    <p class="text-sm text-dark-blue/70">Ubah status pesanan berdasarkan progres di Warkop.</p>
 </div>
 @endsection
 
 @section('content')
-<div class="space-y-4">
-    <div class="p-2 flex items-center justify-between">
-        <h2 class="text-2xl font-semibold text-dark-blue">Edit Order</h2>
-        <a href="{{ route('dashboard.orders') }}" class="bg-dark-blue px-2 rounded py-1 text-white flex items-center gap-1 text-sm"><x-icon name="arrow-left" />Back</a>
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <h3 class="text-xl font-semibold text-dark-blue">Form Edit Order</h3>
+        <a href="{{ route('dashboard.orders') }}" class="flex items-center gap-2 text-sm bg-dark-blue hover:bg-dark-blue/80 text-white px-3 py-1 rounded">
+            <x-icon name="arrow-left" /> Kembali
+        </a>
     </div>
-    <div class="flex flex-col gap-4 bg-white px-2 py-6 rounded-lg shadow-sm shadow-dark-blue/10">
-        <form action="{{ route('order.update', $order->id) }}" method="POST" class="space-y-6">
+
+    <div class="bg-white p-6 rounded-lg shadow-md shadow-dark-blue/10">
+        <form action="{{ route('order.update', $order->id) }}" method="POST" class="space-y-5">
             @csrf
             @method("PATCH")
-            <div class="space-y-3">
-                <label for="customer_name" class="flex flex-col gap-3">
-                    <span class="text-dark-blue font-semibold">Nama Pembeli:</span>
-                    <input type="text" id="customer_name" name="customer_name" value="{{ old('name', $order->user->name ) }}" class="w-full border-2 text-dark-blue/70 border-dark-blue/20 px-4 py-1 rounded-sm" readonly>
-                </label>
+
+            <div>
+                <label for="customer_name" class="block text-sm font-semibold text-dark-blue mb-1">Nama Pembeli</label>
+                <input type="text" id="customer_name" name="customer_name" value="{{ old('name', $order->user->name ) }}" class="w-full border border-dark-blue/20 bg-gray-100 text-dark-blue/80 px-4 py-2 rounded" readonly>
                 @error('customer_name')
                 <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                 @enderror
+            </div>
 
-                <label for="branch" class="flex flex-col gap-3">
-                    <span class="text-dark-blue font-semibold">Lokasi Warkop:</span>
-                    <input type="text" id="branch" name="branch" value="{{ old('name', $order->branch ) }}" class="w-full border-2 text-dark-blue/70 border-dark-blue/20 px-4 py-1 rounded-sm" readonly>
-                </label>
+            <div>
+                <label for="branch" class="block text-sm font-semibold text-dark-blue mb-1">Lokasi Warkop</label>
+                <input type="text" id="branch" name="branch" value="{{ old('branch', $order->branch ) }}" class="w-full border border-dark-blue/20 bg-gray-100 text-dark-blue/80 px-4 py-2 rounded" readonly>
                 @error('branch')
                 <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                 @enderror
+            </div>
 
-                <label for="status" class="flex flex-col gap-3">
-                    <span class="text-dark-blue font-semibold">Status:</span>
-                    <select id="status" name="status" class="w-full border-2 border-dark-blue/20 px-4 py-1 rounded-sm">
-                        <option value="pending" {{ old('status', $order->status) == 'pending' ? 'selected' : '' }}>Pending</option>
-                        <option value="processing" {{ old('status', $order->status) == 'processing' ? 'selected' : '' }}>Processing</option>
-                        <option value="done" {{ old('status', $order->status) == 'done' ? 'selected' : '' }}>Done</option>
-                        <option value="cancelled" {{ old('status', $order->status) == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-                    </select>
-                </label>
+            <div>
+                <label for="status" class="block text-sm font-semibold text-dark-blue mb-1">Status Pesanan</label>
+                <select id="status" name="status" class="w-full border border-dark-blue/20 px-4 py-2 rounded bg-white text-dark-blue">
+                    <option value="pending" {{ old('status', $order->status) == 'pending' ? 'selected' : '' }}>Pending</option>
+                    <option value="processing" {{ old('status', $order->status) == 'processing' ? 'selected' : '' }}>Processing</option>
+                    <option value="done" {{ old('status', $order->status) == 'done' ? 'selected' : '' }}>Selesai</option>
+                    <option value="cancelled" {{ old('status', $order->status) == 'cancelled' ? 'selected' : '' }}>Dibatalkan</option>
+                </select>
                 @error('status')
                 <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                 @enderror
             </div>
-            <div class="flex items-center justify-end gap-2">
-                <button type="submit" class="px-4 py-1 rounded cursor-pointer bg-royal-blue text-white font-semibold text-sm">Update</button>
-                <button type="reset" class="px-4 py-1 rounded cursor-pointer bg-red-500 text-white font-semibold text-sm">Batal</button>
+
+            <div class="flex justify-end gap-3 pt-4">
+                <button type="submit" class="bg-royal-blue hover:bg-royal-blue/90 text-white font-semibold px-4 py-2 rounded text-sm">
+                    Update
+                </button>
+                <button type="reset" class="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded text-sm">
+                    Batal
+                </button>
             </div>
         </form>
     </div>

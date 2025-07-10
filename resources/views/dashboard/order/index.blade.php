@@ -11,12 +11,6 @@
 <div class="space-y-4">
     <div class="flex items-center justify-between">
         <h2 class="text-xl font-semibold text-royal-blue">Order</h2>
-        @if(auth()->check() && auth()->user()->role->value === 'customer')
-        <a href="{{ route('dashboard.orders.cart') }}" class="relative px-4">
-            <x-icon name="shopping-cart" class="text-royal-blue" />
-            <span class="absolute -top-3 left-4 flex items-center justify-center text-sm rounded-full bg-royal-blue size-5 text-white" id="total-cart"></span>
-        </a>
-        @endif
     </div>
     <div class="overflow-x-auto w-full bg-white p-2 rounded-lg shadow-sm shadow-dark-blue/10">
         <table class="w-full text-left rounded-md overflow-hidden">
@@ -82,13 +76,6 @@
 
 @section('script')
 <script>
-    let totalCart = document.getElementById('total-cart')
 
-    let localstorageCart = localStorage.getItem('cart')
-    let cart = localstorageCart ? JSON.parse(localstorageCart) : []
-
-    if (cart.length === 0) totalCart.style.display = "none"
-
-    totalCart.innerHTML = cart.length
 </script>
 @endsection

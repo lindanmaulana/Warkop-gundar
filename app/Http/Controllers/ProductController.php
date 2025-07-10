@@ -96,7 +96,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return view('dashboard.payment.show', compact('product'));
+        return view('dashboard.menu.product.show', compact('product'));
     }
 
     /**
@@ -159,8 +159,11 @@ class ProductController extends Controller
                     ->pluck('order_id')
                     ->unique();
 
-
                 OrderItem::where('product_id', $product->id)->delete();
+
+                if ($product->image_url && Storage::disk('public')->exists($product->image_url)) {
+                    Storage::disk('public')->delete($product->image_url);
+                }
 
                 $product->delete();
 

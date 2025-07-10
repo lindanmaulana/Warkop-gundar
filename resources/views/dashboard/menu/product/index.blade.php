@@ -1,8 +1,3 @@
-@php
-// Fungsi helper untuk memeriksa apakah rute saat ini cocok dengan nama rute yang diberikan
-$isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal-blue hover:bg-royal-blue/80' : 'bg-royal-blue/70';
-@endphp
-
 @extends('layouts.dashboard')
 
 @section('header')
@@ -31,11 +26,9 @@ $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal
                     @endforeach
                 </select>
             </form>
-            @if(auth()->check() && auth()->user()->role->value === 'admin')
             <a href="{{ route('dashboard.menu.products.create') }}" class="flex items-center rounded px-3 py-1 text-white bg-green-500 hover:bg-green-300 cursor-pointer">
                 Tambah
             </a>
-            @endif
         </div>
     </div>
 
@@ -74,21 +67,18 @@ $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal
                     </td>
                     <td class="px-2 py-4 text-dark-blue">{{ $product->name }}</td>
                     <td class="px-2 py-4 text-dark-blue">{{ $product->category->name }}</td>
-                    <td class="px-2 py-4 text-dark-blue">{{ $product->price }}</td>
+                    <td class="px-2 py-4 text-dark-blue">Rp {{ number_format($product->price, 0, ',', '.') }}</td>
                     <td class="px-2 py-4 text-dark-blue">{{ $product->stock }}</td>
                     <td class="px-2 py-4 text-dark-blue">{{ $product->description }}</td>
                     <td class="px-2 py-4 text-dark-blue">
                         <div class="flex items-center justify-center gap-3 *:text-sm">
                             <a href="{{ route('dashboard.menu.products.edit', $product->id) }}" class="text-royal-blue font-medium cursor-pointer">Edit</a>
-                            <a href="{{ route('dashboard.menu.products', $product->id) }}" class="text-green-500 font-medium cursor-pointer">Detail</a>
-                            <form action="{{ route('products.destroy', $category) }}" method="POST">
+                            <a href="{{ route('dashboard.menu.products.detail', $product->id) }}" class="text-green-500 font-medium cursor-pointer">Detail</a>
+                            <form action="{{ route('products.destroy', $product->id) }}" method="POST">
                                 @csrf
-                                @method('DELETE')
+                                @method('delete')
                                 <button type="submit" class="text-red-500 font-medium cursor-pointer">Hapus</button>
                             </form>
-                            <button onclick="handleAddToCart(this)" class="cursor-pointer text-dark-blue" data-user-id="{{ auth()->user()->id }}" data-product-id="{{ $product->id }}" data-product-name="{{ $product->name }}" data-product-price="{{ $product->price }}">
-                                <x-icon name="shopping-cart" />
-                            </button>
                         </div>
                     </td>
                 </tr>

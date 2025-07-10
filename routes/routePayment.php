@@ -11,6 +11,7 @@ Route::middleware(['auth'])->group(function() {
         Route::get('/', [PaymentController::class, 'index'])->name('dashboard.payments');
         Route::get('/create', [PaymentController::class, 'create'])->name('dashboard.payments.create');
         Route::get('/{payment}/update', [PaymentController::class, 'edit'])->name('dashboard.payments.update');
+        Route::get('/{payment}/detail', [PaymentController::class, 'show'])->name('dashboard.payments.detail');
 
         Route::post('/store', [PaymentController::class, 'store'])->name('payments.store');
         Route::patch('/{payment}/update', [PaymentController::class, 'update'])->name('payments.update');

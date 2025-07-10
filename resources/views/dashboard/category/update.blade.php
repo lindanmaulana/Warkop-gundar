@@ -25,14 +25,14 @@ $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal
             <div class="space-y-3">
                 <label for="name" class="flex flex-col gap-3">
                     <span class="text-dark-blue font-semibold">Nama:</span>
-                    <input type="text" id="name" name="name" value="{{ old('name', $category->name) }}" class="w-full border-2 border-dark-blue/20 px-4 py-1 rounded-sm">
+                    <input type="text" id="name" name="name" value="{{ old('name', $category->name) }}" class="w-full border border-dark-blue/20 px-4 py-1 rounded-sm">
                 </label>
                 @error('name')
                 <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                 @enderror
                 <label for="description" class="flex flex-col gap-3 rounded-md">
                     <span class="text-dark-blue font-semibold">Deskripsi:</span>
-                    <input type="text" id="description" name="description" value="{{ old('description', $category->description) }}" class="w-full border-2 border-dark-blue/20 px-4 py-1 rounded-sm">
+                    <input type="text" id="description" name="description" value="{{ old('description', $category->description) }}" class="w-full border border-dark-blue/20 px-4 py-1 rounded-sm">
                 </label>
                 @error('description')
                 <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>

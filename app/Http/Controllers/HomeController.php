@@ -9,6 +9,7 @@ use App\Models\OrderItem;
 use App\Models\Payment;
 use App\Models\PaymentProofs;
 use App\Models\Product;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,8 +24,14 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $allProducts = Product::count();
         $productsLatest = Product::latest()->take(3)->get();
-        $productsForYou = Product::latest()->skip(3)->take(9)->get();
+
+        if ($allProducts <= 3) {
+            $productsForYou = $productsLatest;
+        } else {
+            $productsForYou = Product::latest()->skip(3)->take(9)->get();
+        }
         return view('home.index', compact('productsLatest', 'productsForYou'));
     }
 
@@ -177,6 +184,18 @@ class HomeController extends Controller
             ], 500);
         }
     }
+
+    public function updateProfile(Request $request, User $user)
+    {
+        $userValidated = $request->validate([
+            'name' => 'required|string',
+        ]);
+
+        $user->update($userValidated);
+
+        return redirect()->route('home.profile')->with('message', 'Profile berhasil di perbarui.');
+    }
+
     /**
      * Show the form for creating a new resource.
      */

@@ -67,9 +67,9 @@ class PaymentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Payment $payment)
     {
-        //
+        return view('dashboard.payment.show', compact('payment'));
     }
 
     /**

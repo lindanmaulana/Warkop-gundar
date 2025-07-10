@@ -53,7 +53,8 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string'
+            'name' => 'required|string',
+            'phone' => 'nullable|string'
         ]);
 
         $user->update($validatedData);

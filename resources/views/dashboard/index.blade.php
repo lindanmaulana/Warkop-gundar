@@ -3,33 +3,16 @@
 @section('header')
 <div class="mt-10 mb-4 w-full flex items-center justify-between">
     <div>
-        @auth
-        @if(auth()->user()->role->value === 'admin')
         <h2 class="text-3xl font-semibold text-royal-blue">Ringkasan Dashboard</h2>
         <p class="text-dark-blue mt-1">Selamat datang, {{ auth()->user()->name }}! Ini ringkasan operasional warkop hari ini.</p>
-        @else {{-- Asumsikan role selain 'admin' adalah 'customer' --}}
-        <h2 class="text-3xl font-semibold text-dark-blue">Dashboard Pesananmu</h2>
-        <p class="text-slate-500 mt-1">Selamat datang kembali, {{ auth()->user()->name }}! Mari cek status pesananmu.</p>
-        @endif
-        @endauth
     </div>
     <div class="hidden md:flex items-center gap-3">
-        @if(auth()->user()->role->value === 'admin')
         <a href="{{ route('dashboard.orders') }}" class="relative">
             <x-icon name="bell" class="size-5 text-royal-blue" />
             <div data-total-order="{{ $totalOrderPending }}" class="totalOrder absolute -top-3 right-0 rounded-full size-4 flex items-center justify-center bg-red-500">
                 <span class=" text-sm text-white">{{ $totalOrderPending }}</span>
             </div>
         </a>
-        @elseif(auth()->user()->role->value === 'customer')
-        <a href="{{ route('dashboard.orders') }}" class="relative">
-            <x-icon name="shopping-cart" class="size-5 text-royal-blue" />
-            <div data-total-order="{{ $totalOrderByCustomer }}" class="totalOrder absolute -top-3 right-0 rounded-full size-4 flex items-center justify-center bg-red-500">
-                <span class=" text-sm text-white">{{ $totalOrderByCustomer }}</span>
-            </div>
-        </a>
-        @endif
-
         <h4 class="text-lg text-royal-blue font-semibold capitalize">{{ auth()->user()->role }}</h4>
         <div class="bg-royal-blue/40 rounded-full size-10 flex items-center justify-center">
             <span id="initialName" data-profile-name="{{ auth()->user()->name }}" class="text-base font-bold text-royal-blue"></span>
@@ -92,7 +75,7 @@
             @foreach($latestOrdersData as $order)
             <tr class="border-b border-dark-blue/20 hover:bg-dark-blue/20 *:text-sm">
                 <td class="text-gray-500 px-6 py-2">{{ $no++ }}</td>
-                <td class="text-gray-500 px-2 py-3">{{ $order->customer_name }}</td>
+                <td class="text-gray-500 px-2 py-3">{{ $order->user->name }}</td>
                 <td class="text-gray-500 px-2 py-3">{{ $order->branch }}</td>
                 <td class="text-gray-500 px-2 py-3">{{ $order->delivery_location }}</td>
                 <td class="text-gray-500 px-2 py-3">Rp {{ number_format($order->total_price, 0, ',', '.') }}</td>
@@ -112,7 +95,12 @@
                     @endif
                 </td>
                 <td class="text-gray-500 px-2 py-3 line-clamp-1 truncate max-w-[160px]">{{ $order->description }} </td>
-                <td class="text-gray-500">{{ $order->created_at->format('d M Y H:i') }}</td>
+                <td class="text-gray-500">
+                    <?php if ($order->created_at): ?>
+                        {{ $order->created_at->format('d M Y H:i') }}
+                    <?php else: ?>
+                        - <?php endif; ?>
+                </td>
             </tr>
             @endforeach
             @else

@@ -9,6 +9,13 @@
 
 @section('content')
 <div class="">
+    @if(session('success'))
+    <div id="alert-success" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+        <p class="text-green-700 ">
+            <strong class="bold">Success!</strong> {{session('success')}}
+        </p>
+    </div>
+    @endif
     <h2 class="text-lg font-semibold text-dark-blue">Profile Setting</h2>
     <div class="w-full flex items-center gap-6 py-4">
         <form action="{{ route('setting.profile.update', $user->id) }}" class="w-full space-y-6" method="POST">

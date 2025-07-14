@@ -16,32 +16,31 @@
     <div class="flex flex-col gap-4 bg-white px-2 py-6 rounded-lg shadow-sm shadow-dark-blue/10">
         <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
-            <div class="space-y-3">
-                <label for="name" class="flex flex-col gap-3">
-                    <span class="text-dark-blue font-semibold">Nama:</span>
-                    <input type="text" id="name" name="name" placeholder="Kopi susu..." class="w-full border-2 border-dark-blue/20 px-4 py-1 rounded-sm">
-                </label>
-                @error('name')
-                <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
-                @enderror
+            <div class="space-y-3 grid grid-cols-3 gap-4">
+                <div class="col-span-2 space-y-3">
+                    <label for="name" class="flex flex-col gap-3">
+                        <span class="text-dark-blue font-semibold">Nama:</span>
+                        <input type="text" id="name" name="name" placeholder="Kopi susu..." class="w-full border border-dark-blue/20 px-4 py-2 rounded">
+                    </label>
+                    @error('name')
+                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                    @enderror
 
-                <label for="category" class="flex flex-col gap-3">
-                    <span class="text-dark-blue font-semibold">Category:</span>
-                    <select id="category" name="category_id" class="w-full border-2 border-dark-blue/20 px-4 py-1 rounded-sm">
-                        @foreach($categories as $category)
-                        <option value="{{ $category->id }}">{{ $category->name }}</option>
-                        @endforeach
-                    </select>
-                </label>
-                @error('name')
-                <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
-                @enderror
-
-                <div class="grid grid-cols-3 gap-4">
-                    <div class="col-span-2">
+                    <label for="category" class="flex flex-col gap-3">
+                        <span class="text-dark-blue font-semibold">Category:</span>
+                        <select id="category" name="category_id" class="w-full border border-dark-blue/20 px-4 py-2 rounded">
+                            @foreach($categories as $category)
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </label>
+                    @error('name')
+                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                    @enderror
+                    <div class="grid grid-cols-2 gap-4">
                         <label for="price" class="flex flex-col gap-3">
                             <span class="text-dark-blue font-semibold">Harga:</span>
-                            <input type="number" id="price" name="price" placeholder="80xxx" class="w-full border-2 border-dark-blue/20 px-4 py-1 rounded-sm">
+                            <input type="number" id="price" name="price" placeholder="80xxx" class="w-full border border-dark-blue/20 px-4 py-2 rounded">
                         </label>
                         @error('price')
                         <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
@@ -49,41 +48,41 @@
 
                         <label for="stock" class="flex flex-col gap-3">
                             <span class="text-dark-blue font-semibold">Stock:</span>
-                            <input type="number" id="stock" name="stock" placeholder="4xxx" class="w-full border-2 border-dark-blue/20 px-4 py-1 rounded-sm">
+                            <input type="number" id="stock" name="stock" placeholder="4xxx" class="w-full border border-dark-blue/20 px-4 py-2 rounded">
                         </label>
                         @error('stock')
                         <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
+                    </div>
 
-                        <label for="description" class="flex flex-col gap-3 rounded-md">
-                            <span class="text-dark-blue font-semibold">Deskripsi: (Optional)</span>
-                            <input type="text" id="description" name="description" class="w-full border-2 border-dark-blue/20 px-4 py-1 rounded-sm">
+                    <label for="description" class="flex flex-col gap-3 rounded-md">
+                        <span class="text-dark-blue font-semibold">Deskripsi: (Optional)</span>
+                        <textarea id="description" name="description" class="w-full border border-dark-blue/20 px-4 py-2 rounded"></textarea>
+                    </label>
+                    @error('description')
+                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="">
+                    <div id="image-preview" class="relative w-full max-h-54 flex items-center justify-center border rounded-lg border-gray-200">
+                        <label for="image_url" class="absolute inset-0 flex items-center justify-center cursor-pointer text-center group"></label>
+                        <figure class="w-full h-full rounded-md overflow-hidden">
+                            <img src="" id="image-product" alt="" class="w-full h-full object-cover">
+                        </figure>
+                    </div>
+
+                    <div id="image-upload" class="max-h-20 w-full h-full self-end space-y-2">
+                        <span class="block text-dark-blue font-semibold">Attachment</span>
+                        <label for="image_url" class="border rounded-lg border-gray-200 flex items-center justify-center gap-1 cursor-pointer bg-peach w-full h-[85%]">
+                            <x-icon name="image-up" class="text-green-500" />
+                            <span class="text-gray-500">Upload Image Here</span>
+                            @error('image_url')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            @enderror
                         </label>
-                        @error('description')
-                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
-                        @enderror
                     </div>
-
-                    <div class="flex items-center">
-                        <div id="image-preview" class="relative w-full max-h-54 flex items-center justify-center border-2 rounded-lg border-gray-200">
-                            <label for="image_url" class="absolute inset-0 flex items-center justify-center cursor-pointer text-center group"></label>
-                            <figure class="w-full h-full rounded-md overflow-hidden">
-                                <img src="" id="image-product" alt="" class="w-full h-full object-cover">
-                            </figure>
-                        </div>
-
-                        <div id="image-upload" class="w-full h-full self-end space-y-2">
-                            <span class="block text-dark-blue font-semibold">Attachment</span>
-                            <label for="image_url" class="border-2 rounded-lg border-gray-200 flex items-center justify-center gap-1 cursor-pointer bg-peach w-full h-[85%]">
-                                <x-icon name="image-up" class="text-green-500" />
-                                <span class="text-gray-500">Upload Image Here</span>
-                                @error('image_url')
-                                <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
-                                @enderror
-                            </label>
-                        </div>
-                        <input type="file" name="image_url" id="image_url" accept="image/*" class="hidden">
-                    </div>
+                    <input type="file" name="image_url" id="image_url" accept="image/*" class="hidden">
                 </div>
             </div>
             <div class="flex items-center justify-end gap-2">

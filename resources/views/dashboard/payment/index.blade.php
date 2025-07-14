@@ -16,13 +16,14 @@
         </a>
     </div>
 
-    @if(session('message'))
-    <div id="alert" class="bg-green-200 rounded p-4">
-        <p class="text-green-700 font-semibold">
-            {{session('message')}}
+    @if(session('success'))
+    <div id="alert-success" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+        <p class="text-green-700 ">
+            <strong class="bold">Success!</strong> {{session('success')}}
         </p>
     </div>
     @endif
+
 
     <div class="overflow-x-auto w-full bg-white p-2 rounded-lg shadow-sm shadow-dark-blue/10">
         <table class="w-full text-left rounded-md overflow-hidden">
@@ -87,17 +88,6 @@
 
 <script>
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    const alertComponent = document.getElementById('alert')
-
-    const handleHideAlert = (alert) => {
-        if (alert) {
-            setTimeout(() => {
-                alert.style.display = "none"
-            }, 1500);
-        }
-    }
-
-    handleHideAlert(alertComponent)
 </script>
 
 @endsection

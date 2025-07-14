@@ -118,7 +118,7 @@ class PaymentController extends Controller
         $payment->is_active = $validatedData['is_active'];
         $payment->save();
 
-        return redirect()->route('dashboard.payments')->with('message', 'Tipe Pembayaran berhasil diperbarui.');
+        return redirect()->route('dashboard.payments')->with('success', 'Tipe Pembayaran berhasil diperbarui.');
     }
 
     /**

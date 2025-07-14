@@ -63,17 +63,17 @@
     </div>
 </section>
 
-<section>
+<section class="mb-20 sm:mb-16 md:mb-10">
     <div class="relative container max-w-6xl mx-auto py-10">
         <img src="/images/bg_img_hero.png" alt="" class="absolute -top-4 w-[460px] -left-12">
         <h2 data-aos="fade-right" data-aos-duration="1000" class="relative text-secondary text-3xl font-bold mb-28 ml-5 after:content[''] after:absolute after:left-30 after:-bottom-2 after:w-16 after:h-1.5 after:rounded after:bg-primary">Menu Terbaru</h2>
-        <div class="relative w-full h-[280px] bg-pale-peach rounded-4xl py-10">
-            <article class="absolute w-full -top-20 grid grid-cols-3 gap-8 px-10">
+        <div class="relative w-full min-h-[200px] lg:min-h-[280px] bg-pale-peach rounded-4xl py-10">
+            <article class="absolute w-full -top-20 flex overflow-x-auto md:overflow-hidden md:grid grid-cols-3 gap-8 px-10 py-10">
                 @foreach($productsLatest as $product)
                 <article
                     data-aos="fade-up"
                     data-aos-duration="{{ 500 + ($loop->index * 100) }}"
-                    class="flex flex-col h-auto sm:h-[380px] md:h-[400px] lg:h-[420px] xl:h-[450px] bg-white border border-primary/20 p-4 rounded-xl shadow-lg transition-all duration-300 ease-in-out transform hover:scale-[1.02] hover:shadow-xl hover:border-primary/50 space-y-3">
+                    class="flex flex-col min-w-[300px] md:w-full h-auto sm:h-[380px] md:h-[400px] lg:h-[420px] xl:h-[450px] bg-white border border-primary/20 p-4 rounded-xl shadow-lg transition-all duration-300 ease-in-out transform hover:scale-[1.02] hover:shadow-xl hover:border-primary/50 space-y-3">
                     <div class="relative w-full h-2/3 overflow-hidden rounded-lg">
                         <figure class="w-full h-full">
                             @if($product->image_url)
@@ -124,11 +124,11 @@
     </div>
 </section>
 
-<section class="py-20">
+<section class="py-24 md:py-20">
     <div class="container max-w-6xl mx-auto">
         <h2 data-aos="fade-up" data-aos-duration="1000" class="relative text-secondary text-3xl text-center font-semibold mb-28 ml-5 after:content[''] after:absolute after:right-1/2 after:translate-x-1/2 after:-bottom-2 after:w-16 after:h-1.5 after:rounded after:bg-primary">Pengiriman Cepat dari Kantin ke Meja Anda</h2>
 
-        <article class="grid grid-cols-3 gap-4">
+        <article class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             <article class="flex flex-col items-center justify-center gap-1">
                 <figure data-aos="fade-up" data-aos-duration="1000">
                     <img src="/images/chose-coffe.png" alt="pilih coffe mu" class="w-full h-full">
@@ -154,9 +154,9 @@
     </div>
 </section>
 
-<section class="w-full h-[400px] bg-center bg-no-repeat mt-20" style="background-image: url('/images/bg-coffe.jpg')">
-    <div class="container max-w-6xl mx-auto">
-        <div class="w-full h-full flex items-center justify-evenly">
+<section class="w-full min-h-[400px] bg-center bg-no-repeat bg-cover md:bg-auto mt-20 py-20" style="background-image: url('/images/bg-coffe.jpg')">
+    <div class="container max-w-6xl mx-auto px-4 md:px-0">
+        <div class="w-full h-full flex flex-col md:flex-row items-center justify-evenly">
             <div class="">
                 <figure data-aos="fade-right" data-aos-duration="1000" class="h-[440px] -translate-y-16 rounded-xl overflow-hidden border-4 border-peach">
                     <img src="/images/warkopgundar.jpg" alt="warkopgundar" class="w-full h-full object-cover">
@@ -195,11 +195,11 @@
 </section>
 
 <section class="bg-center bg-no-repeat h-[440px]" style="background-image: url('/images/bg-coffe-2.png');">
-    <div class="container max-w-6xl mx-auto">
-        <div class="w-full h-full flex items-center justify-between">
+    <div class="container max-w-6xl mx-auto px-4 md:px-0">
+        <div class="w-full h-full flex flex-col md:flex-row items-center justify-around md:justify-between">
             <h2 data-aos="fade-right" data-aos-duration="1000" class="text-3xl font-semibold text-white bg-secondary/50 p-4 rounded">Ngopi Bisa Kapan Aja</h2>
 
-            <article class="grid grid-cols-2 gap-12 mr-40">
+            <article class="grid grid-cols-2 gap-12 lg:mr-40">
                 <article class="">
                     <h3 data-aos="fade-up" data-aos-duration="1000" class="text-2xl text-primary">WG-SUDIRMAN</h3>
                     <p data-aos="fade-up" data-aos-duration="1000" class="text-white font-semibold text-lg">Senin - Jum'at</p>
@@ -226,15 +226,15 @@
 </section>
 
 <section class="py-20">
-    <div class="container max-w-6xl mx-auto">
+    <div class="container max-w-6xl mx-auto px-4 md:px-0">
         <h2 data-aos="fade-right" data-aos-duration="1000" class="relative text-secondary text-3xl font-bold  ml-5 after:content[''] after:absolute after:left-72 after:-bottom-2 after:w-16 after:h-1.5 after:rounded after:bg-primary">Menu Pilihan untuk Kamu</h2>
 
-        <article class="grid grid-cols-3 gap-4 py-20">
+        <article class="flex overflow-x-auto md:overflow-hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 py-20">
             @foreach($productsForYou as $product)
             <article
                 data-aos="fade-up"
                 data-aos-duration="{{ 500 + ($loop->index * 100) }}"
-                class="flex flex-col h-auto sm:h-[380px] md:h-[400px] lg:h-[420px] xl:h-[450px] bg-white border border-primary/20 p-4 rounded-xl shadow-lg transition-all duration-300 ease-in-out transform hover:scale-[1.02] hover:shadow-xl hover:border-primary/50 space-y-3">
+                class="flex flex-col min-w-[300px] md:w-auto h-auto sm:h-[380px] md:h-[400px] lg:h-[420px] xl:h-[450px] bg-white border border-primary/20 p-4 rounded-xl shadow-lg transition-all duration-300 ease-in-out transform hover:scale-[1.02] hover:shadow-xl hover:border-primary/50 space-y-3">
                 <div class="relative w-full h-2/3 overflow-hidden rounded-lg">
                     <figure class="w-full h-full">
                         @if($product->image_url)
@@ -288,17 +288,17 @@
     </div>
 </section>
 
-<section class="relative w-full h-[360px] my-20">
-    <div class="absolute w-2/3 h-full left-0 top-0 bg-center bg-no-repeat -z-10 rounded-r-2xl" style="background-image: url('/images/bg-coffe.jpg')"></div>
-    <div class="container max-w-6xl mx-auto overflow-hidden">
-        <div class="w-full h-full flex items-center justify-between">
+<section class="relative w-full min-h-[360px] my-20 py-10">
+    <div class="absolute w-4/5 lg:w-2/3 h-full left-0 top-0 bg-center bg-no-repeat -z-10 rounded-r-2xl" style="background-image: url('/images/bg-coffe.jpg')"></div>
+    <div class="container max-w-6xl mx-auto overflow-hidden px-4 md:px-0">
+        <div class="w-full h-full flex flex-col md:flex-row items-center gap-6 md:gap-0 justify-between">
             <div class="space-y-2">
                 <h2 data-aos="fade-right" data-aos-duration="1000" class="relative text-secondary text-3xl font-extrabold">Dari Hati <span class="text-primary">Pemilik</span></h2>
                 <p data-aos="fade-right" data-aos-duration="1200" class="max-w-[340px] text-secondary text-base font-thin">Dari obrolan kecil sampai tawa besar, semuanya bisa dimulai dari secangkir kopi. Itu alasan kami buka warkop ini..</p>
             </div>
 
-            <article class="grid grid-cols-3 gap-12">
-                <article data-aos="fade-left" data-aos-duration="1000" class="relative h-[260px] bg-white border-3 border-primary/30 rounded-sm shadow-lg space-y-3">
+            <article class="w-full flex overflow-x-auto md:grid grid-cols-3 gap-12 md:px-10">
+                <article data-aos="fade-left" data-aos-duration="1000" class="min-w-[200px] md:w-full relative h-[260px] bg-white border-3 border-primary/30 rounded-sm shadow-lg space-y-3">
                     <figure data-aos="fade-left" data-aos-duration="1000" class="rounded-sm overflow-hidden">
                         <img src="/images/pendiri1.jpg" alt="Pendiri Warkop 1" class="w-full h-full object-cover">
                     </figure>
@@ -307,7 +307,7 @@
                         <p class="text-sm text-secondary">Tempat kecil, tapi niat kami besar..</p>
                     </div>
                 </article>
-                <article data-aos="fade-left" data-aos-duration="1000" class="relative h-[260px] bg-white border-3 border-primary/30 rounded-sm shadow-lg space-y-3">
+                <article data-aos="fade-left" data-aos-duration="1000" class="min-w-[200px] md:w-full relative h-[260px] bg-white border-3 border-primary/30 rounded-sm shadow-lg space-y-3">
                     <figure data-aos="fade-left" data-aos-duration="1000" class="rounded-sm overflow-hidden">
                         <img src="/images/pendiri1.jpg" alt="Pendiri Warkop 1" class="w-full h-full object-cover">
                     </figure>
@@ -316,7 +316,7 @@
                         <p class="text-sm text-secondary">Bukan sekadar kopi, tapi tempat pulang...</p>
                     </div>
                 </article>
-                <article data-aos="fade-left" data-aos-duration="1000" class="relative h-[260px] bg-white border-3 border-primary/30 rounded-sm shadow-lg space-y-3">
+                <article data-aos="fade-left" data-aos-duration="1000" class="min-w-[200px] md:w-full relative h-[260px] bg-white border-3 border-primary/30 rounded-sm shadow-lg space-y-3">
                     <figure data-aos="fade-left" data-aos-duration="1000" class="rounded-sm overflow-hidden">
                         <img src="/images/pendiri1.jpg" alt="Pendiri Warkop 1" class="w-full h-full object-cover">
                     </figure>

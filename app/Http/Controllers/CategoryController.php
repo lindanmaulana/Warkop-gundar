@@ -50,7 +50,7 @@ class CategoryController extends Controller
 
         $category->update($validatedData);
 
-        return redirect()->route('dashboard.categories')->with('success', 'Kategori berhasil di edit.');
+        return redirect()->route('dashboard.categories')->with('success', 'Kategori berhasil diperbarui!');
     }
 
     public function destroy(Category $category)

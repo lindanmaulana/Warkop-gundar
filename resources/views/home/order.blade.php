@@ -51,7 +51,9 @@
                             <td class="px-2 py-4">
                                 <div class="flex items-center gap-2">
                                     <a href="{{ route('home.order.detail', $order->id) }}" class="text-green-500 cursor-pointer"><x-icon name="receipt-text" /></a>
+                                    @if($order->status->value != "cancelled")
                                     <a href="{{ route('home.order.payment', $order->id) }}" class="bg-secondary text-white px-2 py-1 text-sm rounded font-semibold cursor-pointer">Pembayaran</a>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

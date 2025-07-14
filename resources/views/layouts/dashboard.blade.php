@@ -1,5 +1,5 @@
     @php
-    $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'text-royal-blue' : 'text-royal-blue/50';
+    $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'text-white bg-royal-blue' : 'text-royal-blue/50';
     $isActiveMobile = fn (string $routeName) => request()->routeIs($routeName) ? 'text-white' : 'text-white/50';
     @endphp
 
@@ -14,18 +14,16 @@
                     <ul class="w-full py-14 flex flex-col items-center">
                         <li class="w-full group">
                             <a href="{{ route('dashboard') }}" class="w-full flex items-center gap-4 text-lg font-semibold pl-6 py-2 rounded-md group-hover:bg-royal-blue/20 transition-all duration-300 ease-in-out {{ $isActive('dashboard') }}"">
-                                <x-icon name="home" />
-                                Dashboard
+                                <x-icon name='home' />
+                            Dashboard
                             </a>
                         </li>
-                        @if(auth()->check() && auth()->user()->role->value === 'admin')
                         <li class="w-full group">
                             <a href="{{ route('dashboard.categories') }}" class="w-full flex items-center gap-4 text-lg font-semibold pl-6 py-2 rounded-md group-hover:bg-royal-blue/20 transition-all duration-300 ease-in-out {{ $isActive('dashboard.categories') }}">
                                 <x-icon name="category" />
                                 Category
                             </a>
                         </li>
-                        @endif
                         <li class="w-full group">
                             <a href="{{ route('dashboard.menu.products') }}" class="w-full flex items-center gap-4 text-lg font-semibold pl-6 py-2 rounded-md group-hover:bg-royal-blue/20 transition-all duration-300 ease-in-out {{ $isActive('dashboard.menu.products') }}">
                                 <x-icon name="toolskitchen" />
@@ -117,3 +115,8 @@
             </div>
         </section>
     </main>
+
+
+    <!-- <script>
+
+    </script> -->

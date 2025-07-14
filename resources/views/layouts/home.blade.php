@@ -1,4 +1,5 @@
 @extends('app')
+
 @php
 $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'text-primary font-semibold' : 'text-secondary';
 $bgHeader = fn () => request()->routeIs('home.menu', 'home.order.detail', 'home.order.payment') ? 'bg-peach/10 backdrop-blur-xs text-lg' : 'bg-peach text-lg';
@@ -63,7 +64,7 @@ $bgHeader = fn () => request()->routeIs('home.menu', 'home.order.detail', 'home.
                     </span>
                 </a>
                 @endif
-                <button id="mobileMenuButton" class="text-secondary focus:outline-none p-1 rounded-md hover:bg-gray-100 transition-colors duration-200">
+                <button onclick="handleHamburgerMenu()" id="mobileMenuButton" class="text-secondary focus:outline-none p-1 rounded-md hover:bg-gray-100 transition-colors duration-200">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
@@ -71,43 +72,44 @@ $bgHeader = fn () => request()->routeIs('home.menu', 'home.order.detail', 'home.
             </div>
         </div>
 
-        <div id="mobileMenuOverlay" class="fixed inset-0 bg-black bg-opacity-75 z-40 hidden transition-opacity duration-300 opacity-0"></div>
-        <nav id="mobileMenu" class="fixed top-0 right-0 w-64 h-full bg-peach shadow-lg transform translate-x-full transition-transform duration-300 z-50">
-            <div class="p-6">
-                <button id="closeMobileMenuButton" class="absolute top-4 right-4 text-secondary hover:text-primary transition-colors duration-200">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-                <ul class="flex flex-col gap-6 text-xl font-semibold mt-16">
-                    <li>
-                        <a href="{{ route('home') }}" class="text-secondary hover:text-primary transition-colors duration-200 {{ $isActive('home') ? 'text-primary font-bold' : '' }}">Home</a>
-                    </li>
-                    <li>
-                        <a href="#" class="text-secondary hover:text-primary transition-colors duration-200">About Us</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('home.menu') }}" class="text-secondary hover:text-primary transition-colors duration-200 {{ $isActive('home.menu') ? 'text-primary font-bold' : '' }}">Our Menu</a>
-                    </li>
-                    @if(Auth::user())
-                    <hr class="border-t border-gray-300 my-4">
-                    <li>
-                        <a href="{{ route('home.profile') }}" class="text-green-600 hover:text-green-800 transition-colors duration-200">Profile</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('home.order') }}" class="text-green-600 hover:text-green-800 transition-colors duration-200">Pesanan</a>
-                    </li>
-                    <li>
-                        <form action="{{ route('auth.logout') }}" method="post">
-                            @csrf
-                            <button type="submit" class="block w-full text-left text-red-600 hover:text-red-800 transition-colors duration-200">Logout</button>
-                        </form>
-                    </li>
-                    @endif
-                </ul>
-            </div>
-        </nav>
     </header>
+
+    <div id="mobileMenuOverlay" class="fixed inset-0 bg-black bg-opacity-75 z-40 hidden transition-opacity duration-300 opacity-0"></div>
+    <nav id="mobileMenu" class="fixed top-0 right-0 w-64 h-full bg-peach shadow-lg transform translate-x-full transition-transform duration-300 z-50">
+        <div class="p-6">
+            <button onclick="handleCloseHamburgerMenu()" id="closeMobileMenuButton" class="absolute top-4 right-4 text-secondary hover:text-primary transition-colors duration-200">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            <ul class="flex flex-col gap-6 text-xl font-semibold mt-16">
+                <li>
+                    <a href="{{ route('home') }}" class="text-secondary hover:text-primary transition-colors duration-200 {{ $isActive('home') ? 'text-primary font-bold' : '' }}">Home</a>
+                </li>
+                <li>
+                    <a href="#" class="text-secondary hover:text-primary transition-colors duration-200">About Us</a>
+                </li>
+                <li>
+                    <a href="{{ route('home.menu') }}" class="text-secondary hover:text-primary transition-colors duration-200 {{ $isActive('home.menu') ? 'text-primary font-bold' : '' }}">Our Menu</a>
+                </li>
+                @if(Auth::user())
+                <hr class="border-t border-gray-300 my-4">
+                <li>
+                    <a href="{{ route('home.profile') }}" class="text-green-600 hover:text-green-800 transition-colors duration-200">Profile</a>
+                </li>
+                <li>
+                    <a href="{{ route('home.order') }}" class="text-green-600 hover:text-green-800 transition-colors duration-200">Pesanan</a>
+                </li>
+                <li>
+                    <form action="{{ route('auth.logout') }}" method="post">
+                        @csrf
+                        <button type="submit" class="block w-full text-left text-red-600 hover:text-red-800 transition-colors duration-200">Logout</button>
+                    </form>
+                </li>
+                @endif
+            </ul>
+        </div>
+    </nav>
 
     <main class="flex-1 font-poppins-regular">
         @yield('content')
@@ -181,6 +183,7 @@ $bgHeader = fn () => request()->routeIs('home.menu', 'home.order.detail', 'home.
 <script>
     let cartLocalStorage = localStorage.getItem('cart')
     let cart = cartLocalStorage ? JSON.parse(cartLocalStorage) : []
+    const mobileMenu = document.getElementById("mobileMenu")
 
     const componentTotalCart = document.getElementById('totalCart')
 
@@ -217,7 +220,6 @@ $bgHeader = fn () => request()->routeIs('home.menu', 'home.order.detail', 'home.
         })
 
         mainLocalStorage()
-        showTotalCart()
     }
 
     const showTotalCart = () => {
@@ -231,6 +233,8 @@ $bgHeader = fn () => request()->routeIs('home.menu', 'home.order.detail', 'home.
     function mainLocalStorage() {
         const cartNew = JSON.stringify(cart)
         localStorage.setItem('cart', cartNew)
+
+        showTotalCart()
     }
 
     const componentMenu = document.getElementById('menu');
@@ -258,6 +262,14 @@ $bgHeader = fn () => request()->routeIs('home.menu', 'home.order.detail', 'home.
             componentMenu.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
         }
     });
+
+    const handleHamburgerMenu = () => {
+        mobileMenu.classList.toggle("translate-x-full")
+    }
+
+    const handleCloseHamburgerMenu = () => {
+        mobileMenu.classList.toggle("translate-x-full")
+    }
 
     showTotalCart()
 </script>

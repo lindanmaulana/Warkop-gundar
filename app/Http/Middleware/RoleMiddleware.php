@@ -13,7 +13,9 @@ class RoleMiddleware
         $user = $request->user();
 
         if (!$user || !in_array($user->role->value ?? $user->role, $roles)) {
-            abort(403, 'Unauthorized');
+            // abort(403, 'Unauthorized');
+
+            return redirect()->back()->with('error', 'Kamu tidak di izinkan untuk mengakses halaman yang di tuju.');
         }
 
         return $next($request);

@@ -22,33 +22,6 @@
                             </tr>
                         </thead>
                         <tbody id="table-body" class="text-gray-600 text-sm font-light">
-                            <tr class="border-b border-gray-200 last:border-b-0 hover:bg-gray-50 transition-colors duration-150">
-                                <td class="py-4 px-4 flex items-center gap-3">
-                                    <img src="/images/placeholder-coffee.png" alt="Es Kopi Susu Aren" class="w-16 h-16 object-cover rounded-md border border-gray-200">
-                                    <div>
-                                        <h3 class="font-medium text-secondary text-base">Es Kopi Susu Aren</h3>
-                                        <p class="text-xs text-gray-500">Minuman Kopi</p>
-                                    </div>
-                                </td>
-                                <td class="py-4 px-4 text-center font-medium text-gray-700">Rp 20.000</td>
-                                <td class="py-4 px-4 text-center">
-                                    <div class="flex items-center justify-center gap-2">
-                                        <button class="qty-minus text-primary hover:text-primary/80 transition-colors duration-200 focus:outline-none">
-                                            <x-icon name="minus-circle" class="size-6" />
-                                        </button>
-                                        <span class="font-semibold text-gray-700">1</span>
-                                        <button class="qty-plus text-primary hover:text-primary/80 transition-colors duration-200 focus:outline-none">
-                                            <x-icon name="plus-circle" class="size-6" />
-                                        </button>
-                                    </div>
-                                </td>
-                                <td class="py-4 px-4 text-center font-semibold text-secondary">Rp 20.000</td>
-                                <td class="py-4 px-4 text-center">
-                                    <button class="remove-item text-red-500 hover:text-red-700 transition-colors duration-200 focus:outline-none">
-                                        <x-icon name="trash" class="size-6" />
-                                    </button>
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
 
@@ -87,7 +60,7 @@
             </div>
         </div>
     </div>
-</section>  
+</section>
 @endsection
 
 
@@ -187,15 +160,17 @@
             }
         }
 
-        mainLocalStorage()
         showMappingCart()
+        mainLocalStorage()
     }
 
     const handleDeleteCart = (productId) => {
         cart = cart.filter(item => item.productId !== productId.toString())
         localStorage.setItem('cart', JSON.stringify(cart))
 
+        mainLocalStorage()
         showMappingCart()
+        showTotalItems()
     }
 
     const showTotalPrice = () => {
@@ -215,6 +190,8 @@
     const showTotalItems = () => {
         if (cart.length > 0) {
             componentTotalItems.innerHTML = `${cart.length} Items`
+        } else {
+            componentTotalItems.remove()
         }
     }
 

@@ -33,9 +33,9 @@
     </div>
 
     @if(session('success'))
-    <div id="alert" class="bg-green-200 rounded p-4">
-        <p class="text-green-800 font-semibold">
-            {{session('success')}}
+    <div id="alert-success" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+        <p class="text-green-700 ">
+            <strong class="bold">Success!</strong> {{session('success')}}
         </p>
     </div>
     @endif
@@ -99,7 +99,6 @@
 
 @section('script')
 <script>
-    const alertComponent = document.getElementById('alert')
     let cartLocalStorage = localStorage.getItem('cart')
     let cart = cartLocalStorage ? JSON.parse(cartLocalStorage) : []
 
@@ -140,14 +139,6 @@
         localStorage.setItem('cart', cartNew)
     }
 
-    const handleHideAlert = (alert) => {
-        if (alert) {
-            setTimeout(() => {
-                alert.style.display = "none"
-            }, 1500);
-        }
-    }
-
     document.addEventListener('DOMContentLoaded', () => {
         const categoryFilterForm = document.getElementById('categoryFilterForm')
         const categoryFilter = document.getElementById('category_filter')
@@ -165,7 +156,5 @@
             window.location.href = newUrl
         })
     })
-
-    handleHideAlert(alertComponent)
 </script>
 @endsection

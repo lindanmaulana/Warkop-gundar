@@ -1,7 +1,6 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CategoryController;
+
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PaymentProofsController;
 use App\Http\Middleware\RoleMiddleware;

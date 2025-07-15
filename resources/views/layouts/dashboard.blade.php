@@ -25,7 +25,7 @@
                             </a>
                         </li>
                         <li class="w-full group">
-                            <a href="{{ route('dashboard.menu.products') }}" class="w-full flex items-center gap-4 text-lg font-semibold pl-6 py-2 rounded-md group-hover:bg-royal-blue/20 transition-all duration-300 ease-in-out {{ $isActive('dashboard.menu.products') }}">
+                            <a href="{{ route('dashboard.menu.products', ['page' => 1, 'limit' => 5]) }}" class="w-full flex items-center gap-4 text-lg font-semibold pl-6 py-2 rounded-md group-hover:bg-royal-blue/20 transition-all duration-300 ease-in-out {{ $isActive('dashboard.menu.products') }}">
                                 <x-icon name="toolskitchen" />
                                 Menu
                             </a>

@@ -22,7 +22,7 @@
         const handleAlert = () => {
             const alertError = document.getElementById("alert-error")
             const alertSuccess = document.getElementById('alert-success')
-            
+
             if (alertError) {
                 setTimeout(() => {
                     alertError.remove()

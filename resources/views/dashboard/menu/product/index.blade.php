@@ -15,15 +15,7 @@
         <div class="flex items-center gap-2">
             <form id="categoryFilterForm" action="{{ route('dashboard.menu.products') }}" method="GET">
                 <select name="category" id="category_filter" class="bg-dark-blue text-white px-2 rounded py-1">
-                    <option value="" {{ empty(request('category')) ? 'selected' : ''}}>All</option>
 
-                    @foreach($categories as $category)
-                    <option
-                        value="{{ $category->id }}"
-                        {{ request('category') == $category->id ? 'selected' : '' }}>
-                        {{ $category->name }}
-                    </option>
-                    @endforeach
                 </select>
             </form>
             <a href="{{ route('dashboard.menu.products.create') }}" class="flex items-center rounded px-3 py-1 text-white bg-green-500 hover:bg-green-300 cursor-pointer">
@@ -52,46 +44,18 @@
                 <th class="font-normal p-2">Deskripsi</th>
                 <th class="font-normal p-2 text-center">Aksi</th>
             </thead>
-            <tbody>
-                @if($products->isNotEmpty())
-                <?php $no = 1; ?>
-                @foreach($products as $product)
-                <tr class=" hover:bg-dark-blue/20 divide-y divide-gray-200 text-gray-800 *:text-sm *:font-medium">
-                    <td class="py-4 px-6">{{ $no++ }}</td>
-                    <td class="px-2 py-4 text-dark-blue" id="table-image">
-                        @if($product->image_url)
-                        <img src="{{ asset('storage/'. $product->image_url )}}" alt="{{ $product->name }}" class="w-24">
-                        @else
-                        <img src="/images/image-placeholder.png" alt="{{ $product->name }}" class="w-24">
-                        @endif
-                    </td>
-                    <td class="px-2 py-4 text-dark-blue">{{ $product->name }}</td>
-                    <td class="px-2 py-4 text-dark-blue">{{ $product->category->name }}</td>
-                    <td class="px-2 py-4 text-dark-blue">Rp {{ number_format($product->price, 0, ',', '.') }}</td>
-                    <td class="px-2 py-4 text-dark-blue">{{ $product->stock }}</td>
-                    <td class="px-2 py-4 text-dark-blue">{{ $product->description }}</td>
-                    <td class="px-2 py-4 text-dark-blue">
-                        <div class="flex items-center justify-center gap-3 *:text-sm">
-                            <a href="{{ route('dashboard.menu.products.edit', $product->id) }}" class="text-royal-blue font-medium cursor-pointer">Edit</a>
-                            <a href="{{ route('dashboard.menu.products.detail', $product->id) }}" class="text-green-500 font-medium cursor-pointer">Detail</a>
-                            <form action="{{ route('products.destroy', $product->id) }}" method="POST">
-                                @csrf
-                                @method('delete')
-                                <button type="submit" class="text-red-500 font-medium cursor-pointer">Hapus</button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-                @else
-                <tr>
-                    <td colspan="6" class="text-center py-4 text-red-500">
-                        <p class="flex items-center justify-center gap-2"><x-icon name="package-open" /> Data Product tidak tersedia.</p>
-                    </td>
-                </tr>
-                @endif
+            <tbody id="body-product" data-edit-url="{{ route('dashboard.menu.products.edit', ':id') }}"
+                data-detail-url="{{ route('dashboard.menu.products.detail', ':id') }}"
+                data-delete-url="{{ route('products.destroy', ':id') }}">
             </tbody>
         </table>
+        <div class="flex items-center justify-between py-6">
+            <div class="flex items-center gap-2">
+                <select name="" id="pagination-filter" class="border border-dark-blue/20 rounded px-4 py-2">
+                </select>
+                <p>Data per halaman.</p>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
@@ -99,62 +63,168 @@
 
 @section('script')
 <script>
-    let cartLocalStorage = localStorage.getItem('cart')
-    let cart = cartLocalStorage ? JSON.parse(cartLocalStorage) : []
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const urlParams = new URLSearchParams(window.location.search)
 
-    function handleAddToCart(buttonElement) {
-        const userId = buttonElement.dataset.userId;
-        const productId = buttonElement.dataset.productId;
-        const productName = buttonElement.dataset.productName;
-        const productPrice = parseFloat(buttonElement.dataset.productPrice);
+    let data = []
+    let setParams = ''
+    let categoryParams = urlParams.get("category") || "default"
+    let limitParams = urlParams.get("limit") || "5"
 
-        const exisItem = cart.findIndex(item => item.userId === userId && item.productId === productId)
+    const dataLimitPage = [5, 10, 15, 20]
 
-        if (exisItem > -1) {
-            cart[exisItem].qty += 1
-            cart[exisItem].totalPrice += productPrice
+    document.getElementById("pagination-filter").addEventListener("change", function() {
+        const value = this.value
+        urlParams.set("limit", value)
+        urlParams.set("page", 1)
 
+        updateURL()
+        loadDataProduct()
+    })
+
+    document.getElementById("category_filter").addEventListener("change", function() {
+        const value = this.value
+
+        if (value === "default" || value === "") {
+            urlParams.delete("category")
+            updateURL();
         } else {
-            cart.push({
-                userId,
-                productId,
-                productName,
-                price: productPrice,
-                totalPrice: productPrice,
-                qty: 1
-            })
+            urlParams.set("category", value)
         }
 
-        Swall.fire({
-            title: "Berhasil!",
-            text: `Menu ${productName} telah ditambahkan ke keranjang.`,
-            icon: "success"
-        })
-
-        mainLocalStorage()
-    }
-
-    function mainLocalStorage() {
-        const cartNew = JSON.stringify(cart)
-        localStorage.setItem('cart', cartNew)
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const categoryFilterForm = document.getElementById('categoryFilterForm')
-        const categoryFilter = document.getElementById('category_filter')
-
-        categoryFilter.addEventListener('change', function() {
-            const categorySelected = this.value
-            const baseUrl = "{{ route('dashboard.menu.products') }}"
-
-            let newUrl = baseUrl
-
-            if (categorySelected !== "") {
-                newUrl += "?category=" + categorySelected
-            }
-
-            window.location.href = newUrl
-        })
+        updateURL()
+        loadDataProduct()
     })
+
+    const loadDataProduct = async () => {
+        try {
+            const response = await fetch(`/api/v1/products?${urlParams.toString()}`, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                }
+            })
+
+            const result = await response.json()
+
+            data = result.data.data
+
+            showProductList(data)
+
+            return result
+        } catch (err) {
+            console.log({
+                err
+            })
+        }
+    }
+
+    const showProductList = (dataProduct) => {
+        const bodyProduct = document.getElementById("body-product")
+        bodyProduct.innerHTML = ""
+        const editUrlTemplate = bodyProduct.dataset.editUrl;
+        const detailUrlTemplate = bodyProduct.dataset.detailUrl;
+        const deleteUrlTemplate = bodyProduct.dataset.deleteUrl;
+
+
+        const row = dataProduct.map((product, index) => {
+            let imageUrl = product.image_url ? `/storage/${product.image_url}` : "/images/image-placeholder.png"
+            const editUrl = editUrlTemplate.replace(':id', product.id);
+            const detailUrl = detailUrlTemplate.replace(':id', product.id);
+            const deleteUrl = deleteUrlTemplate.replace(':id', product.id);
+            return (
+                `
+                <tr class=" hover:bg-dark-blue/20 divide-y divide-gray-200 text-gray-800 *:text-sm *:font-medium">
+                    <td class="py-4 px-6">${index + 1}</td>
+                    <td class="px-2 py-4 text-dark-blue" id="table-image">
+                        <img src="${imageUrl}" alt="{${product.name}}" class="w-24">
+                    </td>
+                    <td class="px-2 py-4 text-dark-blue">${product.name}</td>
+                    <td class="px-2 py-4 text-dark-blue">${product.category.name}</td>
+                    <td class="px-2 py-4 text-dark-blue">${product.price}</td>
+                    <td class="px-2 py-4 text-dark-blue">${product.stock}</td>
+                    <td class="px-2 py-4 text-dark-blue">${product.description}</td>
+                    <td class="px-2 py-4 text-dark-blue">
+                        <div class="flex items-center justify-center gap-3 *:text-sm">
+                            <a href="${editUrl}" class="text-royal-blue font-medium cursor-pointer">Edit</a>
+                            <a href="${detailUrl}" class="text-green-500 font-medium cursor-pointer">Detail</a>
+                            <form action="${deleteUrl}" method="POST">
+                                <input type="hidden" name="_token" value="${csrfToken}">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button type="submit" class="text-red-500 font-medium cursor-pointer">Hapus</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            `
+            )
+        })
+
+        bodyProduct.innerHTML = row
+
+    }
+
+    const loadDataCategory = async () => {
+        try {
+            const response = await fetch('/api/v1/categories', {
+                method: "GET",
+                headers: {
+                    'Content-Type': "application/json",
+                    'X-CSRF-TOKEN': csrfToken
+                }
+            })
+
+            const result = await response.json()
+            const data = result.data
+
+            showCategoryList(data)
+            return result
+        } catch (err) {
+            console.log({
+                err
+            })
+        }
+    }
+
+    const showCategoryList = (dataCategory) => {
+        const categoryFilter = document.getElementById("category_filter")
+        categoryFilter.innerHTML = ""
+
+        const list = dataCategory.map(category => (
+            `
+                <option value="${category.id}" ${category.id == categoryParams ? "selected" : ""}  >${category.name}</option>
+            `
+        )).join("")
+
+        const options = `
+            <option value="default" ${categoryParams === "default" ? "selected" : ""}>All</option>
+        ${list}
+        `
+
+        categoryFilter.innerHTML = options
+    }
+
+    const showLimitPage = () => {
+        const paginationFilter = document.getElementById("pagination-filter")
+        paginationFilter.innerHTML = ""
+
+        const option = dataLimitPage.map(limit => (
+            `
+                <option value="${limit}" ${limit == limitParams ? "selected" : ""}>${limit}</option>
+            `
+        ))
+
+        paginationFilter.innerHTML = option
+    }
+
+    function updateURL() {
+        const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
+        window.history.replaceState({}, '', newUrl);
+    }
+
+    showLimitPage()
+    loadDataProduct()
+    loadDataCategory()
 </script>
 @endsection

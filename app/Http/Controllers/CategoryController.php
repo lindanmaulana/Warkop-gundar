@@ -59,4 +59,13 @@ class CategoryController extends Controller
 
         return redirect()->route('dashboard.categories')->with('success', 'Kategori berhasil di hapus.');
     }
+
+    public function getAllCategory () {
+        $categories = Category::all();
+
+        return response()->json([
+            "message" => "Data kategori berhasil diambil.",
+            "data" => $categories
+        ]);
+    }
 }

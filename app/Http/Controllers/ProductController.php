@@ -17,7 +17,18 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
+        return view('dashboard.menu.product.index');
+    }
+
+    public function getAllProduct(Request $request)
+    {
         $queryCategoryId = $request->query('category');
+        $queryPage = $request->query("page");
+        $queryLimit = $request->query("limit");
+
+        $page = max(1, (int)$queryPage);
+        $limit = max(1, (int)$queryLimit);
+
 
         $categories = Category::all();
 
@@ -27,9 +38,12 @@ class ProductController extends Controller
             $productsQuery->where('category_id', $queryCategoryId);
         }
 
-        $products = $productsQuery->get();
+        $products = $productsQuery->paginate($limit);
 
-        return view('dashboard.menu.product.index', compact('categories', 'products'));
+        return response()->json([
+            'message' => "Data product berhasil di ambil",
+            'data' => $products
+        ]);
     }
 
     public function getByCategory(string $categoryId)

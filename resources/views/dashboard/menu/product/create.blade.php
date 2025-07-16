@@ -11,7 +11,7 @@
 <div class="space-y-4">
     <div class="p-2 flex items-center justify-between">
         <h2 class="text-xl font-semibold text-royal-blue">Menu</h2>
-        <a href="{{ route('dashboard.menu.products') }}" class="bg-dark-blue hover:bg-dark-blue/70 px-3 rounded py-1 text-white flex items-center gap-1 text-sm"><x-icon name="arrow-left" />Back</a>
+        <a href="{{ route('dashboard.menu.products', ['page' => 1, 'limit' => 5]) }}" class="bg-dark-blue hover:bg-dark-blue/70 px-3 rounded py-1 text-white flex items-center gap-1 text-sm"><x-icon name="arrow-left" />Back</a>
     </div>
     <div class="flex flex-col gap-4 bg-white px-2 py-6 rounded-lg shadow-sm shadow-dark-blue/10">
         <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">

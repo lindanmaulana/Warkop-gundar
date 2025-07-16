@@ -15,7 +15,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
             'role' => \App\Http\Middleware\RoleMiddleware::class,
-            'otp.not.verified' => \App\Http\Middleware\EnsureOtpNotVerified::class
+            'otp.not.verified' => \App\Http\Middleware\EnsureOtpNotVerified::class,
+            'otp.verified' => \App\Http\Middleware\EnsureOtpVerified::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

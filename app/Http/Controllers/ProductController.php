@@ -29,6 +29,7 @@ class ProductController extends Controller
         $page = max(1, (int)$queryPage);
         $limit = max(1, (int)$queryLimit);
 
+        if($limit > 20) $limit = 5;
 
         $categories = Category::all();
 
@@ -102,7 +103,7 @@ class ProductController extends Controller
         $product->stock = $request->stock;
         $product->save();
 
-        return redirect()->route('dashboard.menu.products')->with('success', 'Produk berhasil di tambahkan.');
+        return redirect()->route('dashboard.menu.products', ['page' => 1, 'limit' => 5])->with('success', 'Produk berhasil di tambahkan.');
     }
 
     /**
@@ -158,7 +159,7 @@ class ProductController extends Controller
         $product->save();
 
 
-        return redirect()->route('dashboard.menu.products')->with('success', 'Produk berhasil di perbarui.');
+        return redirect()->route('dashboard.menu.products', ['page' => 1, 'limit' => 5])->with('success', 'Produk berhasil di perbarui.');
     }
 
     /**
@@ -190,7 +191,7 @@ class ProductController extends Controller
                 }
             });
 
-            return redirect()->route('dashboard.menu.products')->with('success', 'Produk dan item pesanan terkait berhasil dihapus.');
+            return redirect()->route('dashboard.menu.products', ['page' => 1, 'limit' => 5])->with('success', 'Produk dan item pesanan terkait berhasil dihapus.');
         } catch (Throwable $e) {
             return redirect()->back()->with('error', 'Gagal menghapus produk: ' . $e->getMessage());
         }

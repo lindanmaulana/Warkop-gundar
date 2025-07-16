@@ -12,7 +12,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::all();
+
+        return view('/dashboard/user/index', compact("users"));
     }
 
     /**
@@ -68,5 +70,23 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function getAllUser(Request $request) {
+        $queryPage = $request->query('page');
+        $queryLimit = $request->query('limit');
+
+        $page = max(1, (int)$queryPage);
+        $limit = max(1, (int)$queryLimit);
+
+        if($limit > 20) $limit = 5;
+
+        $users = User::paginate($limit);
+        $users->getCollection()->makeHidden('email', 'password', 'remember_token');
+
+        return response()->json([
+            'message' => "Data user berhasil di ambil",
+            'data' => $users
+        ]);
     }
 }

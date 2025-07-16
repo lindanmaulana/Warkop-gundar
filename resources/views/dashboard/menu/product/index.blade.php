@@ -49,11 +49,17 @@
                 data-delete-url="{{ route('products.destroy', ':id') }}">
             </tbody>
         </table>
-        <div class="flex items-center justify-between py-6">
+        <div class="flex items-center justify-between py-6 px-4">
             <div class="flex items-center gap-2">
-                <select name="" id="pagination-filter" class="border border-dark-blue/20 rounded px-4 py-2">
+                <select name="" id="pagination-filter" class="border border-dark-blue/20 rounded-md px-3 py-1 text-sm font-semibold">
                 </select>
-                <p>Data per halaman.</p>
+                <p class="text-sm font-semibold text-dark-blue/80">data per halaman.</p>
+            </div>
+
+            <div>
+                <div id="page" class="flex items-center gap-2">
+
+                </div>
             </div>
         </div>
     </div>
@@ -107,10 +113,13 @@
             })
 
             const result = await response.json()
+            const currentPage = result.data.current_page
+            const pages = result.data.links
 
             data = result.data.data
 
             showProductList(data)
+            showPage(pages)
 
             return result
         } catch (err) {
@@ -216,6 +225,44 @@
         ))
 
         paginationFilter.innerHTML = option
+    }
+
+    const showPage = (pages) => {
+        const urlParams = new URLSearchParams(window.location.search)
+        const pageParams = urlParams.get("page")
+        const page = document.getElementById("page")
+        page.innerHTML = ""
+
+        const link = pages.map(page => {
+            const isUrl = page.url
+            const isButton = page.label.length
+            const isPaginationControl = isButton > 1
+
+            const isActive = isUrl && pageParams == page.label 
+            const isDisabled = !isUrl
+
+            const styleIsDisabled = isDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+            const styleIsActive = isActive ?  "bg-royal-blue text-white" : ""
+
+            return (
+                `
+                    <button onclick="handlePage('${isUrl}')" ${isDisabled || isActive ? "disabled" : ""} class="border px-3 py-1 rounded text-sm ${styleIsActive} ${styleIsDisabled}">${page.label}</button>
+                `
+            )
+        }).join(" ")
+
+        page.innerHTML = link
+    }
+
+    const handlePage = (url) => {
+        const urlObj = new URL(url)
+        const params = new URLSearchParams(urlObj.search)
+        const page = params.get("page")
+
+        urlParams.set("page", page)
+
+        updateURL()
+        loadDataProduct()
     }
 
     function updateURL() {

@@ -36,7 +36,7 @@ Route::middleware(['auth', 'otp.not.verified'])->group(function () {
 
 Route::post("/logout", [AuthController::class, 'logout'])->name('auth.logout');
 
-Route::middleware(['auth', 'role:admin'])
+Route::middleware(['auth', 'role:admin', 'otp.verified'])
     ->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 

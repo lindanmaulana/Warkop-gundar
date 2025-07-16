@@ -11,3 +11,9 @@ Route::middleware(['auth', 'role:admin,customer'])
     ->group(function () {
         Route::patch('/profile/{user}/update', [UserController::class, 'update'])->name('setting.profile.update');
     });
+
+
+
+Route::middleware(['auth', 'role:admin'])->prefix("/dashboard")->group(function() {
+    Route::get('/users', [UserController::class, 'index'])->name('dashboard.users');
+});

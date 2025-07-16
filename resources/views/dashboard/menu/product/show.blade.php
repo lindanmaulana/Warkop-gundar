@@ -13,7 +13,7 @@
     <div class="container max-w-6xl mx-auto">
         <div class="flex items-center justify-between">
             <h3 class="text-2xl text-dark-blue font-semibold">{{ $product->name }}</h3>
-            <a href="{{ route('dashboard.menu.products') }}" class="flex items-center gap-2 text-sm bg-dark-blue hover:bg-dark-blue/80 text-white p-2 rounded">
+            <a href="{{ route('dashboard.menu.products', ['page' => 1, 'limit' => 5]) }}" class="flex items-center gap-2 text-sm bg-dark-blue hover:bg-dark-blue/80 text-white p-2 rounded">
                 <x-icon name="arrow-left" /> Kembali
             </a>
         </div>

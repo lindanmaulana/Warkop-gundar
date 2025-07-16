@@ -51,7 +51,7 @@
         </table>
         <div class="flex items-center justify-between py-6 px-4">
             <div class="flex items-center gap-2">
-                <select name="" id="pagination-filter" class="border border-dark-blue/20 rounded-md px-3 py-1 text-sm font-semibold">
+                <select name="" id="filter-limit" class="border border-dark-blue/20 rounded-md px-3 py-1 text-sm font-semibold">
                 </select>
                 <p class="text-sm font-semibold text-dark-blue/80">data per halaman.</p>
             </div>
@@ -79,7 +79,7 @@
 
     const dataLimitPage = [5, 10, 15, 20]
 
-    document.getElementById("pagination-filter").addEventListener("change", function() {
+    document.getElementById("filter-limit").addEventListener("change", function() {
         const value = this.value
         urlParams.set("limit", value)
         urlParams.set("page", 1)
@@ -119,7 +119,7 @@
             data = result.data.data
 
             showProductList(data)
-            showPage(pages)
+            showFilterPage(pages)
 
             return result
         } catch (err) {
@@ -137,11 +137,12 @@
         const deleteUrlTemplate = bodyProduct.dataset.deleteUrl;
 
 
-        const row = dataProduct.map((product, index) => {
+        const row = dataProduct.length > 0 ? dataProduct.map((product, index) => {
             let imageUrl = product.image_url ? `/storage/${product.image_url}` : "/images/image-placeholder.png"
             const editUrl = editUrlTemplate.replace(':id', product.id);
             const detailUrl = detailUrlTemplate.replace(':id', product.id);
             const deleteUrl = deleteUrlTemplate.replace(':id', product.id);
+
             return (
                 `
                 <tr class=" hover:bg-dark-blue/20 divide-y divide-gray-200 text-gray-800 *:text-sm *:font-medium">
@@ -168,7 +169,11 @@
                 </tr>
             `
             )
-        })
+        }) : `<tr>
+                <td colspan="8" class="text-center py-4 text-red-500">
+                    <p class="flex items-center justify-center gap-2"><x-icon name="package-open" /> Menu tidak tersedia.</p>
+                </td>
+            </tr> `
 
         bodyProduct.innerHTML = row
 
@@ -214,8 +219,8 @@
         categoryFilter.innerHTML = options
     }
 
-    const showLimitPage = () => {
-        const paginationFilter = document.getElementById("pagination-filter")
+    const showFilterLimit = () => {
+        const paginationFilter = document.getElementById("filter-limit")
         paginationFilter.innerHTML = ""
 
         const option = dataLimitPage.map(limit => (
@@ -227,7 +232,7 @@
         paginationFilter.innerHTML = option
     }
 
-    const showPage = (pages) => {
+    const showFilterPage = (pages) => {
         const urlParams = new URLSearchParams(window.location.search)
         const pageParams = urlParams.get("page")
         const page = document.getElementById("page")
@@ -246,7 +251,7 @@
 
             return (
                 `
-                    <button onclick="handlePage('${isUrl}')" ${isDisabled || isActive ? "disabled" : ""} class="border px-3 py-1 rounded text-sm ${styleIsActive} ${styleIsDisabled}">${page.label}</button>
+                    <button onclick="handleFilterPage('${isUrl}')" ${isDisabled || isActive ? "disabled" : ""} class="border px-3 py-1 rounded text-sm ${styleIsActive} ${styleIsDisabled}">${page.label}</button>
                 `
             )
         }).join(" ")
@@ -254,7 +259,7 @@
         page.innerHTML = link
     }
 
-    const handlePage = (url) => {
+    const handleFilterPage = (url) => {
         const urlObj = new URL(url)
         const params = new URLSearchParams(urlObj.search)
         const page = params.get("page")
@@ -270,7 +275,7 @@
         window.history.replaceState({}, '', newUrl);
     }
 
-    showLimitPage()
+    showFilterLimit()
     loadDataProduct()
     loadDataCategory()
 </script>

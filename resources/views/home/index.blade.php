@@ -283,7 +283,7 @@
         </article>
 
         <div class="flex items-center justify-end">
-            <a href="{{ route('home.menu') }}" class="flex items-center justify-end text-primary max-w-40 cursor-pointer group">Menu lainnya <x-icon name="arrow-right" class="mt-1 group-hover:translate-x-2 transition-global" /> </a>
+            <a href="{{ route('home.menu', ['page' => 1, 'limit' => 5]) }}" class="flex items-center justify-end text-primary max-w-40 cursor-pointer group">Menu lainnya <x-icon name="arrow-right" class="mt-1 group-hover:translate-x-2 transition-global" /> </a>
         </div>
     </div>
 </section>

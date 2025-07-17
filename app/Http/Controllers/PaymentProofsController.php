@@ -58,7 +58,7 @@ class PaymentProofsController extends Controller
         $paymentProofs->verified = $request->verified;
         $paymentProofs->save();
 
-        return redirect()->route('home.order')->with('message', 'Bukti Pembayaran berhasil di kirim.');
+        return redirect()->route('home.order')->with('success', 'Bukti Pembayaran berhasil di kirim.');
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\RoleMiddleware;
@@ -21,4 +22,7 @@ Route::middleware(['auth'])->prefix("/api/v1")->group(function() {
     Route::prefix("/categories")->group(function() {
         Route::get("/", [CategoryController::class, 'getAllCategory']);
     });
+
+    //customer
+    Route::get("/menus", [HomeController::class, 'getAllMenu']);
 });

@@ -20,7 +20,7 @@ $bgHeader = fn () => request()->routeIs('home.menu', 'home.order.detail', 'home.
                             class="relative text-secondary text-lg hover:text-primary transition-colors duration-200 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300 hover:after:w-full {{ $isActive('home') ? 'font-semibold text-primary' : '' }}">Home</a>
                     </li>
                     <li>
-                        <a href="{{ route('home.menu') }}"
+                        <a href="{{ route('home.menu', ['page' => 1, 'limit' => 5]) }}"
                             class="relative text-secondary text-lg hover:text-primary transition-colors duration-200
                                 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300 hover:after:w-full
                                 {{ $isActive('home.menu') ? 'font-semibold text-primary' : '' }}">Our Menu</a>
@@ -90,7 +90,7 @@ $bgHeader = fn () => request()->routeIs('home.menu', 'home.order.detail', 'home.
                     <a href="#" class="text-secondary hover:text-primary transition-colors duration-200">About Us</a>
                 </li>
                 <li>
-                    <a href="{{ route('home.menu') }}" class="text-secondary hover:text-primary transition-colors duration-200 {{ $isActive('home.menu') ? 'text-primary font-bold' : '' }}">Our Menu</a>
+                    <a href="{{ route('home.menu', ['page' => 1, 'limit' => 5]) }}" class="text-secondary hover:text-primary transition-colors duration-200 {{ $isActive('home.menu') ? 'text-primary font-bold' : '' }}">Our Menu</a>
                 </li>
                 @if(Auth::user())
                 <hr class="border-t border-gray-300 my-4">
@@ -186,6 +186,7 @@ $bgHeader = fn () => request()->routeIs('home.menu', 'home.order.detail', 'home.
     const mobileMenu = document.getElementById("mobileMenu")
 
     const componentTotalCart = document.getElementById('totalCart')
+    const componentTotalCartMobile = document.getElementById('totalCartMobile')
 
     function handleAddToCart(buttonElement) {
         const userId = buttonElement.dataset.userId;
@@ -220,14 +221,7 @@ $bgHeader = fn () => request()->routeIs('home.menu', 'home.order.detail', 'home.
         })
 
         mainLocalStorage()
-    }
-
-    const showTotalCart = () => {
-        if (cart.length === 0) {
-            componentTotalCart.style.display = "none"
-        } else {
-            componentTotalCart.innerHTML = cart.length
-        }
+        showTotalCart()
     }
 
     function mainLocalStorage() {
@@ -235,6 +229,20 @@ $bgHeader = fn () => request()->routeIs('home.menu', 'home.order.detail', 'home.
         localStorage.setItem('cart', cartNew)
 
         showTotalCart()
+    }
+
+    const showTotalCart = () => {
+        if (cart.length === 0) {
+            componentTotalCart.style.display = "none"
+            componentTotalCartMobile.style.display = "none"
+
+            return;
+        }
+        
+        componentTotalCart.style.display = "flex"
+        componentTotalCartMobile.style.display = "flex"
+        componentTotalCart.innerHTML = cart.length
+        componentTotalCartMobile.innerHTML = cart.length
     }
 
     const componentMenu = document.getElementById('menu');

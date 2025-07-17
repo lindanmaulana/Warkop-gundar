@@ -2,12 +2,21 @@
 
 @section('content')
 <section class="pt-28 pb-20">
-    <div class="container max-w-6xl mx-auto ">
+    <div class="container max-w-6xl mx-auto px-4 lg:px-0">
         <div class="space-y-6">
             <div class="flex items-center justify-between border-b border-black/10 pb-6">
                 <h2 class="text-2xl font-semibold text-secondary">Pesanan</h2>
                 <p id="totalItems" class="text-xl font-semibold text-secondary"></p>
             </div>
+
+            @if(session('success'))
+            <div id="alert-success" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+                <p class="text-green-700 ">
+                    <strong class="bold">Success!</strong> {{session('success')}}
+                </p>
+            </div>
+            @endif
+
             <div class="overflow-x-auto w-full bg-white p-2 rounded-lg shadow-sm shadow-dark-blue/10">
                 <table class="w-full text-left rounded-md overflow-hidden">
                     <thead class="*:text-gray-500 bg-gray-300">
@@ -47,7 +56,9 @@
                                 @endif
                             </td>
                             <td class="px-2 py-4 line-clamp-1 truncate max-w-[160px]">{{ $order->description }}</td>
-                            <td>{{ $order->created_at->format('d M Y H:i') }}</td>
+                            <td>
+                                <p class="line-clamp-1">{{ $order->created_at->format('d M Y H:i') }}</p>
+                            </td>
                             <td class="px-2 py-4">
                                 <div class="flex items-center gap-2">
                                     <a href="{{ route('home.order.detail', $order->id) }}" class="text-green-500 cursor-pointer"><x-icon name="receipt-text" /></a>

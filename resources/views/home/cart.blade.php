@@ -10,15 +10,15 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div class="lg:col-span-2 overflow-x-auto bg-white rounded-xl shadow-lg p-4">
-                    <table class="w-full text-left table-auto">
+                <div class="w-full lg:col-span-2 overflow-x-auto bg-white rounded-xl shadow-lg p-4">
+                    <table class="w-screen md:w-full text-left table-auto">
                         <thead class="bg-gray-100 text-gray-700 uppercase text-sm leading-normal">
                             <tr>
-                                <th class="py-3 px-4 text-left rounded-tl-lg">Produk</th>
-                                <th class="py-3 px-4 text-center">Harga</th>
-                                <th class="py-3 px-4 text-center">Jumlah</th>
-                                <th class="py-3 px-4 text-center">Total</th>
-                                <th class="py-3 px-4 text-center rounded-tr-lg">Aksi</th>
+                                <th class="py-3 px-4 text-left rounded-tl-lg">No</th>
+                                <th class="py-3 px-4 text-center">Produk</th>
+                                <th class="py-3 px-4">Jumlah</th>
+                                <th class="py-3 px-4">Harga</th>
+                                <th class="py-3 px-4 rounded-tr-lg">Harga Total</th>
                             </tr>
                         </thead>
                         <tbody id="table-body" class="text-gray-600 text-sm font-light">
@@ -50,9 +50,9 @@
 
                     <div class="flex flex-col gap-3">
                         <a href="{{ route('home.checkout') }}" id="btn-complete-order" class="w-full bg-green-600 text-white font-semibold py-3 rounded-lg text-center hover:bg-green-700 transition-colors duration-200 shadow-md transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
-                            Lanjutkan ke Pembayaran
+                            Lanjutkan ke Pemesanan
                         </a>
-                        <a href="{{ route('home.menu') }}" class="w-full border border-secondary text-secondary font-semibold py-3 rounded-lg text-center hover:bg-secondary hover:text-white transition-colors duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-opacity-50">
+                        <a href="{{ route('home.menu', ['page' => 1, 'limit' => 5]) }}" class="w-full border border-secondary text-secondary font-semibold py-3 rounded-lg text-center hover:bg-secondary hover:text-white transition-colors duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-opacity-50">
                             Kembali Belanja
                         </a>
                     </div>
@@ -108,13 +108,13 @@
                             <td class="py-2 px-6">${index + 1}</td>
                             <td class="py-2 ">
                                 <div class="flex gap-4">
-                                    <figure class="w-40 h-28">
-                                        <img src="${imageUrl}" class="w-full h-full object-cover" />
+                                    <figure class="min-w-24 h-20">
+                                        <img src="${imageUrl}" class="w-full h-full aspect-square object-cover" />
                                     </figure>
                                     <div class="flex flex-col items-start justify-center gap-1">
-                                        <h4 class="text-lg font-semibold">${item.productName}</h4>
-                                        <bold class="block text-green-500 text-sm">${item.category}</bold>
-                                        <button onclick="handleDeleteCart(${item.productId})" class="cursor-pointer text-sm text-secondary/60 hover:text-red-500 transition-global">remove</button>
+                                        <h4 class="text-lg font-bold">${item.productName}</h4>
+                                        <bold class="block text-green-500 text-sm font-medium">${item.category}</bold>
+                                        <button onclick="handleDeleteCart(${item.productId})" class="cursor-pointer text-sm text-red-500 transition-global">remove</button>
                                     </div>
                                 </div>
                             </td>
@@ -151,12 +151,16 @@
             if (type === "inc") {
                 cart[existInCart].qty += 1
                 cart[existInCart].totalPrice += Number(dataProductPrice)
+
+                console.log("fungsi inc")
             }
 
             if (type === "dec") {
                 if (cart[existInCart].qty == 1) return;
                 cart[existInCart].qty -= 1
                 cart[existInCart].totalPrice -= Number(dataProductPrice)
+
+                console.log("fungsi")
             }
         }
 

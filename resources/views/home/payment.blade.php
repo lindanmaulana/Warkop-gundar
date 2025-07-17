@@ -3,13 +3,13 @@
 
 @section('content')
 <section class="mt-24">
-    <div class="container max-w-4xl mx-auto min-h-[400px]">
+    <div class="container max-w-4xl mx-auto min-h-[400px] px-4 lg:px-0">
         <div class="flex items-center justify-between border-b border-black/10 pb-4">
             <h2 class="text-2xl font-semibold text-secondary">Pembayaran</h2>
             <a href="{{ route('home.order') }}" class="text-sm font-semibold bg-secondary text-white px-4 py-1 rounded">Kembali</a>
         </div>
 
-        <div class="w-full h-full grid grid-cols-2 gap-4 py-10">
+        <div class="w-full h-full grid grid-cols-1 md:grid-cols-2 gap-4 py-10">
             <div class="h-full bg-peach shadow rounded p-6 space-y-6">
                 <label for="" class="block rounded">
                     <span class="block text-lg text-secondary font-semibold">Metode Pembayaran</span>
@@ -24,10 +24,12 @@
             <div class="h-full">
                 <form action="{{ route('upload.payment', $order->id) }}" class="space-y-6" method="POST" enctype="multipart/form-data">
                     @csrf
-
                     @if($paymentProof)
                     <p class="block text-secondary font-semibold mb-4">Bukti Pembayaran</p>
-                        @if($order->status->value == "processing")
+                        @if($order->status->value == "pending")
+                        <p class="bg-secondary p-2 text-white rounded">Pesanan sedang pending</p>
+
+                        @elseif($order->status->value == "processing")
                         <p class="bg-green-500 p-2 text-white rounded">Pesanan mu sudah di proses</p>
 
                         @elseif($order->status->value == "done")

@@ -28,7 +28,7 @@
                 <th class="font-normal py-2 px-6">No</th>
                 <th class="font-normal p-2">Nama</th>
                 <th class="font-normal p-2">Role</th>
-                <th class="font-normal p-2">Status Aktif</th>
+                <th class="font-normal p-2">Status Akun</th>
                 <th class="font-normal p-2">Tgl Daftar</th>
                 <th class="font-normal p-2">Aksi</th>
             </thead>

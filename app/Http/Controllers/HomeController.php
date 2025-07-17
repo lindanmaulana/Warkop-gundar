@@ -31,7 +31,7 @@ class HomeController extends Controller
         if ($allProducts <= 3) {
             $productsForYou = $productsLatest;
         } else {
-            $productsForYou = Product::latest()->skip(3)->take(9)->get();
+            $productsForYou = Product::latest()->skip(3)->take(6)->get();
         }
         return view('home.index', compact('productsLatest', 'productsForYou'));
     }
@@ -43,11 +43,11 @@ class HomeController extends Controller
 
         $productsFood = Product::whereHas('category', function ($query) {
             $query->where('name', 'makanan');
-        })->get();
+        })->latest()->take(5)->get();
 
         $productsCoffe = Product::whereHas('category', function ($query) {
             $query->where('name', 'minuman');
-        })->get();
+        })->latest()->take(5)->get();
 
         return view('home.menu', compact('products', 'productsFood', 'productsCoffe'));
     }
@@ -296,5 +296,35 @@ class HomeController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function getAllMenu(Request $request)
+    {
+        $queryPage = $request->query("page");
+        $queryLimit = $request->query("limit");
+
+        $limit = max(1, (int)$queryLimit);
+
+
+        if($limit > 20) $limit = 5;
+
+        $products = Product::with('category')->where('stock', '>', 0)->paginate($limit);
+
+        $productsFood = Product::whereHas('category', function ($query) {
+            $query->where('name', 'makanan');
+        })->get();
+
+        $productsCoffe = Product::whereHas('category', function ($query) {
+            $query->where('name', 'minuman');
+        })->get();
+
+        return response()->json([
+            "message" => "Data produk berhasil di ambil.",
+            'data' => [
+                'pagination' => $products,
+                'productsFood' => $productsFood,
+                'productsCoffe' => $productsCoffe
+            ]
+        ]);
     }
 }

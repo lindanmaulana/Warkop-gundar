@@ -2,16 +2,16 @@
 
 @section('content')
 <section class="mt-20">
-    <div class="container max-w-6xl mx-auto py-14">
+    <div class="container max-w-6xl mx-auto py-14 px-4 lg:px-0">
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="text-3xl font-semibold text-secondary">Edit Profile</h2>
                 <p class="text-secondary/80 max-w-80">Masukkan informasi yang valid agar proses pesanan lebih mudah</p>
             </div>
 
-            <a href="{{ route('home') }}" class="bg-secondary px-4 py-1 text-white rounded">Kembali</a>
+            <a href="{{ route('home') }}" class="hidden md:block bg-secondary px-4 py-1 text-white rounded">Kembali</a>
         </div>
-        <form method="POST" action="{{ route('profile.update', $user->id) }}" class=" grid grid-cols-2 gap-6 py-8">
+        <form method="POST" action="{{ route('profile.update', $user->id) }}" class="grid grid-cols-1 md:grid-cols-2 gap-6 py-8">
             @csrf
             @method('PATCH')
 

@@ -56,10 +56,8 @@
                 <p class="text-sm font-semibold text-dark-blue/80">data per halaman.</p>
             </div>
 
-            <div>
-                <div id="page" class="flex items-center gap-2">
+            <div id="filter-page" class="flex items-center gap-2">
 
-                </div>
             </div>
         </div>
     </div>
@@ -241,7 +239,8 @@
     const showFilterPage = (pages) => {
         const urlParams = new URLSearchParams(window.location.search)
         const pageParams = urlParams.get("page")
-        const page = document.getElementById("page")
+
+        const page = document.getElementById("filter-page")
         page.innerHTML = ""
 
         const link = pages.map(page => {
@@ -249,11 +248,11 @@
             const isButton = page.label.length
             const isPaginationControl = isButton > 1
 
-            const isActive = isUrl && pageParams == page.label 
+            const isActive = isUrl && pageParams == page.label
             const isDisabled = !isUrl
 
             const styleIsDisabled = isDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"
-            const styleIsActive = isActive ?  "bg-royal-blue text-white" : ""
+            const styleIsActive = isActive ? "bg-royal-blue text-white" : ""
 
             return (
                 `

@@ -3,26 +3,26 @@
 
 @section('content')
 <section class="mt-20">
-    <div class="container max-w-6xl mx-auto">
-        <div class="space-y-8 py-8">
+    <div class="container max-w-6xl mx-auto px-4 lg:px-0">
+        <div class="space-y-12 lg:space-y-8 py-8">
             <div class="flex items-center justify-between">
                 <h2 class="text-2xl font-semibold text-secondary">Detail Pesanan</h2>
                 <a href="{{ route('home.order') }}" class="bg-secondary px-4 rounded text-white text-sm py-1">Back</a>
             </div>
-            <div class="relative max-w-1/2 mx-auto bg-peach px-2 py-6 rounded shadow-sm shadow-dark-blue/10">
+            <div class="relative md:max-w-1/2 mx-auto bg-peach px-2 py-6 rounded shadow-sm shadow-dark-blue/10">
                 <div class="absolute translate-x-1/2 right-1/2 -top-9 size-16 flex items-center justify-center rounded-full bg-primary border-2 border-white">
                     <x-icon name="coffee" class="size-10 text-white" />
                 </div>
                 <h3 class="text-center text-3xl font-bold text-dark-blue">Warkop Gundar</h3>
                 <div class="flex flex-col items-center justify-center">
                     <p id="order-status" class="text-sm text-center py-4" data-order-status="{{ $order->status }}"></p>
-                    @if($order->status->value === "pending")
+                    @if($order->status->value === "pending" && empty($paymentProofs))
                     <form onsubmit="confirmCancelOrder(event)">
                         <button type="submit" data-order-id="{{ $order->id }}" class="text-red-500 cursor-pointer font-semibold">Batalkan Pesanan!</button>
                     </form>
                     @endif
                 </div>
-                <div class="px-4 md:px-0 md:max-w-2/3 mx-auto py-10 space-y-4">
+                <div class="px-4 w-full md:px-0 md:max-w-2/3 mx-auto py-10 space-y-4">
                     <ul class="w-full space-y-2 pb-4 border-b border-dark-blue/20">
                         <li class="flex items-center justify-between">
                             <h4 class="font-semibold">Nama</h4>
@@ -76,7 +76,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="relative max-w-1/2 mx-auto bg-pale-peach px-2 py-6 rounded shadow-sm shadow-dark-blue/10 text-center">
+            <div class="relative w-full md:max-w-1/2 mx-auto bg-pale-peach px-2 py-6 rounded shadow-sm shadow-dark-blue/10 text-center">
                 @php
                 $statusValue = $order->status->value;
                 @endphp

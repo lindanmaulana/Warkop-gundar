@@ -143,6 +143,12 @@
             const detailUrl = detailUrlTemplate.replace(':id', product.id);
             const deleteUrl = deleteUrlTemplate.replace(':id', product.id);
 
+            const price = Intl.NumberFormat("id-ID", {
+                currency: "IDR",
+                style: "currency",
+                maximumFractionDigits: 0
+            }).format(product.price)
+
             return (
                 `
                 <tr class=" hover:bg-dark-blue/20 divide-y divide-gray-200 text-gray-800 *:text-sm *:font-medium">
@@ -152,7 +158,7 @@
                     </td>
                     <td class="px-2 py-4 text-dark-blue">${product.name}</td>
                     <td class="px-2 py-4 text-dark-blue">${product.category.name}</td>
-                    <td class="px-2 py-4 text-dark-blue">${product.price}</td>
+                    <td class="px-2 py-4 text-dark-blue">${price}</td>
                     <td class="px-2 py-4 text-dark-blue">${product.stock}</td>
                     <td class="px-2 py-4 text-dark-blue">${product.description}</td>
                     <td class="px-2 py-4 text-dark-blue">

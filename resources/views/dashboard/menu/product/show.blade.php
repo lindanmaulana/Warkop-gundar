@@ -49,8 +49,10 @@
                     </label>
                 </div>
                 <label for="name" class="block space-y-2">
-                    <span class="block text-dark-blue font-semibold">Stok</span>
-                    <textarea value="{{ old('name', $product->stock) }}" id="name" class="w-full px-4 border border-dark-blue/30 py-2 rounded-lg" readonly></textarea>
+                    <span class="block text-dark-blue font-semibold">Deskripsi</span>
+                    <textarea id="name" class="w-full px-4 text-left border border-dark-blue/30 py-2 rounded-lg" readonly>
+                        {{ old('description', $product->description) }}
+                    </textarea>
                 </label>
             </div>
         </div>

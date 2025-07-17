@@ -36,6 +36,11 @@ class HomeController extends Controller
         return view('home.index', compact('productsLatest', 'productsForYou'));
     }
 
+    public function showOurLocation() {
+
+        return view("home/ourLocation");
+    }
+
     public function showMenu()
     {
 

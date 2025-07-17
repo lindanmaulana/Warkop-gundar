@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth', 'role:customer'])
     ->group(function() {
         Route::get('/', [HomeController::class, 'index'])->name('home');
+        Route::get('/ourlocation', [HomeController::class, 'showOurLocation'])->name('home.ourlocation');
         Route::get('/menu', [HomeController::class, 'showMenu'])->name('home.menu');
         Route::get('/profile', [HomeController::class, 'showProfile'])->name('home.profile');
         

@@ -1,9 +1,10 @@
 @extends('app')
 
 @php
-$isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'text-primary font-semibold' : 'text-secondary';
+$isActive = fn (...$routeNames) => request()->routeIs(...$routeNames) ? 'text-primary font-semibold' : 'text-secondary';
 $bgHeader = fn () => request()->routeIs('home.menu', 'home.order.detail', 'home.order.payment') ? 'bg-peach/10 backdrop-blur-xs text-lg' : 'bg-peach text-lg';
 @endphp
+
 <div class="flex flex-col">
     <header class="w-full fixed top-0 right-0 z-50 transition-all duration-300 {{ $bgHeader() }} shadow-sm">
         <div class="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 lg:py-5 flex items-center justify-between">
@@ -17,13 +18,17 @@ $bgHeader = fn () => request()->routeIs('home.menu', 'home.order.detail', 'home.
                 <ul class="flex items-center gap-6 xl:gap-8 font-medium">
                     <li>
                         <a href="{{ route('home') }}"
-                            class="relative text-secondary text-lg hover:text-primary transition-colors duration-200 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300 hover:after:w-full {{ $isActive('home') ? 'font-semibold text-primary' : '' }}">Home</a>
+                            class="relative text-lg hover:text-primary transition-colors duration-200 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300 hover:after:w-full {{ $isActive('home') }}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('home.ourlocation') }}"
+                            class="relative text-lg hover:text-primary transition-colors duration-200 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300 hover:after:w-full {{ $isActive('home.ourlocation') }}">Our Location</a>
                     </li>
                     <li>
                         <a href="{{ route('home.menu', ['page' => 1, 'limit' => 5]) }}"
-                            class="relative text-secondary text-lg hover:text-primary transition-colors duration-200
+                            class="relative  text-lg hover:text-primary transition-colors duration-200
                                 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300 hover:after:w-full
-                                {{ $isActive('home.menu') ? 'font-semibold text-primary' : '' }}">Our Menu</a>
+                                {{ $isActive('home.menu') }}">Our Menu</a>
                     </li>
                 </ul>
 
@@ -87,7 +92,7 @@ $bgHeader = fn () => request()->routeIs('home.menu', 'home.order.detail', 'home.
                     <a href="{{ route('home') }}" class="text-secondary hover:text-primary transition-colors duration-200 {{ $isActive('home') ? 'text-primary font-bold' : '' }}">Home</a>
                 </li>
                 <li>
-                    <a href="#" class="text-secondary hover:text-primary transition-colors duration-200">About Us</a>
+                    <a href="{{ route('home.ourlocation') }}" class="text-secondary hover:text-primary transition-colors duration-200 {{ $isActive('home.ourlocation') ? 'text-primary font-bold' : '' }}">Our Location</a>
                 </li>
                 <li>
                     <a href="{{ route('home.menu', ['page' => 1, 'limit' => 5]) }}" class="text-secondary hover:text-primary transition-colors duration-200 {{ $isActive('home.menu') ? 'text-primary font-bold' : '' }}">Our Menu</a>

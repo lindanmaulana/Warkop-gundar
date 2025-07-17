@@ -6,7 +6,7 @@
         <div class="space-y-8">
             <div class="flex items-center justify-between pb-6 border-b border-gray-200">
                 <h2 class="text-3xl font-extrabold text-secondary">Checkout</h2>
-                <a href="{{ route('home.menu') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-secondary text-white rounded-lg shadow hover:bg-secondary/90 transition-colors duration-200">
+                <a href="{{ route('home.menu', ['page' => 1, 'limit' => 5]) }}" class="inline-flex items-center gap-2 px-4 py-2 bg-secondary text-white rounded-lg shadow hover:bg-secondary/90 transition-colors duration-200">
                     <x-icon name="arrow-left" class="size-4" />
                     <span>Kembali Belanja</span>
                 </a>

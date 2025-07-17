@@ -26,7 +26,7 @@
             if (alertError) {
                 setTimeout(() => {
                     alertError.remove()
-                }, 1500);
+                }, 2000);
             }
 
             if (alertSuccess) {

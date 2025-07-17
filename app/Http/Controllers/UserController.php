@@ -44,9 +44,27 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $user)
     {
-        //
+        if (!$user->is_email_verified) {
+            return redirect()->back()->with('error', "Status Akun tidak aktif tidak bisa diubah.");
+        }
+
+        return view('dashboard/user/update', compact('user'));
+    }
+
+    public function suspendAccount(Request $request, User $user)
+    {
+
+        $validatedData = $request->validate([
+            'is_email_verified' => "boolean"
+        ]);
+
+        $user->update([
+            "is_email_verified" => $validatedData['is_email_verified']
+        ]);
+
+        return redirect()->route('dashboard.users', ['page' => 1, 'limit' => 5])->with("success", "Status akun berhasil di ubah.");
     }
 
     /**
@@ -72,14 +90,15 @@ class UserController extends Controller
         //
     }
 
-    public function getAllUser(Request $request) {
+    public function getAllUser(Request $request)
+    {
         $queryPage = $request->query('page');
         $queryLimit = $request->query('limit');
 
         $page = max(1, (int)$queryPage);
         $limit = max(1, (int)$queryLimit);
 
-        if($limit > 20) $limit = 5;
+        if ($limit > 20) $limit = 5;
 
         $users = User::paginate($limit);
         $users->getCollection()->makeHidden('email', 'password', 'remember_token');

@@ -30,9 +30,9 @@
                 <th class="font-normal p-2">Role</th>
                 <th class="font-normal p-2">Status Aktif</th>
                 <th class="font-normal p-2">Tgl Daftar</th>
-                <th class="font-normal p-2 text-center">Aksi</th>
+                <th class="font-normal p-2">Aksi</th>
             </thead>
-            <tbody id="user-content" data-edit-url="{{ route('dashboard.users', ':id') }}">
+            <tbody id="user-content" data-edit-url="{{ route('dashboard.users.update', ':id') }}">
 
             </tbody>
         </table>
@@ -118,10 +118,11 @@
         const row = dataUser.map((user, index) => {
             const isVerified = user.is_email_verified
             const statusVerified = isVerified === 1 ?
-                '<bold class="text-royal-blue bg-royal-blue/20 px-2 py-1 rounded">Aktif</bold>' :
-                ' <bold class="text-red-500 bg-red-200 px-2 py-1 rounded">Tidak Aktif</bold>'
+                '<bold class="text-xs text-royal-blue bg-royal-blue/20 px-2 py-1 rounded">Aktif</bold>' :
+                ' <bold class="text-xs text-red-500 bg-red-200 px-2 py-1 rounded">Tidak Aktif</bold>'
 
             const editUrl = editUrlTemplate.replace(':id', user.id)
+
             return (
                 `
                     <tr class="hover:bg-dark-blue/20 divide-y divide-gray-200 text-gray-800 *:text-sm *:font-medium">
@@ -130,15 +131,13 @@
                         <td class="px-2 py-4 text-dark-blue">${ user.role }</td>
                         <td class="px-2 py-4 text-dark-blue">${ statusVerified }</td>
                         <td class="px-2 py-4 text-dark-blue">${user.created_at}</td>
-                        <td class=" py-4 px-6">
-                            <div class="flex items-center justify-center gap-3 *:text-sm">
-                                <a href="${editUrl}" class="text-royal-blue font-medium cursor-pointer">Edit</a>
-                            </div>
+                        <td class=" py-4 px-2">
+                            <a href="${editUrl}" class="text-red-500 text-xs cursor-pointer">${user.is_email_verified ? "Non aktifkan" : ""}</a>
                         </td>
                     </tr>
                 `
             )
-        })
+        }).join(" ")
 
         userContent.innerHTML = row
     }

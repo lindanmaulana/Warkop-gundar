@@ -13,7 +13,9 @@ Route::middleware(['auth', 'role:admin,customer'])
     });
 
 
-
 Route::middleware(['auth', 'role:admin'])->prefix("/dashboard")->group(function() {
     Route::get('/users', [UserController::class, 'index'])->name('dashboard.users');
+    Route::get("/users/update/{user}", [UserController::class, 'edit'])->name("dashboard.users.update");
+
+    Route::patch("/users/suspendaccount/{user}", [UserController::class, 'suspendAccount'])->name('users.suspendaccount');
 });

@@ -74,7 +74,7 @@
                     data-aos="fade-up"
                     data-aos-duration="{{ 500 + ($loop->index * 100) }}"
                     class="flex flex-col min-w-[300px] md:w-full h-auto sm:h-[380px] md:h-[400px] lg:h-[420px] xl:h-[450px] bg-white border border-primary/20 p-4 rounded-xl shadow-lg transition-all duration-300 ease-in-out transform hover:scale-[1.02] hover:shadow-xl hover:border-primary/50 space-y-3">
-                    <div class="relative w-full h-2/3 overflow-hidden rounded-lg">
+                    <a href="{{ route('home.menu.detail', $product->id) }}" class="relative w-full h-2/3 overflow-hidden rounded-lg">
                         <figure class="w-full h-full">
                             @if($product->image_url)
                             <img
@@ -89,7 +89,7 @@
                             @endif
                         </figure>
                         <span class="absolute top-2 left-2 bg-primary/80 text-white text-xs font-semibold px-2 py-0.5 rounded-full z-10">{{ $product->category->name }}</span>
-                    </div>
+                    </a>
 
                     <div class="flex flex-col flex-grow justify-between gap-2 pt-1">
                         <h3 class="text-xl text-secondary font-extrabold line-clamp-2 leading-tight">
@@ -234,7 +234,7 @@
                 data-aos="fade-up"
                 data-aos-duration="{{ 500 + ($loop->index * 100) }}"
                 class="flex flex-col min-w-[300px] md:w-auto h-auto sm:h-[380px] md:h-[400px] lg:h-[420px] xl:h-[450px] bg-white border border-primary/20 p-4 rounded-xl shadow-lg transition-all duration-300 ease-in-out transform hover:scale-[1.02] hover:shadow-xl hover:border-primary/50 space-y-3">
-                <div class="relative w-full h-2/3 overflow-hidden rounded-lg">
+                <a href="{{ route('home.menu.detail', $product->id) }}" class="relative w-full h-2/3 overflow-hidden rounded-lg">
                     <figure class="w-full h-full">
                         @if($product->image_url)
                         <img
@@ -249,7 +249,7 @@
                         @endif
                     </figure>
                     <span class="absolute top-2 left-2 bg-primary/80 text-white text-xs font-semibold px-2 py-0.5 rounded-full z-10">{{ $product->category->name }}</span>
-                </div>
+                </a>
 
                 <div class="flex flex-col flex-grow justify-between gap-2 pt-1">
                     <h3 class="text-xl text-secondary font-extrabold line-clamp-2 leading-tight">

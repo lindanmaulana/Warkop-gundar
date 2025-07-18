@@ -36,7 +36,8 @@ class HomeController extends Controller
         return view('home.index', compact('productsLatest', 'productsForYou'));
     }
 
-    public function showOurLocation() {
+    public function showOurLocation()
+    {
 
         return view("home/ourLocation");
     }
@@ -55,6 +56,13 @@ class HomeController extends Controller
         })->latest()->take(5)->get();
 
         return view('home.menu', compact('products', 'productsFood', 'productsCoffe'));
+    }
+
+    public function showMenuDetail(Product $product)
+    {
+        $product->with("category")->get();
+
+        return view('/home/menuDetail', compact('product'));
     }
 
     public function showCart()
@@ -274,10 +282,6 @@ class HomeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -311,14 +315,14 @@ class HomeController extends Controller
 
         $limit = max(1, (int)$queryLimit);
 
-        if($limit > 20) $limit = 5;
+        if ($limit > 20) $limit = 5;
 
         $products = Product::with('category')
-                            ->where('stock', '>', 0)
-                            ->when($queryKeyword, function($query) use ($queryKeyword) {
-                                $query->where("name", "like", "%{$queryKeyword}%");
-                            })
-                            ->paginate($limit);
+            ->where('stock', '>', 0)
+            ->when($queryKeyword, function ($query) use ($queryKeyword) {
+                $query->where("name", "like", "%{$queryKeyword}%");
+            })
+            ->paginate($limit);
 
         $productsFood = Product::whereHas('category', function ($query) {
             $query->where('name', 'makanan');

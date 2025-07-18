@@ -22,7 +22,7 @@ class EnsureOtpNotVerified
                     return redirect()->route('dashboard')->with('error', 'Akun Anda sudah diverifikasi.');
                     break;
                 case UserRole::Customer:
-                    return redirect()->route('/')->with('error', 'Akun Anda sudah diverifikasi.');
+                    return redirect()->route('home')->with('error', 'Akun Anda sudah diverifikasi.');
                     break;
                 default:
                     Auth::logout();

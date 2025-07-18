@@ -11,6 +11,7 @@ Route::middleware(['auth', 'role:customer'])
         Route::get('/', [HomeController::class, 'index'])->name('home');
         Route::get('/ourlocation', [HomeController::class, 'showOurLocation'])->name('home.ourlocation');
         Route::get('/menu', [HomeController::class, 'showMenu'])->name('home.menu');
+        Route::get('/menu/{product}/detail', [HomeController::class, 'showMenuDetail'])->name('home.menu.detail');
         Route::get('/profile', [HomeController::class, 'showProfile'])->name('home.profile');
         
         Route::middleware('otp.verified')->group(function() {

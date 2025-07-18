@@ -58,11 +58,11 @@
 
         <div class="flex items-start md:items-center flex-col md:flex-row justify-between gap-4 py-6">
             <div class="flex items-center gap-2">
-                <select name="" id="filter-limit" class="border border-dark-blue/20 rounded-md px-3 py-1 text-sm font-semibold"></select>
-                <p class="text-sm font-semibold opacity-50">data per halaman</p>
+                <select name="" id="filter-limit" class="border border-dark-blue/20 rounded-md p-1 text-sm font-semibold"></select>
+                <p class="text-sm font-semibold opacity-70">data per halaman</p>
             </div>
 
-            <div id="filter-page" class="flex items-center gap-2">
+            <div id="filter-page" class="flex items-center md:justify-end gap-2 w-full overflow-x-auto md:overflow-x-hidden ">
 
             </div>
         </div>
@@ -80,8 +80,8 @@
     let urlParams = new URLSearchParams(window.location.search)
 
     const dataFilterLimit = [5, 10, 15, 20]
-    
-    
+
+
     function debounce(fn, delay) {
         let timeout;
         return function(...args) {
@@ -89,19 +89,19 @@
             timeout = setTimeout(() => fn.apply(this, args), delay);
         };
     }
-    
+
     const filterSearch = document.getElementById("filter-search")
     filterSearch.defaultValue = urlParams.get("keyword") ? urlParams.get("keyword").toString() : ""
     filterSearch.addEventListener("input", debounce(function() {
         const value = this.value
 
-        switch(value) {
+        switch (value) {
             case "":
                 urlParams.delete("keyword")
-            break
+                break
             default:
                 urlParams.set("keyword", value)
-            break
+                break
         }
 
         loadDataProduct()
@@ -164,7 +164,7 @@
         const menuList = document.getElementById("menu-list")
         menuList.innerHTML = ""
 
-        const list = dataMenu.map((menu, index) => {
+        const list = dataMenu.length > 0 ? dataMenu.map((menu, index) => {
             let imageUrl = menu.image_url ? `/storage/${menu.image_url}` : "/images/image-placeholder.png"
             const price = Intl.NumberFormat("id-ID", {
                 currency: "IDR",
@@ -179,7 +179,7 @@
                     data-aos="fade-up"
                     data-aos-duration="${aosDuration}"
                     class="col-span-1 flex flex-col h-auto sm:h-[300px] md:h-[400px] lg:h-[420px] xl:h-[400px] bg-white border border-primary/20 p-4 rounded-xl shadow-lg transition-all duration-300 ease-in-out transform hover:scale-[1.02] hover:shadow-xl hover:border-primary/50 space-y-3">
-                    <div class="relative w-full h-2/4 overflow-hidden rounded-lg">
+                    <a href="/menu/${menu.id}/detail" class="relative w-full h-2/4 overflow-hidden rounded-lg">
                         <figure class="w-full h-full">
                             <img
                                 src="${imageUrl}"
@@ -187,7 +187,7 @@
                                 class="w-full h-full object-cover transition-transform duration-300 ease-in-out hover:scale-105">
                         </figure>
                         <span class="absolute top-2 left-2 bg-primary/80 text-white text-xs font-semibold px-2 py-0.5 rounded-full z-10">${menu.category.name}</span>
-                    </div>
+                    </a>
 
                     <div class="flex flex-col flex-grow justify-center gap-2 pt-1">
                         <h3 class="text-lg text-secondary font-extrabold line-clamp-2 leading-tight">
@@ -212,7 +212,22 @@
                 </article>
                 `
             )
-        }).join(" ")
+        }).join(" ") : (
+            `
+            <article
+                data-aos="fade-up"
+                data-aos-duration="600"
+                class="col-span-5 flex flex-col h-auto sm:h-[300px] md:h-[310px] lg:h-[320px] bg-white border border-dashed border-gray-300 p-4 rounded-xl shadow-sm transition-all duration-300 ease-in-out justify-center items-center text-center space-y-4">
+                
+                <x-icon name="notfound" class="w-12 h-12 text-gray-400" />
+                
+                <div class="space-y-1">
+                    <h3 class="text-xl font-semibold text-gray-500">Menu tidak tersedia</h3>
+                    <p class="text-sm text-gray-400">Belum ada menu yang ditambahkan atau menu sedang tidak tersedia.</p>
+                </div>
+            </article>
+            `
+        )
 
         menuList.innerHTML = list
     }

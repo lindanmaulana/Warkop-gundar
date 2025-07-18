@@ -92,6 +92,7 @@ class UserController extends Controller
 
     public function getAllUser(Request $request)
     {
+        $queryKeyword = $request->query("keyword");
         $queryPage = $request->query('page');
         $queryLimit = $request->query('limit');
 
@@ -100,7 +101,11 @@ class UserController extends Controller
 
         if ($limit > 20) $limit = 5;
 
-        $users = User::paginate($limit);
+        $users = User::when($queryKeyword, function($query) use($queryKeyword) {
+            $query->where("name", "like", "%{$queryKeyword}%");
+        })
+                ->paginate($limit);
+                
         $users->getCollection()->makeHidden('email', 'password', 'remember_token');
 
         return response()->json([

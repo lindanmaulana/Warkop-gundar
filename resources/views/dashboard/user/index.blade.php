@@ -11,6 +11,7 @@
 <div class="space-y-4">
     <div class="p-2 flex items-center justify-between">
         <h2 class="text-xl font-semibold text-royal-blue">Daftar Pengguna</h2>
+        <input id="filter-search" type="text" placeholder="Cari..." class="border border-dark-blue/20 rounded-lg px-4 py-1">
     </div>
 
     @if(session('success'))
@@ -58,6 +59,34 @@
     const urlParams = new URLSearchParams(window.location.search)
 
     const dataFilterLimit = [5, 10, 15, 20]
+
+
+    function debounce(fn, delay) {
+        let timeout;
+
+        return function(...args) {
+            clearTimeout(timeout)
+            timeout = setTimeout(() => fn.apply(this, args), delay)
+        }
+    }
+
+    const filterSearch = document.getElementById("filter-search")
+    filterSearch.defaultValue = urlParams.get("keyword") ? urlParams.get("keyword").toString() : ""
+    filterSearch.addEventListener("input", debounce(function() {
+        const value = this.value
+
+        switch (value) {
+            case "":
+                urlParams.delete("keyword")
+                break;
+            default:
+                urlParams.set("keyword", value)
+                break
+        }
+
+        updateURL()
+        loadDataUser()
+    }, 1000))
 
     document.getElementById("filter-limit").addEventListener("change", function() {
         const value = this.value
@@ -115,7 +144,7 @@
         userContent.innerHTML = ""
         const editUrlTemplate = userContent.dataset.editUrl
 
-        const row = dataUser.map((user, index) => {
+        const row = dataUser.length > 0 ? dataUser.map((user, index) => {
             const isVerified = user.is_email_verified
             const statusVerified = isVerified === 1 ?
                 '<bold class="text-xs text-royal-blue bg-royal-blue/20 px-2 py-1 rounded">Aktif</bold>' :
@@ -137,7 +166,17 @@
                     </tr>
                 `
             )
-        }).join(" ")
+        }).join(" ") : (
+            `
+            <tr>
+                <td colspan="6" class=" py-4">
+                    <div class="flex items-center justify-center gap-2 text-red-500">
+                        <x-icon name="notfound" class="mt-px" />  <bold class="text-base">Tidak ada data ditemukan.</bold>
+                    </div>
+                </td>
+            </tr>
+            `
+        )
 
         userContent.innerHTML = row
     }

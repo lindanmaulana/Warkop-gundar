@@ -8,6 +8,14 @@
     <h2 class="text-lg font-semibold">Verify Your Account</h2>
     <p class="text-xs text-gray-500">OTP telah dikirim ke email Anda.</p>
 
+    @if(session('success'))
+    <div id="alert-success" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+        <p class="text-green-700 ">
+            <strong class="bold">Success!</strong> {{session('success')}}
+        </p>
+    </div>
+    @endif
+
     <form action="{{ route('otp') }}" method="POST" class="w-full py-4 space-y-4 px-12">
         @csrf
         <input type="hidden" id="user-id" name="user_id" value="{{ Auth::user()->id}}">
@@ -18,9 +26,13 @@
             <input type="text" maxlength="1" class="otp-box border border-gray-300 size-9 rounded">
             <input type="text" maxlength="1" class="otp-box border border-gray-300 size-9 rounded">
         </div>
-        <p class="text-center text-xs text-gray-500">Didn't receive code? <span class="text-royal-blue">Resend now</span></p>
+        <p class="text-center text-xs text-gray-500">Didn't receive code? <button type="button" onclick="handleResendOtp(event)" class="text-royal-blue">Resend now</button></p>
 
         <button type="submit" class="w-full text-center bg-royal-blue/80 rounded px-4 py-1 text-sm text-white">Verify Account</button>
+    </form>
+
+    <form id="otp-resend" action="{{ route('otp.resend') }}" method="POST">
+        @csrf
     </form>
 </div>
 @endsection
@@ -59,5 +71,16 @@
             alert('Silakan isi semua digit OTP!');
         }
     })
+
+
+    const handleResendOtp = (event) => {
+        const otpResend = document.getElementById("otp-resend")
+
+        const btn = event.target;
+        btn.disabled = true;
+        btn.textContent = "Sending...";
+
+        otpResend.submit()
+    }
 </script>
 @endsection

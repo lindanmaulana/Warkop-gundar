@@ -5,11 +5,22 @@
     <div class="container max-w-6xl mx-auto py-14 px-4 lg:px-0">
         <div class="flex items-center justify-between">
             <div>
-                <h2 class="text-3xl font-semibold text-secondary">Edit Profile</h2>
+                <h2 class="text-3xl font-semibold text-secondary">
+                    Edit Profile
+                    @if($user->is_email_verified)
+                    <span class="text-sm text-green-500">Terverfikasi</span>
+                    @else
+                    <span class="text-sm text-red-500">Belum Verifikasi</span>
+                    @endif
+                </h2>
                 <p class="text-secondary/80 max-w-80">Masukkan informasi yang valid agar proses pesanan lebih mudah</p>
             </div>
-
-            <a href="{{ route('home') }}" class="hidden md:block bg-secondary px-4 py-1 text-white rounded">Kembali</a>
+            <div class="flex items-center gap-2">
+                @if(!$user->is_email_verified)
+                    <a href="{{ route('auth.otp') }}" class="text-sm text-red-500 border border-red-500 rounded px-2 py-1 hover:bg-red-500 hover:text-white hover:border-none transition-global">Verifikasi</a>
+                @endif
+                <a href="{{ route('home') }}" class="hidden md:block bg-secondary px-4 py-1 text-white rounded">Kembali</a>
+            </div>
         </div>
         <form method="POST" action="{{ route('profile.update', $user->id) }}" class="grid grid-cols-1 md:grid-cols-2 gap-6 py-8">
             @csrf

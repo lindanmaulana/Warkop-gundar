@@ -69,14 +69,12 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            
+
             $user = Auth::user();
             if ($user->role === UserRole::Admin) {
                 return redirect()->route("dashboard");
-
             } else if ($user->role === UserRole::Customer) {
                 return redirect()->route("home");
-                
             } else {
                 return redirect()->route("dashboard");
             }
@@ -109,7 +107,7 @@ class AuthController extends Controller
             ->first();
 
         if (!$otpData) {
-            return back()->withErrors(['otp' => 'Kode OTP tidak valid atau sudah kadaluarsa']);
+            return back()->with('error', 'Kode OTP tidak valid atau sudah kadaluarsa');
         }
 
         $user = User::find($request->user_id);
@@ -125,5 +123,53 @@ class AuthController extends Controller
         } else {
             return redirect()->intended(route("home"))->with('message', 'Akun berhasil di verifikasi');;
         }
+    }
+
+    public function resendOtp(Request $request)
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return redirect()->route('auth.login')->with('error', 'Silakan login terlebih dahulu.');
+        }
+
+        if ($user->is_email_verified) {
+            switch ($user->role) {
+                case UserRole::Admin:
+                    return redirect()->route('dashboard')->with('error', 'Akun Anda sudah diverifikasi.');
+                    break;
+                case UserRole::Customer:
+                    return redirect()->route('home')->with('error', 'Akun Anda sudah diverifikasi.');
+                    break;
+                default:
+                    Auth::logout();
+                    $request->session()->invalidate();
+                    $request->session()->regenerateToken();
+
+                    return redirect()->route('auth.login');
+            }
+        }
+
+        $existingOtp = Otp::where('user_id', $user->id)
+            ->where('expires_at', '>', now())
+            ->first();
+
+        if ($existingOtp) {
+            return redirect()->route('auth.otp')->with('error', 'OTP sudah dikirim. Silakan tunggu beberapa menit sebelum meminta ulang.');
+        }
+
+        $otp = rand(1000, 9999);
+
+        Otp::updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'code' => $otp,
+                'expires_at' => now()->addMinutes(5)
+            ]
+        );
+
+        Mail::to($user->email)->send(new SendOtpMail($user->name, $otp));
+
+        return redirect()->route('auth.otp')->with('success', 'Kode OTP baru telah dikirim.');
     }
 }

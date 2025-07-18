@@ -28,6 +28,7 @@
             <thead class="*:text-gray-400  *:border-b *:border-dark-blue/10">
                 <th class="font-normal py-2 px-6">No</th>
                 <th class="font-normal p-2">Nama</th>
+                <th class="font-normal p-2">Email</th>
                 <th class="font-normal p-2">Role</th>
                 <th class="font-normal p-2">Status Akun</th>
                 <th class="font-normal p-2">Tgl Daftar</th>
@@ -157,6 +158,7 @@
                     <tr class="hover:bg-dark-blue/20 divide-y divide-gray-200 text-gray-800 *:text-sm *:font-medium">
                         <td class="py-4 px-6">${ index + 1 }</td>
                         <td class="px-2 py-4 text-dark-blue">${ user.name }</td>
+                        <td class="px-2 py-4 text-dark-blue">${ user.email }</td>
                         <td class="px-2 py-4 text-dark-blue">${ user.role }</td>
                         <td class="px-2 py-4 text-dark-blue">${ statusVerified }</td>
                         <td class="px-2 py-4 text-dark-blue">${user.created_at ?? "-"}</td>

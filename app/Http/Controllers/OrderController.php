@@ -217,6 +217,12 @@ class OrderController extends Controller
 
         $orders = Order::with('user', 'orderItems')->paginate($limit);
 
+        $orders->getCollection()->each(function ($order) {
+            if ($order->relationLoaded('user') && $order->user) {
+                $order->user->makeHidden(['password', 'remember_token']);
+            }
+        });
+        
         return response()->json([
             'message' => "Data order berhasil di ambil",
             'data' => $orders

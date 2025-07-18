@@ -11,17 +11,19 @@
 <div class="space-y-4">
     <div class="flex items-center justify-between">
         <h2 class="text-xl font-semibold text-royal-blue">Order</h2>
+        <select name="" id="filter-status">
+            
+        </select>
     </div>
-    <div class="overflow-x-auto w-full bg-white p-2 rounded-lg shadow-sm shadow-dark-blue/10">
+    <div class="overflow-x-auto bg-white p-2 rounded-lg shadow-sm shadow-dark-blue/10">
         <table class="w-full text-left rounded-md overflow-hidden">
             <thead class="*:text-gray-500">
                 <th class="font-normal py-2 px-6">No</th>
                 <th class="font-normal px-2 py-4">Pelanggan</th>
+                <th class="font-normal px-2 py-4">Email</th>
                 <th class="font-normal px-2 py-4">Tempat</th>
-                <th class="font-normal px-2 py-4">Lokasi Antar</th>
                 <th class="font-normal px-2 py-4">Total</th>
                 <th class="font-normal px-2 py-4">Status</th>
-                <th class="font-normal px-2 py-4">Deskripsi</th>
                 <th class="font-normal px-2 py-4">Waktu</th>
                 <th class="font-normal px-2 py-4"></th>
             </thead>
@@ -140,13 +142,12 @@
                 <tr class="hover:bg-dark-blue/20 divide-y divide-gray-200 text-gray-800">
                     <td class="px-6 py-2">${index + 1}</td>
                     <td class="px-2 py-4">${order.user.name}</td>
+                    <td class="px-2 py-4">${order.user.email}</td>
                     <td class="px-2 py-4">${order.branch}</td>
-                    <td class="px-2 py-4">${order.delivery_location}</td>
                     <td class="px-2 py-4">${totalPrice}</td>
                     <td class="px-2 py-4">
                         ${statusOrder}
                     </td>
-                    <td class="px-2 py-4 line-clamp-1 truncate max-w-[160px]">${order.description ?? "-"}</td>
                     <td>${createdAt}</td>
                     <td class="px-2 py-4">
                         <div class="flex items-center gap-2">

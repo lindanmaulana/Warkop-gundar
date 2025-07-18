@@ -32,6 +32,7 @@ Route::middleware("guest")
 Route::middleware(['auth', 'otp.not.verified'])->group(function () {
     Route::get("/auth/otp", [AuthController::class, 'showOtpForm'])->name('auth.otp');
     Route::post("/otp", [AuthController::class, 'otpVerified'])->name('otp');
+    Route::post("/otp/resend", [AuthController::class, 'resendOtp'])->name('otp.resend');
 });
 
 Route::post("/logout", [AuthController::class, 'logout'])->name('auth.logout');

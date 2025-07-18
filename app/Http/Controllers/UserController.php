@@ -105,8 +105,8 @@ class UserController extends Controller
             $query->where("name", "like", "%{$queryKeyword}%");
         })
                 ->paginate($limit);
-                
-        $users->getCollection()->makeHidden('email', 'password', 'remember_token');
+
+        $users->getCollection()->makeHidden('password', 'remember_token');
 
         return response()->json([
             'message' => "Data user berhasil di ambil",

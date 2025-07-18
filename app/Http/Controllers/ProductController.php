@@ -22,6 +22,7 @@ class ProductController extends Controller
 
     public function getAllProduct(Request $request)
     {
+        $queryKeyword = $request->query("keyword");
         $queryCategoryId = $request->query('category');
         $queryPage = $request->query("page");
         $queryLimit = $request->query("limit");
@@ -31,13 +32,15 @@ class ProductController extends Controller
 
         if ($limit > 20) $limit = 5;
         
-        $query = Product::with('category')->latest();
-
-        if ($queryCategoryId) {
-            $query->where('category_id', $queryCategoryId);
-        }
-
-        $products = $query->paginate($limit);
+        $products = Product::with('category')
+                        ->latest()
+                        ->when($queryCategoryId, function($query) use($queryCategoryId) {
+                            $query->where('category_id', $queryCategoryId);
+                        })
+                        ->when($queryKeyword, function($query) use($queryKeyword) {
+                            $query->where("name", "like", "%{$queryKeyword}%");
+                        })
+                        ->paginate($limit);
 
         return response()->json([
             'message' => "Data product berhasil di ambil",

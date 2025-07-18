@@ -18,6 +18,9 @@
 
                 </select>
             </form>
+            <div>
+                <input id="filter-search" type="text" placeholder="Cari..." class="border border-dark-blue/20 rounded-lg px-4 py-1">
+            </div>
             <a href="{{ route('dashboard.menu.products.create') }}" class="flex items-center rounded px-3 py-1 text-white bg-green-500 hover:bg-green-300 cursor-pointer">
                 Tambah
             </a>
@@ -76,6 +79,33 @@
     let limitParams = urlParams.get("limit") || "5"
 
     const dataLimitPage = [5, 10, 15, 20]
+
+    function debounce(fn, delay) {
+        let timeout;
+
+        return function(...args) {
+            clearTimeout(timeout)
+            timeout = setTimeout(() => fn.apply(this, args), delay)
+        }
+    }
+
+    const filterSearch = document.getElementById("filter-search")
+    filterSearch.defaultValue = urlParams.get("keyword") ? urlParams.get("keyword").toString() : ""
+    filterSearch.addEventListener("input", debounce(function() {
+        const value = this.value
+
+        switch (value) {
+            case "":
+                urlParams.delete("keyword")
+                break;
+            default:
+                urlParams.set("keyword", value)
+                break
+        }
+
+        updateURL()
+        loadDataProduct()
+    }, 1000))
 
     document.getElementById("filter-limit").addEventListener("change", function() {
         const value = this.value

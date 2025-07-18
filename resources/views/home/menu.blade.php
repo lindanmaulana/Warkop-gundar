@@ -80,9 +80,8 @@
     let urlParams = new URLSearchParams(window.location.search)
 
     const dataFilterLimit = [5, 10, 15, 20]
-    const filterSearch = document.getElementById("filter-search")
-
-
+    
+    
     function debounce(fn, delay) {
         let timeout;
         return function(...args) {
@@ -90,7 +89,8 @@
             timeout = setTimeout(() => fn.apply(this, args), delay);
         };
     }
-
+    
+    const filterSearch = document.getElementById("filter-search")
     filterSearch.defaultValue = urlParams.get("keyword") ? urlParams.get("keyword").toString() : ""
     filterSearch.addEventListener("input", debounce(function() {
         const value = this.value

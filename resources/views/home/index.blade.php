@@ -182,13 +182,12 @@
                     class="text-gray-700 text-base font-normal leading-relaxed">
                     Tempat ngopi sederhana dengan pilihan minuman praktis dan suasana akrab. Cocok buat ngobrol, santai, atau sekadar isi waktu. Kami berdedikasi menyajikan kopi terbaik dengan suasana yang hangat.
                 </p>
-                <button
+                <a href="{{ route('home.cart') }}"
                     data-aos="fade-up"
                     data-aos-duration="1300"
-                    class="bg-secondary text-primary px-4 py-2 rounded-full text-base font-semibold
-                           transition-all duration-300 ease-in-out hover:bg-secondary/90 hover:scale-105">
+                    class="bg-secondary text-primary px-4 py-2 rounded-full text-base font-semibold transition-all duration-300 ease-in-out hover:bg-secondary/90 hover:scale-105">
                     Pesan Sekarang
-                </button>
+                </a>
             </div>
         </div>
     </div>

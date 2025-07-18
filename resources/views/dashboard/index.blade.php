@@ -7,7 +7,7 @@
         <p class="text-dark-blue mt-1">Selamat datang, {{ auth()->user()->name }}! Ini ringkasan operasional warkop hari ini.</p>
     </div>
     <div class="hidden md:flex items-center gap-3">
-        <a href="{{ route('dashboard.orders') }}" class="relative">
+        <a href="{{ route('dashboard.orders', ['page' => 1, 'limit' => 5]) }}" class="relative">
             <x-icon name="bell" class="size-5 text-royal-blue" />
             <div data-total-order="{{ $totalOrderPending }}" class="totalOrder absolute -top-3 right-0 rounded-full size-4 flex items-center justify-center bg-red-500">
                 <span class=" text-sm text-white">{{ $totalOrderPending }}</span>
@@ -113,7 +113,7 @@
             </tbody>
         </table>
     </div>
-    <a href="{{ route('dashboard.orders') }}" class="flex items-center justify-end text-sm text-royal-blue">Lihat semua pesanan -></a>
+    <a href="{{ route('dashboard.orders', ['page' => 1, 'limit' => 5]) }}" class="flex items-center justify-end text-sm text-royal-blue">Lihat semua pesanan -></a>
 </div>
 @endsection
 

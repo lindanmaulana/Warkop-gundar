@@ -15,7 +15,7 @@ $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal
 <div class="space-y-6">
     <div class="flex items-center justify-between">
         <h3 class="text-xl font-semibold text-dark-blue">Form Edit Order</h3>
-        <a href="{{ route('dashboard.orders') }}" class="flex items-center gap-2 text-sm bg-dark-blue hover:bg-dark-blue/80 text-white px-3 py-1 rounded">
+        <a href="{{ route('dashboard.orders', ['page' => 1, 'limit' => 5]) }}" class="flex items-center gap-2 text-sm bg-dark-blue hover:bg-dark-blue/80 text-white px-3 py-1 rounded">
             <x-icon name="arrow-left" /> Kembali
         </a>
     </div>

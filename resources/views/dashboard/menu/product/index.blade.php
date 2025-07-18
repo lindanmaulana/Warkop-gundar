@@ -158,7 +158,7 @@
                     <td class="px-2 py-4 text-dark-blue">${product.category.name}</td>
                     <td class="px-2 py-4 text-dark-blue">${price}</td>
                     <td class="px-2 py-4 text-dark-blue">${product.stock}</td>
-                    <td class="px-2 py-4 text-dark-blue">${product.description}</td>
+                    <td class="px-2 py-4 text-dark-blue">${product.description ?? "-"}</td>
                     <td class="px-2 py-4 text-dark-blue">
                         <div class="flex items-center justify-center gap-3 *:text-sm">
                             <a href="${editUrl}" class="text-royal-blue font-medium cursor-pointer">Edit</a>

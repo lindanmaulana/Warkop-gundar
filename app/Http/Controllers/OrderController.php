@@ -180,7 +180,7 @@ class OrderController extends Controller
 
         $order->update($validatedData);
 
-        return redirect()->route('dashboard.orders')->with('success', 'Order status berhasil di perbarui.');
+        return redirect()->route('dashboard.orders', ['page' => 1, 'limit' => 5])->with('success', 'Order status berhasil di perbarui.');
     }
 
     /**
@@ -202,5 +202,24 @@ class OrderController extends Controller
         $user = Auth::user();
 
         return view('dashboard.order.checkout', compact('user'));
+    }
+
+
+    public function getAllOrder(Request $request)
+    {
+        $queryPage = $request->query('page');
+        $queryLimit = $request->query('limit');
+
+        $page = max(1, (int)$queryPage);
+        $limit = max(1, (int)$queryLimit);
+
+        if ($limit > 20) $limit = 5;
+
+        $orders = Order::with('user', 'orderItems')->paginate($limit);
+
+        return response()->json([
+            'message' => "Data order berhasil di ambil",
+            'data' => $orders
+        ]);
     }
 }

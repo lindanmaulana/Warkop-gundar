@@ -29,17 +29,15 @@ class ProductController extends Controller
         $page = max(1, (int)$queryPage);
         $limit = max(1, (int)$queryLimit);
 
-        if($limit > 20) $limit = 5;
-
-        $categories = Category::all();
-
-        $productsQuery = Product::with('category');
+        if ($limit > 20) $limit = 5;
+        
+        $query = Product::with('category')->latest();
 
         if ($queryCategoryId) {
-            $productsQuery->where('category_id', $queryCategoryId);
+            $query->where('category_id', $queryCategoryId);
         }
 
-        $products = $productsQuery->paginate($limit);
+        $products = $query->paginate($limit);
 
         return response()->json([
             'message' => "Data product berhasil di ambil",

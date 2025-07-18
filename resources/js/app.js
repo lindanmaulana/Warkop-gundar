@@ -8,3 +8,5 @@ AOS.init({
 });
 
 window.Swall = Swal
+
+const hello = "hello"

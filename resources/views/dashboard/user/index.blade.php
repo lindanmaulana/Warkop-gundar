@@ -130,7 +130,7 @@
                         <td class="px-2 py-4 text-dark-blue">${ user.name }</td>
                         <td class="px-2 py-4 text-dark-blue">${ user.role }</td>
                         <td class="px-2 py-4 text-dark-blue">${ statusVerified }</td>
-                        <td class="px-2 py-4 text-dark-blue">${user.created_at}</td>
+                        <td class="px-2 py-4 text-dark-blue">${user.created_at ?? "-"}</td>
                         <td class=" py-4 px-2">
                             <a href="${editUrl}" class="text-red-500 text-xs cursor-pointer">${user.is_email_verified ? "Non aktifkan" : ""}</a>
                         </td>

@@ -32,7 +32,7 @@ $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal
                 @enderror
                 <label for="description" class="flex flex-col gap-3 rounded-md">
                     <span class="text-dark-blue font-semibold">Deskripsi:</span>
-                    <textarea id="description" name="description" value="{{ old('description', $category->description) }}" class="w-full border border-dark-blue/20 px-4 py-1 rounded-sm"></textarea>
+                    <textarea id="description" name="description" class="w-full border border-dark-blue/20 px-4 py-1 rounded-sm">{{ old('description', $category->description) }}</textarea>
                 </label>
                 @error('description')
                 <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>

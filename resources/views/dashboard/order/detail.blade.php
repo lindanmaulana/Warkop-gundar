@@ -5,7 +5,7 @@
 <div class="space-y-4 pb-10 md:pb-0">
     <div class="w-full min-h-[200px] flex items-center justify-between bg-royal-blue px-6 md:px-12 -mb-14">
         <h2 class="text-lg font-semibold text-white">Order Detail</h2>
-        <a href="{{ route('dashboard.orders') }}" class="flex items-center justify-start max-w-20 gap-1 bg-dark-blue text-sm px-4 py-1 text-white rounded"><x-icon name="arrow-left" /> Back</a>
+        <a href="{{ route('dashboard.orders', ['page' => 1, 'limit' => 5]) }}" class="flex items-center justify-start max-w-20 gap-1 bg-dark-blue text-sm px-4 py-1 text-white rounded"><x-icon name="arrow-left" /> Back</a>
     </div>
     <div class="relative max-w-[90%] mx-auto bg-white px-2 py-6 rounded shadow-sm shadow-dark-blue/10">
         <div class="absolute translate-x-1/2 right-1/2 -top-9 size-16 flex items-center justify-center rounded-full bg-royal-blue border-2 border-white">

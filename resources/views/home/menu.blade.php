@@ -49,8 +49,10 @@
 <section class="my-20">
     <div class="container max-w-6xl mx-auto space-y-4 px-4 md:px-">
         <h2 class="text-secondary text-3xl lg:text-5xl font-semibold text-center tracking-widest">MENU TERSEDIA</h2>
-
-        <article id="menu-list" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-2 gap-y-4">
+        <div class="flex items-center justify-end">
+            <input id="filter-search" type="text" placeholder="cari..." class="border border-secondary/40 rounded-lg px-4 py-1">
+        </div>
+        <article id="menu-list" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-2 gap-y-4">
 
         </article>
 
@@ -78,6 +80,33 @@
     let urlParams = new URLSearchParams(window.location.search)
 
     const dataFilterLimit = [5, 10, 15, 20]
+    const filterSearch = document.getElementById("filter-search")
+
+
+    function debounce(fn, delay) {
+        let timeout;
+        return function(...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => fn.apply(this, args), delay);
+        };
+    }
+
+    filterSearch.defaultValue = urlParams.get("keyword") ? urlParams.get("keyword").toString() : ""
+    filterSearch.addEventListener("input", debounce(function() {
+        const value = this.value
+
+        switch(value) {
+            case "":
+                urlParams.delete("keyword")
+            break
+            default:
+                urlParams.set("keyword", value)
+            break
+        }
+
+        loadDataProduct()
+        updateURL()
+    }, 1000))
 
     document.getElementById("filter-limit").addEventListener("change", function() {
         const value = this.value
@@ -117,17 +146,11 @@
             const result = await response.json()
             const currentPage = result.data.current_page
             const pages = result.data.links
-
             const data = result.data.data
-
             const pagination = result.data.pagination
 
             showFilterPage(pagination.links)
             showMenuList(pagination.data)
-
-            console.log({
-                result
-            })
 
             return result
         } catch (err) {
@@ -156,7 +179,7 @@
                     data-aos="fade-up"
                     data-aos-duration="${aosDuration}"
                     class="col-span-1 flex flex-col h-auto sm:h-[300px] md:h-[400px] lg:h-[420px] xl:h-[400px] bg-white border border-primary/20 p-4 rounded-xl shadow-lg transition-all duration-300 ease-in-out transform hover:scale-[1.02] hover:shadow-xl hover:border-primary/50 space-y-3">
-                    <div class="relative w-full h-2/3 overflow-hidden rounded-lg">
+                    <div class="relative w-full h-2/4 overflow-hidden rounded-lg">
                         <figure class="w-full h-full">
                             <img
                                 src="${imageUrl}"
@@ -166,7 +189,7 @@
                         <span class="absolute top-2 left-2 bg-primary/80 text-white text-xs font-semibold px-2 py-0.5 rounded-full z-10">${menu.category.name}</span>
                     </div>
 
-                    <div class="flex flex-col flex-grow justify-between gap-2 pt-1">
+                    <div class="flex flex-col flex-grow justify-center gap-2 pt-1">
                         <h3 class="text-lg text-secondary font-extrabold line-clamp-2 leading-tight">
                             ${menu.name}
                         </h3>

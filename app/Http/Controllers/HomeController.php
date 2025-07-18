@@ -307,13 +307,18 @@ class HomeController extends Controller
     {
         $queryPage = $request->query("page");
         $queryLimit = $request->query("limit");
+        $queryKeyword = $request->query("keyword");
 
         $limit = max(1, (int)$queryLimit);
 
-
         if($limit > 20) $limit = 5;
 
-        $products = Product::with('category')->where('stock', '>', 0)->paginate($limit);
+        $products = Product::with('category')
+                            ->where('stock', '>', 0)
+                            ->when($queryKeyword, function($query) use ($queryKeyword) {
+                                $query->where("name", "like", "%{$queryKeyword}%");
+                            })
+                            ->paginate($limit);
 
         $productsFood = Product::whereHas('category', function ($query) {
             $query->where('name', 'makanan');

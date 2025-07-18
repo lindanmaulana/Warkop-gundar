@@ -26,7 +26,7 @@
                     <a href="{{ route('home.cart') }}" class="bg-secondary rounded-full px-6 py-3.5 font-semibold text-white text-base flex items-center gap-2 transition-all duration-300 hover:bg-secondary/90 hover:scale-105">
                         Pesan Sekarang <x-icon name="shopping-cart" class="size-5" />
                     </a>
-                    <a href="{{ route('home.menu') }}" class="rounded-full px-6 py-3.5 text-primary font-semibold text-base flex items-center gap-2 border border-primary transition-all duration-300 hover:bg-primary/10 hover:scale-105">
+                    <a href="{{ route('home.menu', ['page' => 1, 'limit' => 5]) }}" class="rounded-full px-6 py-3.5 text-primary font-semibold text-base flex items-center gap-2 border border-primary transition-all duration-300 hover:bg-primary/10 hover:scale-105">
                         Menu lainnya
                     </a>
                 </div>

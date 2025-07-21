@@ -24,7 +24,16 @@
 @section('content')
 <div class="mb-6">
     <h2 class="text-lg font-semibold text-royal-blue">Overview</h2>
-    <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-3 py-4 md:py-4">
+    <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-3 py-4 md:py-4">
+        <div class="hover:-translate-y-2 transition-global duration-300 flex gap-2 max-h-[120px] bg-white border border-dark-blue/10 shadow-md p-5 rounded-md space-y-5 *:text-royal-blue">
+            <div class="bg-royal-blue/30 size-10 rounded-full flex items-center justify-center">
+                <x-icon name="trending-up" />
+            </div>
+            <div>
+                <h3 class="text-dark-blue/80 font-semibold text-sm">Total Pendapatan</h3>
+                <p class="text-xl font-bold text-dark-blue ">{{ $totalRevenue }}</p>
+            </div>
+        </div>
         <div class="hover:-translate-y-2 transition-global duration-300 flex gap-2 max-h-[120px] bg-white border border-dark-blue/10 shadow-md p-5 rounded-md space-y-5 *:text-royal-blue">
             <div class="bg-royal-blue/30 size-10 rounded-full flex items-center justify-center">
                 <x-icon name="toolskitchen" />

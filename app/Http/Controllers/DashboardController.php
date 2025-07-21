@@ -20,6 +20,7 @@ class DashboardController extends Controller
         $totalProducts = Product::count();
         $totalOrders = Order::count();
         $totalTransactions = Transaction::count();
+        $totalRevenue = Transaction::where('transaction_status', 'settlement')->sum('gross_amount');
 
         $totalOrderPending = Order::where('status', 'pending')->count();
         $latestOrdersData = collect();
@@ -29,7 +30,7 @@ class DashboardController extends Controller
             $latestOrdersData = Order::with('orderItems.product')->latest()->take(3)->get();
         }
 
-        return view('dashboard.index', compact('totalProducts', 'totalOrders', 'totalTransactions' ,'totalOrderPending', 'latestOrdersData', 'totalOrderByCustomer'));
+        return view('dashboard.index', compact('totalProducts', 'totalOrders', 'totalTransactions', 'totalRevenue' ,'totalOrderPending', 'latestOrdersData', 'totalOrderByCustomer'));
     }
 
     public function showDashboardMenu()

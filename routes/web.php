@@ -13,6 +13,7 @@ require __DIR__ . '//routeProduct.php';
 require __DIR__ . '//routeUser.php';
 require __DIR__ . '//routeOrder.php';
 require __DIR__ . '//routePayment.php';
+require __DIR__ . '//routeTransaction.php';
 require __DIR__ . '//routeHome.php';
 require __DIR__ . '//routeApi.php';
 

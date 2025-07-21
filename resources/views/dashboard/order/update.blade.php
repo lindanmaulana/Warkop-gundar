@@ -44,10 +44,10 @@ $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal
             <div>
                 <label for="status" class="block text-sm font-semibold text-dark-blue mb-1">Status Pesanan</label>
                 <select id="status" name="status" class="w-full border border-dark-blue/20 px-4 py-2 rounded bg-white text-dark-blue">
-                    <option value="pending" {{ old('status', $order->status) == 'pending' ? 'selected' : '' }}>Pending</option>
-                    <option value="processing" {{ old('status', $order->status) == 'processing' ? 'selected' : '' }}>Processing</option>
-                    <option value="done" {{ old('status', $order->status) == 'done' ? 'selected' : '' }}>Selesai</option>
-                    <option value="cancelled" {{ old('status', $order->status) == 'cancelled' ? 'selected' : '' }}>Dibatalkan</option>
+                    <option value="pending" {{ old('status', $order->status->value) == 'pending' ? 'selected' : '' }}>Pending</option>
+                    <option value="processing" {{ old('status', $order->status->value) == 'processing' ? 'selected' : '' }}>Processing</option>
+                    <option value="done" {{ old('status', $order->status->value) == 'done' ? 'selected' : '' }}>Selesai</option>
+                    <option value="cancelled" {{ old('status', $order->status->value) == 'cancelled' ? 'selected' : '' }}>Dibatalkan</option>
                 </select>
                 @error('status')
                 <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>

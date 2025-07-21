@@ -43,6 +43,15 @@
                 <p class="text-xl font-bold text-dark-blue ">{{ $totalOrders }}</p>
             </div>
         </div>
+        <div class="hover:-translate-y-2 transition-global duration-300 flex gap-2 max-h-[120px] bg-white border border-dark-blue/10 shadow-md p-5 rounded-md space-y-5 *:text-royal-blue">
+            <div class="bg-green-100 size-10 rounded-full flex items-center justify-center">
+                <x-icon name="transaction" class="text-green-500" />
+            </div>
+            <div>
+                <h3 class="text-dark-blue/80 font-semibold text-sm">Total Transaksi</h3>
+                <p class="text-xl font-bold text-dark-blue ">{{ $totalTransactions }}</p>
+            </div>
+        </div>
     </div>
 </div>
 

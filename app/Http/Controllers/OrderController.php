@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\PaymentProofs;
 use App\Models\Product;
+use App\Models\Transaction;
 use Exception;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
@@ -41,10 +42,9 @@ class OrderController extends Controller
 
     public function getDetailOrder(Order $order)
     {
-        $order->load('orderItems.product');
-        $paymentProofs = PaymentProofs::where('order_id', $order->id)->first();
+        $order->load('orderItems.product', 'transactions');
 
-        return view('dashboard.order.detail', compact('order', 'paymentProofs'));
+        return view('dashboard.order.detail', compact('order'));
     }
 
     /**
@@ -161,9 +161,7 @@ class OrderController extends Controller
      */
     public function edit(Order $order)
     {
-
-        $paymentProof = PaymentProofs::where('order_id', $order->id)->get();
-        return view('dashboard.order.update', compact('order', 'paymentProof'));
+        return view('dashboard.order.update', compact('order'));
     }
 
     /**

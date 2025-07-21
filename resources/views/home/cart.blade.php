@@ -70,7 +70,7 @@
     const componentTotalItems = document.getElementById('totalItems')
 
     const showMappingCart = () => {
-        let btnCompleteOrder = document.getElementById('btn-complete-order') //button complete disable saat cart kosong
+        let btnCompleteOrder = document.getElementById('btn-complete-order') 
         const tableBody = document.getElementById('table-body')
         tableBody.innerHTML = ""
 
@@ -145,14 +145,13 @@
         const dataProductPrice = buttonElement.dataset.itemProductPrice
         const dataProductTotalPrice = buttonElement.dataset.itemProducTotalPrice
 
-        const existInCart = cart.findIndex(item => item.userId === dataUserId && item.productId === dataProductId)
+        const existInCart = cart.findIndex(item => item.productId === dataProductId)
 
         if (existInCart > -1) {
             if (type === "inc") {
                 cart[existInCart].qty += 1
                 cart[existInCart].totalPrice += Number(dataProductPrice)
 
-                console.log("fungsi inc")
             }
 
             if (type === "dec") {
@@ -160,7 +159,6 @@
                 cart[existInCart].qty -= 1
                 cart[existInCart].totalPrice -= Number(dataProductPrice)
 
-                console.log("fungsi")
             }
         }
 

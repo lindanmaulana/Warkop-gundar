@@ -76,7 +76,7 @@ class MidtransController extends Controller
 
         $order->save();
 
-        $transaction = Transaction::updateOrCreate(
+        Transaction::updateOrCreate(
             [
                 'midtrans_transaction_id' => $midtransTransactionId,
             ],

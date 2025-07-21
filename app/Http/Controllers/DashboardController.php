@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Product;
+use App\Models\Transaction;
 
 class DashboardController extends Controller
 {
@@ -18,21 +19,17 @@ class DashboardController extends Controller
 
         $totalProducts = Product::count();
         $totalOrders = Order::count();
-        // $totalPayments = Payment::count();
+        $totalTransactions = Transaction::count();
+
         $totalOrderPending = Order::where('status', 'pending')->count();
         $latestOrdersData = collect();
 
         $totalOrderByCustomer = 0;
-        if ($user->role === UserRole::Customer) {
-            $totalOrderByCustomer = Order::where('user_id', $user->id)->count();
-            $latestOrdersData = Order::where('user_id', $user->id)->with('orderItems.product')->latest()->take(3)->get();
-        }
-
         if ($user->role === UserRole::Admin) {
             $latestOrdersData = Order::with('orderItems.product')->latest()->take(3)->get();
         }
 
-        return view('dashboard.index', compact('totalProducts', 'totalOrders' ,'totalOrderPending', 'latestOrdersData', 'totalOrderByCustomer'));
+        return view('dashboard.index', compact('totalProducts', 'totalOrders', 'totalTransactions' ,'totalOrderPending', 'latestOrdersData', 'totalOrderByCustomer'));
     }
 
     public function showDashboardMenu()

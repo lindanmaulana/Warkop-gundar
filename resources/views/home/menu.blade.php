@@ -57,7 +57,7 @@
         </article>
 
         <div class="flex items-start md:items-center flex-col md:flex-row justify-between gap-4 py-6">
-            <div class="flex items-center gap-2">
+            <div class="w-full flex items-center gap-2">
                 <select name="" id="filter-limit" class="border border-dark-blue/20 rounded-md p-1 text-sm font-semibold"></select>
                 <p class="text-sm font-semibold opacity-70">data per halaman</p>
             </div>
@@ -75,7 +75,6 @@
 @parent
 <script>
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    const userId = document.querySelector('meta[name="user-id"]')?.content;
 
     let urlParams = new URLSearchParams(window.location.search)
 
@@ -203,7 +202,7 @@
                             Stok ${menu.stock}
                         </span>
                         <button
-                            onclick="handleCart(${userId}, '${menu.id}', '${menu.name}', '${menu.price}', '${menu.image_url}', '${menu.category.name}')"
+                            onclick="handleCart('${menu.id}', '${menu.name}', '${menu.price}', '${menu.image_url}', '${menu.category.name}')"
                             class="bg-primary text-white rounded-full p-2.5 cursor-pointer shadow-md
                     transition-all duration-300 ease-in-out hover:bg-royal-blue/90 hover:scale-110">
                             <x-icon name="shopping-cart" class="size-5" />
@@ -270,18 +269,16 @@
         loadDataProduct()
     }
 
-    function handleCart(userId, productId, productName, productPrice, productImage, productCategoryName) {
+    function handleCart(productId, productName, productPrice, productImage, productCategoryName) {
         const price = parseFloat(Number(productPrice));
-        const idUser = userId.toString()
 
-        const exisItem = cart.findIndex(item => item.userId === userId && item.productId === productId)
+        const exisItem = cart.findIndex(item => item.productId === productId)
 
         if (exisItem > -1) {
             cart[exisItem].qty += 1
             cart[exisItem].totalPrice += price
         } else {
             cart.push({
-                userId: idUser,
                 productId,
                 productName,
                 price,

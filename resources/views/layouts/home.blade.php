@@ -32,7 +32,7 @@ $bgHeader = fn () => request()->routeIs('home.menu', 'home.order.detail', 'home.
                     </li>
                 </ul>
 
-                @if(Auth::user())
+                @auth
                 <div class="relative flex items-center gap-3">
                     <a href="{{ route('home.cart') }}" class="relative text-secondary hover:text-primary transition-colors duration-200">
                         <x-icon name="shopping-cart" class="size-6 lg:size-7" />
@@ -58,7 +58,14 @@ $bgHeader = fn () => request()->routeIs('home.menu', 'home.order.detail', 'home.
                         </li>
                     </ul>
                 </div>
-                @endif
+                @endauth
+
+                @guest
+                <div class="flex items-center gap-1">
+                    <a href="{{ route('auth.login') }}" class="text-center min-w-[100px] border bg-secondary text-white rounded-lg  px-2 py-2 text-sm hover:bg-transparent hover:text-secondary transition-global">Login</a>
+                    <a href="{{ route('auth.register') }}" class="text-center min-w-[100px] border border-primary bg-primary text-white rounded-lg  px-2 py-2 text-sm hover:bg-transparent hover:text-secondary transition-global">Register</a>
+                </div>
+                @endguest
             </div>
 
             <div class="lg:hidden flex items-center gap-3">
@@ -194,7 +201,6 @@ $bgHeader = fn () => request()->routeIs('home.menu', 'home.order.detail', 'home.
     const componentTotalCartMobile = document.getElementById('totalCartMobile')
 
     function handleAddToCart(buttonElement) {
-        const userId = buttonElement.dataset.userId;
         const productId = buttonElement.dataset.productId;
         const productName = buttonElement.dataset.productName;
         const productPrice = parseFloat(buttonElement.dataset.productPrice);
@@ -208,7 +214,6 @@ $bgHeader = fn () => request()->routeIs('home.menu', 'home.order.detail', 'home.
             cart[exisItem].totalPrice += productPrice
         } else {
             cart.push({
-                userId,
                 productId,
                 productName,
                 price: productPrice,
@@ -237,13 +242,15 @@ $bgHeader = fn () => request()->routeIs('home.menu', 'home.order.detail', 'home.
     }
 
     const showTotalCart = () => {
+        if (!componentTotalCart) return;
+
         if (cart.length === 0) {
             componentTotalCart.style.display = "none"
             componentTotalCartMobile.style.display = "none"
 
             return;
         }
-        
+
         componentTotalCart.style.display = "flex"
         componentTotalCartMobile.style.display = "flex"
         componentTotalCart.innerHTML = cart.length
@@ -251,7 +258,8 @@ $bgHeader = fn () => request()->routeIs('home.menu', 'home.order.detail', 'home.
     }
 
     const componentMenu = document.getElementById('menu');
-    componentMenu.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
+
+    if (componentMenu) componentMenu.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
 
     const handleMenu = () => {
         if (componentMenu.classList.contains('opacity-0')) {

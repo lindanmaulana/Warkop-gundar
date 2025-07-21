@@ -56,18 +56,6 @@
                             <p class="text-dark-blue/60">{{ $order->description}}</p>
                         </li>
                     </ul>
-                    <ul class="w-full space-y-2 pb-4 border-b border-dark-blue/20">
-                        <li class="flex flex-col justify-between">
-                            <h4 class="font-semibold">Bukti Pembayaran</h4>
-                            @if($paymentProofs)
-                            <figure class="max-h-60 overflow-y-auto">
-                                <img src="{{ asset('storage/'. $paymentProofs->image_url) }}" alt="{{ $order->user->name }}">
-                            </figure>
-                            @else
-                            <p class="text-center text-sm text-red-500">Belum melakukan pembayaran</p>
-                            @endif
-                        </li>
-                    </ul>
                     <ul>
                         <li class="flex items-center justify-between">
                             <h4 class="font-semibold text-xl">Total</h4>

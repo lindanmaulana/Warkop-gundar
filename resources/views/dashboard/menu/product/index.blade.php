@@ -180,7 +180,7 @@
                 <tr class=" hover:bg-dark-blue/20 divide-y divide-gray-200 text-gray-800 *:text-sm *:font-medium">
                     <td class="py-4 px-6">${index + 1}</td>
                     <td class="px-2 py-4 text-dark-blue" id="table-image">
-                        <img src="${imageUrl}" alt="{${product.name}}" class="aspect-square h-14">
+                        <img src="${imageUrl}" alt="{${product.name}}" class="aspect-square h-14 rounded">
                     </td>
                     <td class="px-2 py-4 text-dark-blue">${product.name}</td>
                     <td class="px-2 py-4 text-dark-blue">${product.category.name}</td>

@@ -21,19 +21,28 @@ class Order extends Model
         ];
     }
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function payment() {
+    public function payment()
+    {
         return $this->belongsTo(Payment::class);
     }
 
-    public function orderItems() {
+    public function orderItems()
+    {
         return $this->hasMany(OrderItem::class);
     }
 
-    public function paymentProofs() {
+    public function paymentProofs()
+    {
         return $this->hasMany(PaymentProofs::class);
+    }
+
+    public function transactions()
+    {
+        return $this->hasOne(Transaction::class)->latestOfMany();
     }
 }

@@ -34,23 +34,23 @@
                     <span class="block text-dark-blue font-semibold">Nama Produk</span>
                     <input type="text" value="{{ old('name', $product->name) }}" id="name" class="w-full px-4 border border-dark-blue/30 py-2 rounded-lg" readonly>
                 </label>
-                <label for="name" class="block space-y-2">
+                <label for="category" class="block space-y-2">
                     <span class="block text-dark-blue font-semibold">Kategori</span>
-                    <input type="text" value="{{ old('name', $product->category->name) }}" id="name" class="w-full px-4 border border-dark-blue/30 py-2 rounded-lg" readonly>
+                    <input type="text" value="{{ old('name', $product->category->name) }}" id="category" class="w-full px-4 border border-dark-blue/30 py-2 rounded-lg" readonly>
                 </label>
                 <div class="grid grid-cols-2 gap-4">
-                    <label for="name" class="block space-y-2">
+                    <label for="price" class="block space-y-2">
                         <span class="block text-dark-blue font-semibold">Harga</span>
-                        <input type="text" value="{{ old('name', number_format($product->price, 0, ',', '.')) }}" id="name" class="w-full px-4 border border-dark-blue/30 py-2 rounded-lg" readonly>
+                        <input type="text" value="{{ old('name', number_format($product->price, 0, ',', '.')) }}" id="price" class="w-full px-4 border border-dark-blue/30 py-2 rounded-lg" readonly>
                     </label>
-                    <label for="name" class="block space-y-2">
+                    <label for="stock" class="block space-y-2">
                         <span class="block text-dark-blue font-semibold">Stok</span>
-                        <input type="text" value="{{ old('name', $product->stock) }}" id="name" class="w-full px-4 border border-dark-blue/30 py-2 rounded-lg" readonly>
+                        <input type="text" value="{{ old('name', $product->stock) }}" id="stock" class="w-full px-4 border border-dark-blue/30 py-2 rounded-lg" readonly>
                     </label>
                 </div>
-                <label for="name" class="block space-y-2">
+                <label for="description" class="block space-y-2">
                     <span class="block text-dark-blue font-semibold">Deskripsi</span>
-                    <textarea id="name" class="w-full px-4 text-left border border-dark-blue/30 py-2 rounded-lg" readonly>
+                    <textarea id="description" class="w-full px-4 text-left border border-dark-blue/30 py-2 rounded-lg" readonly>
                         {{ old('description', $product->description) }}
                     </textarea>
                 </label>

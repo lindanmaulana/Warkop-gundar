@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="shadow-md shadow-gray-300 px-4 py-6 w-[400px] min-h-[400px] flex flex-col items-center justify-center rounded-md">
-    <h2 class="text-lg font-semibold">Warkop Gundar</h2>
+    <h2 class="text-lg font-semibold flex items-center gap-2"><x-icon name="warkopgundar" /> Warkop Gundar</h2>
     <form method="POST" action="{{ route('auth.login')}}" class="w-full rounded-md py-10 px-8">
         @csrf
         <h3 class="text-xl font-semibold">Wellcome Back!</h3>

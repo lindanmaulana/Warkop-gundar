@@ -6,12 +6,14 @@ use App\Http\Controllers\PaymentProofsController;
 use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Support\Facades\Route;
 
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/menu/{product}/detail', [HomeController::class, 'showMenuDetail'])->name('home.menu.detail');
+Route::get('/menu', [HomeController::class, 'showMenu'])->name('home.menu');
+Route::get('/ourlocation', [HomeController::class, 'showOurLocation'])->name('home.ourlocation');
+
 Route::middleware(['auth', 'role:customer'])
     ->group(function() {
-        Route::get('/', [HomeController::class, 'index'])->name('home');
-        Route::get('/ourlocation', [HomeController::class, 'showOurLocation'])->name('home.ourlocation');
-        Route::get('/menu', [HomeController::class, 'showMenu'])->name('home.menu');
-        Route::get('/menu/{product}/detail', [HomeController::class, 'showMenuDetail'])->name('home.menu.detail');
         Route::get('/profile', [HomeController::class, 'showProfile'])->name('home.profile');
         
         Route::middleware('otp.verified')->group(function() {
@@ -20,6 +22,7 @@ Route::middleware(['auth', 'role:customer'])
             Route::get('/order', [HomeController::class, 'showOrder'])->name('home.order');
             Route::get('/order/{order}/detail', [HomeController::class, 'showDetailOrder'])->name('home.order.detail');
             Route::get('/order/{order}/payment', [HomeController::class, 'showPayment'])->name('home.order.payment');
+            Route::get("/transaction/{order}", [HomeController::class, 'showTransaction'])->name('home.transaction');
     
             Route::patch('/profile/{user}/update', [HomeController::class, 'updateProfile'])->name('profile.update');
             Route::post('/checkout', [HomeController::class, 'createOrder'])->name('checkout');

@@ -104,18 +104,19 @@
                         <span class="bg-gray-100 text-secondary font-semibold px-3 py-1.5 rounded-full text-sm shadow-inner">
                             Stok {{ $product->stock }}
                         </span>
+                        @auth
                         <button
                             onclick="handleAddToCart(this)"
-                            data-user-id="{{ auth()->user()->id }}"
                             data-product-id="{{ $product->id }}"
                             data-product-category="{{ $product->category }}"
                             data-product-name="{{ $product->name }}"
                             data-product-price="{{ $product->price }}"
                             data-product-image="{{ $product->image_url }}"
                             class="bg-primary text-white rounded-full p-2.5 cursor-pointer shadow-md
-                   transition-all duration-300 ease-in-out hover:bg-royal-blue/90 hover:scale-110" {{-- Warna disesuaikan --}}>
+                       transition-all duration-300 ease-in-out hover:bg-royal-blue/90 hover:scale-110" {{-- Warna disesuaikan --}}>
                             <x-icon name="shopping-cart" class="size-5" /> {{-- Ukuran ikon sedikit lebih besar --}}
                         </button>
+                        @endauth
                     </div>
                 </article>
                 @endforeach
@@ -264,18 +265,18 @@
                     <span class="bg-gray-100 text-secondary font-semibold px-3 py-1.5 rounded-full text-sm shadow-inner">
                         Stok {{ $product->stock }}
                     </span>
+                    @auth
                     <button
                         onclick="handleAddToCart(this)"
-                        data-user-id="{{ auth()->user()->id }}"
                         data-product-id="{{ $product->id }}"
                         data-product-category="{{ $product->category }}"
                         data-product-name="{{ $product->name }}"
                         data-product-price="{{ $product->price }}"
                         data-product-image="{{ $product->image_url }}"
-                        class="bg-primary text-white rounded-full p-2.5 cursor-pointer shadow-md
-                   transition-all duration-300 ease-in-out hover:bg-royal-blue/90 hover:scale-110" {{-- Warna disesuaikan --}}>
+                        class="bg-primary text-white rounded-full p-2.5 cursor-pointer shadow-md transition-all duration-300 ease-in-out hover:bg-royal-blue/90 hover:scale-110" {{-- Warna disesuaikan --}}>
                         <x-icon name="shopping-cart" class="size-5" /> {{-- Ukuran ikon sedikit lebih besar --}}
                     </button>
+                    @endauth
                 </div>
             </article>
             @endforeach

@@ -44,19 +44,6 @@
                                 <input type="text" id="delivery_location" name="delivery_location" placeholder="Cth: Lantai 5, Depan Lift" class="w-full border border-gray-300 text-gray-800 px-4 py-2 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200" required>
                             </label>
 
-                            <label for="payment" class="flex flex-col gap-2">
-                                <span class="text-secondary text-sm font-medium">Tipe Pembayaran:</span>
-                                @if(isset($paymentsMethod) && $paymentsMethod->isNotEmpty())
-                                <select name="payment_id" id="payment" class="w-full border border-gray-300 text-gray-800 px-4 py-2 rounded-lg bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200">
-                                    @foreach($paymentsMethod as $payment)
-                                    <option value="{{ $payment->id }}">{{ $payment->name }}</option>
-                                    @endforeach
-                                </select>
-                                @else
-                                <input type="text" class="text-red-500 bg-gray-100 px-4 py-2 rounded-lg border border-gray-300 cursor-not-allowed" value="Belum ada metode pembayaran aktif untuk saat ini." disabled />
-                                @endif
-                            </label>
-
                             <label for="description" class="flex flex-col gap-2">
                                 <span class="text-secondary text-sm font-medium">Catatan Tambahan (opsional):</span>
                                 <textarea id="description" name="description" rows="3" placeholder="Contoh: Kopi tanpa gula, Roti bakar extra keju" class="w-full border border-gray-300 text-gray-800 px-4 py-2 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"></textarea>
@@ -137,7 +124,6 @@
         const customer_information = {
             delivery_location: target.delivery_location.value,
             branch: target.branch.value,
-            payment_id: target.payment_id.value,
             description: target.description.value
         }
 
@@ -166,7 +152,7 @@
             })
 
             localStorage.removeItem('cart')
-            window.location.replace(`/order/${result.order_id}/payment`)
+            window.location.replace(`/transaction/${result.order_id}`)
             return result
         } catch (err) {
             Swall.fire({

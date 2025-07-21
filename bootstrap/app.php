@@ -18,7 +18,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'otp.not.verified' => \App\Http\Middleware\EnsureOtpNotVerified::class,
             'otp.verified' => \App\Http\Middleware\EnsureOtpVerified::class
         ]);
+
+        $middleware->validateCsrfTokens(except: [ 
+            'api/v1/midtrans/callback',
+        ]);
     })
-    ->withExceptions(function (Exceptions $exceptions): void {
-        
-    })->create();
+    ->withExceptions(function (Exceptions $exceptions): void {})->create();

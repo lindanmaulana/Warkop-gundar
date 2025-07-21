@@ -222,10 +222,27 @@ class OrderController extends Controller
                 $order->user->makeHidden(['password', 'remember_token']);
             }
         });
-        
+
         return response()->json([
             'message' => "Data order berhasil di ambil",
             'data' => $orders
         ]);
+    }
+
+
+    public function getItemDetails($order)
+    {
+        $items = [];
+
+        foreach ($order->items as $item) {
+            $items[] = [ 
+                'id' => $item->product_id,
+                'price' => $item->price,
+                'quantity' => $item->quantity,
+                'name' => $item->name,
+            ];
+        }
+
+        return $items;
     }
 }

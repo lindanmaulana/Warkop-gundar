@@ -33,6 +33,7 @@ class HomeController extends Controller
         } else {
             $productsForYou = Product::latest()->skip(3)->take(6)->get();
         }
+
         return view('home.index', compact('productsLatest', 'productsForYou'));
     }
 
@@ -72,9 +73,7 @@ class HomeController extends Controller
 
     public function showCheckout()
     {
-        $paymentsMethod = Payment::where('is_active', 1)->get();
-
-        return view('home.checkout', compact('paymentsMethod'));
+        return view('home.checkout');
     }
 
     public function showProfile()
@@ -96,9 +95,8 @@ class HomeController extends Controller
     public function showDetailOrder(Order $order)
     {
         $order->load('orderItems.product');
-        $paymentProofs = PaymentProofs::where('order_id', $order->id)->first();
-
-        return view('home.orderDetail', compact('order', 'paymentProofs'));
+        
+        return view('home.orderDetail', compact('order'));
     }
 
     public function showPayment(Order $order)
@@ -109,6 +107,12 @@ class HomeController extends Controller
         return view('home.payment', compact('order', 'payments', 'paymentProof'));
     }
 
+    public function showTransaction(Order $order) {
+        $order = Order::with("orderItems.product")->findOrFail($order->id);
+
+        return view("home.transaction", compact("order"));
+    }
+
     public function createOrder(Request $request)
     {
         try {
@@ -116,7 +120,6 @@ class HomeController extends Controller
                 'cart' => 'required|array|min:1',
                 'cart.*.productId' => 'required|integer|exists:products,id',
                 'cart.*.qty' => 'required|integer|min:1',
-                'customer_information.payment_id' => 'required|integer|exists:payments,id',
                 'customer_information.branch' => ['required', new Enum(BranchWarkop::class)],
                 'customer_information.delivery_location' => 'required|string',
                 'customer_information.description' => 'nullable|string'
@@ -162,7 +165,6 @@ class HomeController extends Controller
 
             $order = Order::create([
                 'user_id' => $user->id,
-                'payment_id' => $customerInformation['payment_id'],
                 'delivery_location' => $customerInformation['delivery_location'],
                 'branch' => $customerInformation['branch'],
                 'total_price' => $totalOrderPrice,
@@ -182,7 +184,6 @@ class HomeController extends Controller
             return response()->json([
                 'message' => 'Order berhasil dibuat!',
                 'order_id' => $order->id,
-                'payment_id' => $order->payment_id,
                 'delivery_location' => $order->delivery_location,
                 'branch' => $order->branch,
                 'total_price' => $order->total_price,

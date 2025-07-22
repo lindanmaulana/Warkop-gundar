@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix("/api/v1")->group(function () {
     Route::middleware(['auth'])->group(function () {
-        Route::middleware('role:admin')->group(function () {
+        Route::middleware('role:admin,superadmin')->group(function () {
             Route::get('/users', [UserController::class, 'getAllUser']);
         });
 

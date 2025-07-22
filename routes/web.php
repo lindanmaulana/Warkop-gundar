@@ -38,11 +38,8 @@ Route::middleware(['auth', 'otp.not.verified'])->group(function () {
 
 Route::post("/logout", [AuthController::class, 'logout'])->name('auth.logout');
 
-Route::middleware(['auth', 'role:admin', 'otp.verified'])
+Route::middleware(['auth', 'role:admin,superadmin', 'otp.verified'])
     ->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-        Route::middleware('role:admin')->group(function () {
-            Route::get('/dashboard/setting', [DashboardController::class, 'showDashboardSetting'])->name('dashboard.setting');
-        });
+        Route::get('/dashboard/setting', [DashboardController::class, 'showDashboardSetting'])->name('dashboard.setting');
     });

@@ -33,12 +33,11 @@
                     </label>
                     <label for="status" class="flex flex-col gap-3">
                         <span class="text-green-500 font-semibold">Status Akun:</span>
-                        <select name="is_email_verified" id="status" class="border border-green-500 px-4 py-2 rounded-sm">
-                            <option value="1" {{$user->is_email_verified ? "selected" : ""}}>Aktif</option>
-                            <option value="0" {{$user->is_email_verified ? "" : "selected"}}>Tidak Aktif</option>
+                        <select name="is_suspended" id="status" class="border border-green-500 px-4 py-2 rounded-sm">
+                            <option value="1" {{$user->is_suspended ? "selected" : ""}}>Ditangguhkan</option>
+                            <option value="0" {{$user->is_suspended ? "" : "selected"}}>Aktif</option>
                         </select>
                     </label>
-
                 </div>
 
                 <label for="created_at" class="flex flex-col gap-3 rounded-md">

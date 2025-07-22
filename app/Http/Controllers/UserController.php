@@ -46,7 +46,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        if (!$user->is_email_verified) {
+        if ($user->is_suspended) {
             return redirect()->back()->with('error', "Status Akun tidak aktif tidak bisa diubah.");
         }
 
@@ -57,11 +57,11 @@ class UserController extends Controller
     {
 
         $validatedData = $request->validate([
-            'is_email_verified' => "boolean"
+            'is_suspended' => "boolean"
         ]);
 
         $user->update([
-            "is_email_verified" => $validatedData['is_email_verified']
+            "is_suspended" => $validatedData['is_suspended']
         ]);
 
         return redirect()->route('dashboard.users', ['page' => 1, 'limit' => 5])->with("success", "Status akun berhasil di ubah.");

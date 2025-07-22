@@ -1,5 +1,5 @@
     @php
-    $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'text-white bg-royal-blue' : 'text-royal-blue/50';
+    $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'text-white bg-primary' : 'text-secondary/50';
     $isActiveMobile = fn (string $routeName) => request()->routeIs($routeName) ? 'text-white' : 'text-white/50';
     @endphp
 
@@ -7,49 +7,49 @@
     <main class="bg-soft-blue-gray">
         <section class="w-full flex gap-4">
             <!-- side bar -->
-            <div class="w-full hidden md:max-w-[250px] md:flex h-screen lg:relative translate-x-0 bg-white">
+            <div class="w-full hidden md:max-w-[250px] md:flex h-screen lg:relative translate-x-0 bg-white shadow-md">
                 <div class="relative w-full px-4 py-8">
-                    <h2 class="flex items-center gap-2 text-xl font-semibold text-dark-blue"><x-icon name="warkopgundar" class="w-10 h-10" /> Warkop Gundar</h2>
+                    <h2 class="flex items-center gap-2 text-3xl font-bold text-primary">Warkop <span class="text-secondary">Gundar</span></h2>
 
                     <ul class="w-full py-14 flex flex-col items-center">
                         <li class="w-full group">
-                            <a href="{{ route('dashboard') }}" class="w-full flex items-center gap-4 text-lg font-semibold pl-6 py-2 rounded-md group-hover:bg-royal-blue/20 transition-all duration-300 ease-in-out {{ $isActive('dashboard') }}"">
+                            <a href="{{ route('dashboard') }}" class="w-full flex items-center gap-4 text-lg font-semibold pl-6 py-2 rounded-md group-hover:bg-primary/60 transition-all duration-300 ease-in-out {{ $isActive('dashboard') }}"">
                                 <x-icon name='home' />
                             Dashboard
                             </a>
                         </li>
                         <li class="w-full group">
-                            <a href="{{ route('dashboard.users', ['page' => 1, 'limit' => 5]) }}" class="w-full flex items-center gap-4 text-lg font-semibold pl-6 py-2 rounded-md group-hover:bg-royal-blue/20 transition-all duration-300 ease-in-out {{ $isActive('dashboard.users') }}">
+                            <a href="{{ route('dashboard.users', ['page' => 1, 'limit' => 5]) }}" class="w-full flex items-center gap-4 text-lg font-semibold pl-6 py-2 rounded-md group-hover:bg-primary/60 transition-all duration-300 ease-in-out {{ $isActive('dashboard.users') }}">
                                 <x-icon name="users" />
                                 User
                             </a>
                         </li>
                         <li class="w-full group">
-                            <a href="{{ route('dashboard.categories') }}" class="w-full flex items-center gap-4 text-lg font-semibold pl-6 py-2 rounded-md group-hover:bg-royal-blue/20 transition-all duration-300 ease-in-out {{ $isActive('dashboard.categories') }}">
+                            <a href="{{ route('dashboard.categories') }}" class="w-full flex items-center gap-4 text-lg font-semibold pl-6 py-2 rounded-md group-hover:bg-primary/60 transition-all duration-300 ease-in-out {{ $isActive('dashboard.categories') }}">
                                 <x-icon name="category" />
                                 Category
                             </a>
                         </li>
                         <li class="w-full group">
-                            <a href="{{ route('dashboard.menu.products', ['page' => 1, 'limit' => 5]) }}" class="w-full flex items-center gap-4 text-lg font-semibold pl-6 py-2 rounded-md group-hover:bg-royal-blue/20 transition-all duration-300 ease-in-out {{ $isActive('dashboard.menu.products') }}">
+                            <a href="{{ route('dashboard.menu.products', ['page' => 1, 'limit' => 5]) }}" class="w-full flex items-center gap-4 text-lg font-semibold pl-6 py-2 rounded-md group-hover:bg-primary/60 transition-all duration-300 ease-in-out {{ $isActive('dashboard.menu.products') }}">
                                 <x-icon name="toolskitchen" />
                                 Menu
                             </a>
                         </li>
                         <li class="w-full group">
-                            <a href="{{ route('dashboard.orders', ['page' => 1, 'limit' => 5]) }}" class="w-full flex items-center gap-4 text-lg font-semibold pl-6 py-2 rounded-md group-hover:bg-royal-blue/20 transition-all duration-300 ease-in-out {{ $isActive('dashboard.orders') }}">
+                            <a href="{{ route('dashboard.orders', ['page' => 1, 'limit' => 5]) }}" class="w-full flex items-center gap-4 text-lg font-semibold pl-6 py-2 rounded-md group-hover:bg-primary/60 transition-all duration-300 ease-in-out {{ $isActive('dashboard.orders') }}">
                                 <x-icon name="shopping-cart" />
                                 Order
                             </a>
                         </li>
                         <li class="w-full group">
-                            <a href="{{ route('dashboard.transactions') }}" class="w-full flex items-center gap-4 text-lg font-semibold pl-6 py-2 rounded-md group-hover:bg-royal-blue/20 transition-all duration-300 ease-in-out {{ $isActive('dashboard.transactions') }}">
+                            <a href="{{ route('dashboard.transactions') }}" class="w-full flex items-center gap-4 text-lg font-semibold pl-6 py-2 rounded-md group-hover:bg-primary/60 transition-all duration-300 ease-in-out {{ $isActive('dashboard.transactions') }}">
                                 <x-icon name="transaction" />
                                 Transaction
                             </a>
                         </li>
                         <li class="w-full group">
-                            <a href="{{ route('dashboard.setting') }}" class="w-full flex items-center gap-4 text-lg font-semibold pl-6 py-2 rounded-md group-hover:bg-royal-blue/20 transition-all duration-300 ease-in-out {{ $isActive('dashboard.setting') }}">
+                            <a href="{{ route('dashboard.setting') }}" class="w-full flex items-center gap-4 text-lg font-semibold pl-6 py-2 rounded-md group-hover:bg-primary/60 transition-all duration-300 ease-in-out {{ $isActive('dashboard.setting') }}">
                                 <x-icon name="settings" />
                                 Setting
                             </a>
@@ -72,29 +72,29 @@
             <div class="fixed md:hidden bottom-2 translate-x-1/2 right-1/2 w-full max-w-[96%] z-50 mx-auto px-4 bg-royal-blue rounded">
                 <ul class="w-full flex items-center justify-between gap-2">
                     <li class="w-full group ">
-                        <a href="{{ route('dashboard') }}" class="w-full flex items-center justify-center gap-4 text-lg font-semibold py-2 rounded-md group-hover:bg-royal-blue/20 transition-all duration-300 ease-in-out {{ $isActiveMobile('dashboard') }}">
+                        <a href="{{ route('dashboard') }}" class="w-full flex items-center justify-center gap-4 text-lg font-semibold py-2 rounded-md group-hover:bg-primary/60 transition-all duration-300 ease-in-out {{ $isActiveMobile('dashboard') }}">
                             <x-icon name="home" />
                         </a>
                     </li>
                     @if(auth()->check() && auth()->user()->role->value === 'admin')
                     <li class="w-full group ">
-                        <a href="{{ route('dashboard.categories') }}" class="w-full flex items-center justify-center gap-4 text-lg font-semibold py-2 rounded-md group-hover:bg-royal-blue/20 transition-all duration-300 ease-in-out {{ $isActiveMobile('dashboard.admin.category') }}">
+                        <a href="{{ route('dashboard.categories') }}" class="w-full flex items-center justify-center gap-4 text-lg font-semibold py-2 rounded-md group-hover:bg-primary/60 transition-all duration-300 ease-in-out {{ $isActiveMobile('dashboard.admin.category') }}">
                             <x-icon name="category" />
                         </a>
                     </li>
                     @endif
                     <li class="w-full group ">
-                        <a href="{{ route('dashboard.menu.products') }}" class="w-full flex items-center justify-center gap-4 text-lg font-semibold py-2 rounded-md group-hover:bg-royal-blue/20 transition-all duration-300 ease-in-out {{ $isActiveMobile('dashboard.menu.products') }}">
+                        <a href="{{ route('dashboard.menu.products') }}" class="w-full flex items-center justify-center gap-4 text-lg font-semibold py-2 rounded-md group-hover:bg-primary/60 transition-all duration-300 ease-in-out {{ $isActiveMobile('dashboard.menu.products') }}">
                             <x-icon name="toolskitchen" />
                         </a>
                     </li>
                     <li class="w-full group ">
-                        <a href="{{ route('dashboard.orders') }}" class="w-full flex items-center justify-center gap-4 text-lg font-semibold py-2 rounded-md group-hover:bg-royal-blue/20 transition-all duration-300 ease-in-out {{ $isActiveMobile('dashboard.orders') }}">
+                        <a href="{{ route('dashboard.orders') }}" class="w-full flex items-center justify-center gap-4 text-lg font-semibold py-2 rounded-md group-hover:bg-primary/60 transition-all duration-300 ease-in-out {{ $isActiveMobile('dashboard.orders') }}">
                             <x-icon name="shopping-cart" />
                         </a>
                     </li>
                     <li class="w-full group ">
-                        <a href="{{ route('dashboard.setting') }}" class="w-full flex items-center justify-center gap-4 text-lg font-semibold py-2 rounded-md group-hover:bg-royal-blue/20 transition-all duration-300 ease-in-out {{ $isActiveMobile('dashboard.setting') }}">
+                        <a href="{{ route('dashboard.setting') }}" class="w-full flex items-center justify-center gap-4 text-lg font-semibold py-2 rounded-md group-hover:bg-primary/60 transition-all duration-300 ease-in-out {{ $isActiveMobile('dashboard.setting') }}">
                             <x-icon name="settings" />
                         </a>
                     </li>

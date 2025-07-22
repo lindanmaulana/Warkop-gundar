@@ -62,7 +62,7 @@
                             <td class="px-2 py-4">
                                 <div class="flex items-center gap-2">
                                     <a href="{{ route('home.order.detail', $order->id) }}" class="text-green-500 cursor-pointer"><x-icon name="receipt-text" /></a>
-                                    @if($order->status->value != "cancelled")
+                                    @if($order->status->value == "pending")
                                     <a href="{{ route('home.transaction', $order->id) }}" class="bg-secondary text-white px-2 py-1 text-sm rounded font-semibold cursor-pointer">Pembayaran</a>
                                     @endif
                                 </div>

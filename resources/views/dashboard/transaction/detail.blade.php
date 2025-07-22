@@ -3,8 +3,8 @@
 @section('content')
 <div class="max-w-xl mx-auto">
     <div class="w-full flex items-center justify-between py-8">
-        <h2 class="text-lg font-semibold">Transaksi Detail</h2>
-        <a href="{{ route('dashboard.transactions') }}" class="flex items-center justify-start max-w-20 gap-1 bg-dark-blue text-sm px-4 py-1 text-white rounded"><x-icon name="arrow-left" /> Back</a>
+        <h2 class="text-2xl font-bold">Transaksi Detail</h2>
+        <a href="{{ route('dashboard.transactions') }}" class="flex items-center justify-start max-w-20 gap-1 bg-dark-blue text-sm px-4 py-1 text-white rounded-lg hover:scale-110"><x-icon name="arrow-left" /> Back</a>
     </div>
     <ul class="bg-white rounded-lg p-8 shadow-xl">
         <li>
@@ -14,26 +14,26 @@
                 $statusText = '';
                 switch ($transaction->transaction_status) {
                 case 'settlement':
-                $statusClass = 'bg-emerald-100 text-emerald-800';
-                $statusText = 'Pembayaran Lunas';
+                    $statusClass = 'bg-emerald-100 text-emerald-800';
+                    $statusText = 'Pembayaran Lunas';
                 break;
                 case 'pending':
-                $statusClass = 'bg-yellow-100 text-yellow-800';
-                $statusText = 'Menunggu Pembayaran';
+                    $statusClass = 'bg-yellow-100 text-yellow-800';
+                    $statusText = 'Menunggu Pembayaran';
                 break;
                 case 'expire':
-                $statusClass = 'bg-red-100 text-red-800';
-                $statusText = 'Pembayaran Kedaluwarsa';
+                    $statusClass = 'bg-red-100 text-red-800';
+                    $statusText = 'Pembayaran Kedaluwarsa';
                 break;
                 case 'cancel':
                 case 'deny':
                 case 'refund':
-                $statusClass = 'bg-red-100 text-red-800';
-                $statusText = 'Pembayaran Dibatalkan';
+                    $statusClass = 'bg-red-100 text-red-800';
+                    $statusText = 'Pembayaran Dibatalkan';
                 break;
                 default:
-                $statusClass = 'bg-gray-100 text-gray-800';
-                $statusText = 'Status Tidak Dikenal';
+                    $statusClass = 'bg-gray-100 text-gray-800';
+                    $statusText = 'Status Tidak Dikenal';
                 }
                 @endphp
                 <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold {{ $statusClass }}">

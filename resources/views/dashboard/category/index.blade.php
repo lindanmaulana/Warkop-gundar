@@ -6,16 +6,16 @@ $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal
 @extends('layouts.dashboard')
 
 @section('header')
-<div class="mt-10 mb-4">
-    <h2 class="text-3xl font-semibold text-royal-blue">Manajemen Kategori</h2>
-    <p class="text-dark-blue mt-1">Kelola kategori produk untuk memudahkan pengelompokan menu makanan dan minuman.</p>
+<div class="py-10 px-4 rounded-bl-2xl w-full shadow-md shadow-secondary/20 bg-white">
+    <h2 class="text-3xl font-semibold text-primary">Manajemen Kategori</h2>
+    <p class="text-secondary mt-1">Kelola kategori produk untuk memudahkan pengelompokan menu makanan dan minuman.</p>
 </div>
 @endsection
 
 @section('content')
 <div class="space-y-4">
     <div class="p-2 flex items-center justify-between">
-        <h2 class="text-xl font-semibold text-royal-blue">Daftar Kategori</h2>
+        <h2 class="text-xl font-semibold text-primary">Daftar Kategori</h2>
         <a href="{{ route('dashboard.categories.create') }}" class="flex items-center rounded px-3 py-1 text-white bg-green-500 hover:bg-green-300 cursor-pointer">
             Tambah
         </a>

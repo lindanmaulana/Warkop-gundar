@@ -1,14 +1,14 @@
 @extends('layouts.dashboard')
 
 @section('header')
-<div class="mt-10 mb-4">
-    <h2 class="text-3xl font-semibold text-royal-blue">Pengaturan Profile</h2>
-    <p class="text-dark-blue mt-1">Perbarui informasi akun seperti nama atau data profil lainnya.</p>
+<div class="py-10 px-4 rounded-bl-2xl w-full shadow-md bg-white">
+    <h2 class="text-3xl font-semibold text-primary">Pengaturan Profile</h2>
+    <p class="text-secondary mt-1">Perbarui informasi akun seperti nama atau data profil lainnya.</p>
 </div>
 @endsection
 
 @section('content')
-<div class="">
+<div class="pl-4">
     @if(session('success'))
     <div id="alert-success" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
         <p class="text-green-700 ">
@@ -16,25 +16,29 @@
         </p>
     </div>
     @endif
-    <h2 class="text-lg font-semibold text-dark-blue">Profile Setting</h2>
-    <div class="w-full flex items-center gap-6 py-4">
-        <form action="{{ route('setting.profile.update', $user->id) }}" class="w-full space-y-6" method="POST">
+    <h2 class="text-lg font-semibold text-secondary">Profile Setting</h2>
+    <div class="w-full grid grid-cols-2 gap-6 py-4">
+        <div class=" space-y-6">
+            <label for="" class="block space-y-2">
+                <span class="block">Nama</span>
+                <input type="text" value="{{ old('name', $user->name) }}" class="w-full rounded-lg px-4 py-3 border border-secondary/20" readonly>
+            </label>
+            <label for="" class="block">
+                <span class="block">Email</span>
+                <input type="text" value="{{ old('name', $user->email) }}" class="w-full rounded-lg px-4 py-3 border border-secondary/20" readonly>
+            </label>
+        </div>
+        <form action="{{ route('setting.profile.update', $user->id) }}" class="w-full space-y-6 bg-white rounded-lg shadow-lg p-4" method="POST">
             @csrf
             @method('PATCH')
-
             <div class="space-y-3">
                 <label for="name" class="flex flex-col gap-3">
-                    <span class="text-dark-blue font-semibold">Nama:</span>
-                    <input type="text" id="name" name="name" value="{{ old('name', $user->name)}}" class="w-full border-2 border-dark-blue/20 px-4 py-1 rounded-sm">
+                    <span class="text-secondary font-semibold">Nama:</span>
+                    <input type="text" id="name" name="name" placeholder="Nama baru" class="w-full border-2 border-dark-blue/20 px-4 py-1 rounded-sm">
                 </label>
                 @error('name')
                 <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                 @enderror
-
-                <label for="name" class="flex flex-col gap-3">
-                    <span class="text-dark-blue font-semibold">Email:</span>
-                    <input type="text" id="name" value="{{ old('email', $user->email ) }}" readonly class="w-full border-2 border-dark-blue/20 px-4 text-dark-blue/70 py-1 rounded-sm">
-                </label>
             </div>
 
             <div class="flex items-center justify-end gap-2">

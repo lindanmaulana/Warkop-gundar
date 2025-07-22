@@ -1,19 +1,16 @@
 @extends('layouts.dashboard')
 
 @section('header')
-<div class="mt-10 mb-4">
-    <h2 class="text-3xl font-semibold text-royal-blue">Manajemen Transaksi</h2>
-    <p class="text-dark-blue mt-1">Kelola transaksi untuk melihat seluruh proses transaksi pesanan</p>
+<div class="py-10 px-4 rounded-bl-2xl w-full shadow-md bg-white">
+    <h2 class="text-3xl font-semibold text-primary">Manajemen Transaksi</h2>
+    <p class="text-secondary mt-1">Kelola transaksi untuk melihat seluruh proses transaksi pesanan</p>
 </div>
 @endsection
 
 @section('content')
 <div class="space-y-4">
     <div class="p-2 flex items-center justify-between">
-        <h2 class="text-xl font-semibold text-royal-blue">Daftar Transaksi</h2>
-        <a href="{{ route('dashboard.transactions') }}" class="flex items-center rounded px-3 py-1 text-white bg-green-500 hover:bg-green-300 cursor-pointer">
-            Tambah
-        </a>
+        <h2 class="text-xl font-semibold text-primary">Daftar Transaksi</h2>
     </div>
 
     @if(session('success'))
@@ -52,7 +49,7 @@
                     <td class="py-4 px-6">{{ $no++ }}</td>
                     <td class="px-2 py-4 text-dark-blue">{{ $transaction->midtrans_transaction_id }}</td>
                     <td class="px-2 py-4 text-dark-blue">{{ $transaction->payment_type }}</td>
-                    <td class="px-2 py-4 text-dark-blue">{{ $transaction->gross_amount }}</td>
+                    <td class="px-2 py-4 text-dark-blue">Rp{{ number_format($transaction->gross_amount, 0, ',', '.') }}</td>
                     @if($transaction->payment_type == "bank_transfer")
                     <td class="px-2 py-4 text-dark-blue">
                         @if ($vaName)
@@ -69,7 +66,7 @@
                     <td class="px-2 py-4 text-dark-blue">{{ $transaction->transaction_time }}</td>
                     <td class=" py-4 px-6">
                         <div class="flex items-center justify-center gap-3 *:text-sm">
-                            <a href="{{ route('dashboard.transactions.detail', $transaction->id) }}" class="text-royal-blue font-medium cursor-pointer">Detail</a>
+                            <a href="{{ route('dashboard.transactions.detail', $transaction->id) }}" class="text-green-500 font-medium cursor-pointer">Detail</a>
                             <a href="{{ route('dashboard.transactions', $transaction->id) }}" class="text-royal-blue font-medium cursor-pointer">Edit</a>
                             <form action="{{ route('dashboard.transactions', $transaction) }}" method="POST">
                                 @csrf

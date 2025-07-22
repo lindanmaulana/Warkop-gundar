@@ -5,8 +5,8 @@ $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal
 @extends('layouts.dashboard')
 
 @section('header')
-<div class="mt-10 mb-4">
-    <h2 class="text-3xl font-semibold text-royal-blue">Edit Menu</h2>
+<div class="py-10 px-4 rounded-bl-2xl w-full shadow-md bg-white">
+    <h2 class="text-3xl font-semibold text-primary">Edit Menu</h2>
     <p class="text-dark-blue mt-1">Perbarui informasi menu seperti nama, harga, stok, dan kategori.</p>
 </div>
 @endsection
@@ -14,7 +14,7 @@ $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal
 @section('content')
 <div class="space-y-6">
     <div class="flex items-center justify-between">
-        <h3 class="text-xl font-semibold text-royal-blue">Form Edit Produk</h3>
+        <h3 class="text-xl font-semibold text-primary">Form Edit Produk</h3>
         <a href="{{ route('dashboard.menu.products', ['page' => 1, 'limit' => 5]) }}" class="flex items-center gap-2 text-sm bg-dark-blue hover:bg-dark-blue/80 text-white px-3 py-1 rounded">
             <x-icon name="arrow-left" /> Kembali
         </a>

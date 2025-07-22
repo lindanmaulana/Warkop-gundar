@@ -1,16 +1,16 @@
 @extends('layouts.dashboard')
 
 @section('header')
-<div class="mt-10 mb-4">
-    <h2 class="text-3xl font-semibold text-royal-blue">Daftar Pesanan</h2>
-    <p class="text-dark-blue mt-1">Pantau dan kelola semua pesanan pelanggan yang masuk di Warkop.</p>
+<div class="py-10 px-4 rounded-bl-2xl w-full shadow-md bg-white">
+    <h2 class="text-3xl font-semibold text-primary">Daftar Pesanan</h2>
+    <p class="text-secondary mt-1">Pantau dan kelola semua pesanan pelanggan yang masuk di Warkop.</p>
 </div>
 @endsection
 
 @section('content')
 <div class="space-y-4">
     <div class="flex items-center justify-between">
-        <h2 class="text-xl font-semibold text-royal-blue">Order</h2>
+        <h2 class="text-xl font-semibold text-primary">Order</h2>
         <select name="" id="filter-status">
             
         </select>
@@ -186,7 +186,7 @@
             const isDisabled = !isUrl
 
             const styleIsDisabled = isDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"
-            const styleIsActive = isActive ? "bg-royal-blue text-white" : ""
+            const styleIsActive = isActive ? "bg-secondary text-white" : ""
 
             return (
                 `

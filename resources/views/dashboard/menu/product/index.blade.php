@@ -1,9 +1,9 @@
 @extends('layouts.dashboard')
 
 @section('header')
-<div class="mt-10 mb-4">
-    <h2 class="text-3xl font-semibold text-royal-blue">Manajemen Menu</h2>
-    <p class="text-dark-blue mt-1">Atur dan kelola daftar makanan serta minuman yang tersedia di Warkop.</p>
+<div class="py-10 px-4 rounded-bl-2xl w-full shadow-md bg-white">
+    <h2 class="text-3xl font-semibold text-primary">Manajemen Menu</h2>
+    <p class="text-secondary mt-1">Atur dan kelola daftar makanan serta minuman yang tersedia di Warkop.</p>
 </div>
 @endsection
 
@@ -11,10 +11,10 @@
 @section('content')
 <div class="space-y-4">
     <div class="p-2 flex items-center justify-between">
-        <h2 class="text-xl font-semibold text-royal-blue">Menu</h2>
+        <h2 class="text-xl font-semibold text-primary">Menu</h2>
         <div class="flex items-center gap-2">
             <form id="categoryFilterForm" action="{{ route('dashboard.menu.products') }}" method="GET">
-                <select name="category" id="category_filter" class="bg-dark-blue text-white px-2 rounded py-1">
+                <select name="category" id="category_filter" class="bg-secondary text-white px-2 rounded py-1">
 
                 </select>
             </form>
@@ -280,7 +280,7 @@
             const isDisabled = !isUrl
 
             const styleIsDisabled = isDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"
-            const styleIsActive = isActive ? "bg-royal-blue text-white" : ""
+            const styleIsActive = isActive ? "bg-primary text-white" : ""
 
             return (
                 `

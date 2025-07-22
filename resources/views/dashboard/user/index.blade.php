@@ -1,16 +1,16 @@
 @extends('layouts.dashboard')
 
 @section('header')
-<div class="mt-10 mb-4">
-    <h2 class="text-3xl font-semibold text-royal-blue">Manajemen Pengguna</h2>
-    <p class="text-dark-blue mt-1">Kelola data pengguna yang memiliki akses ke sistem, termasuk admin dan staf yang bertugas.</p>
+<div class="py-10 px-4 rounded-bl-2xl w-full shadow-md bg-white">
+    <h2 class="text-3xl font-semibold text-primary">Manajemen Pengguna</h2>
+    <p class="text-secondary mt-1">Kelola data pengguna yang memiliki akses ke sistem, termasuk admin dan staf yang bertugas.</p>
 </div>
 @endsection
 
 @section('content')
 <div class="space-y-4">
     <div class="p-2 flex items-center justify-between">
-        <h2 class="text-xl font-semibold text-royal-blue">Daftar Pengguna</h2>
+        <h2 class="text-xl font-semibold text-primary">Daftar Pengguna</h2>
         <input id="filter-search" type="text" placeholder="Cari..." class="border border-dark-blue/20 rounded-lg px-4 py-1">
     </div>
 
@@ -198,7 +198,7 @@
             const isDisabled = !isUrl
 
             const styleIsDisabled = isDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"
-            const styleIsActive = isActive ? "bg-royal-blue text-white" : ""
+            const styleIsActive = isActive ? "bg-secondary text-white" : ""
 
             return (
                 `

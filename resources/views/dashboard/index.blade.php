@@ -1,21 +1,21 @@
 @extends('layouts.dashboard')
 
 @section('header')
-<div class="mt-10 mb-4 w-full flex items-center justify-between">
+<div class="flex items-center justify-between py-10 px-4 rounded-bl-2xl w-full shadow-md bg-white">
     <div>
-        <h2 class="text-3xl font-semibold text-royal-blue">Ringkasan Dashboard</h2>
-        <p class="text-dark-blue mt-1">Selamat datang, {{ auth()->user()->name }}! Ini ringkasan operasional warkop hari ini.</p>
+        <h2 class="text-3xl font-semibold text-primary">Ringkasan Dashboard</h2>
+        <p class="text-secondary mt-1">Selamat datang, {{ auth()->user()->name }}! Ini ringkasan operasional warkop hari ini.</p>
     </div>
     <div class="hidden md:flex items-center gap-3">
         <a href="{{ route('dashboard.orders', ['page' => 1, 'limit' => 5]) }}" class="relative">
-            <x-icon name="bell" class="size-5 text-royal-blue" />
+            <x-icon name="bell" class="size-5 text-secondary" />
             <div data-total-order="{{ $totalOrderPending }}" class="totalOrder absolute -top-3 right-0 rounded-full size-4 flex items-center justify-center bg-red-500">
                 <span class=" text-sm text-white">{{ $totalOrderPending }}</span>
             </div>
         </a>
-        <h4 class="text-lg text-royal-blue font-semibold capitalize">{{ auth()->user()->role }}</h4>
-        <div class="bg-royal-blue/40 rounded-full size-10 flex items-center justify-center">
-            <span id="initialName" data-profile-name="{{ auth()->user()->name }}" class="text-base font-bold text-royal-blue"></span>
+        <h4 class="text-lg text-primary font-semibold capitalize">{{ auth()->user()->role }}</h4>
+        <div class="bg-primary rounded-full size-10 flex items-center justify-center">
+            <span id="initialName" data-profile-name="{{ auth()->user()->name }}" class="text-base font-bold text-white"></span>
         </div>
     </div>
 </div>
@@ -23,7 +23,7 @@
 
 @section('content')
 <div class="mb-6">
-    <h2 class="text-lg font-semibold text-royal-blue">Overview</h2>
+    <h2 class="text-lg font-semibold text-primary">Overview</h2>
     <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-3 py-4 md:py-4">
         <div class="hover:-translate-y-2 transition-global duration-300 flex gap-2 max-h-[120px] bg-white border border-dark-blue/10 shadow-md p-5 rounded-md space-y-5 *:text-royal-blue">
             <div class="bg-royal-blue/30 size-10 rounded-full flex items-center justify-center">
@@ -31,7 +31,7 @@
             </div>
             <div>
                 <h3 class="text-dark-blue/80 font-semibold text-sm">Total Pendapatan</h3>
-                <p class="text-xl font-bold text-dark-blue ">{{ $totalRevenue }}</p>
+                <p class="text-xl font-bold text-dark-blue ">Rp{{ number_format($totalRevenue, 0, ',', '.') }}</p>
             </div>
         </div>
         <div class="hover:-translate-y-2 transition-global duration-300 flex gap-2 max-h-[120px] bg-white border border-dark-blue/10 shadow-md p-5 rounded-md space-y-5 *:text-royal-blue">
@@ -65,7 +65,7 @@
 </div>
 
 <div class="bg-white shadow-md p-5 rounded">
-    <h2 class="text-xl font-semibold text-royal-blue">Pesanan Terbaru</h2>
+    <h2 class="text-xl font-semibold text-primary">Pesanan Terbaru</h2>
 
     <div class="overflow-x-auto py-8 min-w-full">
         <table class="w-full">
@@ -122,7 +122,7 @@
             </tbody>
         </table>
     </div>
-    <a href="{{ route('dashboard.orders', ['page' => 1, 'limit' => 5]) }}" class="flex items-center justify-end text-sm text-royal-blue">Lihat semua pesanan -></a>
+    <a href="{{ route('dashboard.orders', ['page' => 1, 'limit' => 5]) }}" class="flex items-center justify-end text-sm text-primary">Lihat semua pesanan -></a>
 </div>
 @endsection
 

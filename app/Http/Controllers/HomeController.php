@@ -9,6 +9,7 @@ use App\Models\OrderItem;
 use App\Models\Payment;
 use App\Models\PaymentProofs;
 use App\Models\Product;
+use App\Models\Transaction;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -111,6 +112,12 @@ class HomeController extends Controller
         $order = Order::with("orderItems.product")->findOrFail($order->id);
 
         return view("home.transaction", compact("order"));
+    }
+
+    public function showTransactionHistory(Order $order) {
+        $order->load("transactions", 'user');
+
+        return view("/home/transactionHistory", compact("order"));
     }
 
     public function createOrder(Request $request)

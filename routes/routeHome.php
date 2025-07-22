@@ -23,6 +23,7 @@ Route::middleware(['auth', 'role:customer'])
             Route::get('/order/{order}/detail', [HomeController::class, 'showDetailOrder'])->name('home.order.detail');
             Route::get('/order/{order}/payment', [HomeController::class, 'showPayment'])->name('home.order.payment');
             Route::get("/transaction/{order}", [HomeController::class, 'showTransaction'])->name('home.transaction');
+            Route::get("/transaction/{order}/history", [HomeController::class, 'showTransactionHistory'])->name("home.transaction.history");
     
             Route::patch('/profile/{user}/update', [HomeController::class, 'updateProfile'])->name('profile.update');
             Route::post('/checkout', [HomeController::class, 'createOrder'])->name('checkout');

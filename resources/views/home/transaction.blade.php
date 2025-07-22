@@ -110,15 +110,12 @@
             const result = await response.json();
 
             if (result.snapToken) {
-                // Pastikan Snap.pay() dipanggil setelah mendapatkan token
                 window.snap.pay(result.snapToken, {
                     onSuccess: function(result) {
-                        alert("Pembayaran berhasil!");
-                        window.location.href = '/payment-success/' + result.order_id;
+                        window.location.href = `/transaction/${result.order_id}/history`
                     },
                     onPending: function(result) {
-                        alert("Pembayaran dalam proses.");
-                        window.location.href = '/payment-pending/' + result.order_id;
+                        window.location.href = `/transaction/${result.order_id}/history`
                     },
                     onError: function(result) {
                         alert("Pembayaran gagal.");

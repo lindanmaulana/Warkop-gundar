@@ -12,7 +12,7 @@ Route::get('/menu/{product}/detail', [HomeController::class, 'showMenuDetail'])-
 Route::get('/menu', [HomeController::class, 'showMenu'])->name('home.menu');
 Route::get('/ourlocation', [HomeController::class, 'showOurLocation'])->name('home.ourlocation');
 
-Route::middleware(['auth', 'role:customer'])
+Route::middleware(['auth', 'role:customer', 'not.suspended'])
     ->group(function() {
         Route::get('/profile', [HomeController::class, 'showProfile'])->name('home.profile');
         

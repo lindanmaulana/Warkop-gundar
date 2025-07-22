@@ -74,20 +74,19 @@ class UserController extends Controller
     {
         $userLogin = Auth::user();
 
-        if ($userLogin->role->value != UserRole::Superadmin) return redirect()->route("dashboard.users")->with("error", "Unauthorized");
+        if ($userLogin->role != UserRole::Superadmin) return redirect()->route("dashboard.users", ['page' => 1, 'limit' => 5])->with("error", "Unauthorized");
 
         $validatedData = $request->validate([
-            'name' => 'required|string',
             'role' => 'nullable|string'
         ]);
 
-        if($validatedData['role'] == UserRole::Superadmin) return redirect()->route("dashboard.users")->with("error", "Unauthorized");
+        if($validatedData['role'] == UserRole::Superadmin->value) return redirect()->route("dashboard.users", ['page' => 1, 'limit' => 5])->with("error", "Unauthorized");
 
         $user->update($validatedData);
 
         return redirect()->route("dashboard.users", ["page" => 1, "limit" => 5])->with("success", "Akun berhasil di ubah.");
     }
-    
+
     public function update(Request $request, User $user)
     {
         $validatedData = $request->validate([

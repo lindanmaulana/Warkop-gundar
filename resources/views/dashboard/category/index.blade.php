@@ -1,8 +1,3 @@
-@php
-// Fungsi helper untuk memeriksa apakah rute saat ini cocok dengan nama rute yang diberikan
-$isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal-blue' : 'bg-royal-blue/70';
-@endphp
-
 @extends('layouts.dashboard')
 
 @section('header')
@@ -13,12 +8,18 @@ $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal
 @endsection
 
 @section('content')
+@php
+$isAdmin = Auth::user()->role->value == "admin"
+@endphp
+
 <div class="space-y-4">
     <div class="p-2 flex items-center justify-between">
         <h2 class="text-xl font-semibold text-primary">Daftar Kategori</h2>
+        @if($isAdmin)
         <a href="{{ route('dashboard.categories.create') }}" class="flex items-center rounded px-3 py-1 text-white bg-green-500 hover:bg-green-300 cursor-pointer">
             Tambah
         </a>
+        @endif
     </div>
 
     @if(session('success'))
@@ -36,7 +37,9 @@ $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal
                 <th class="font-normal py-2 px-6">No</th>
                 <th class="font-normal p-2">Nama</th>
                 <th class="font-normal p-2">Deskripsi</th>
+                @if($isAdmin)
                 <th class="font-normal p-2 text-center">Aksi</th>
+                @endif
             </thead>
             <tbody>
                 @if($categories->isNotEmpty())
@@ -47,6 +50,7 @@ $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal
                     <td class="px-2 py-4 text-dark-blue">{{ $category->name }}</td>
                     <td class="px-2 py-4 text-dark-blue">{{ $category->description }}</td>
                     <td class=" py-4 px-6">
+                        @if($isAdmin)
                         <div class="flex items-center justify-center gap-3 *:text-sm">
                             <a href="{{ route('dashboard.categories.edit', $category->id) }}" class="text-royal-blue font-medium cursor-pointer">Edit</a>
                             <form action="{{ route('category.destroy', $category) }}" method="POST">
@@ -55,6 +59,7 @@ $isActive = fn (string $routeName) => request()->routeIs($routeName) ? 'bg-royal
                                 <button type="submit" class="text-red-500 font-medium cursor-pointer">Hapus</button>
                             </form>
                         </div>
+                        @endif
                     </td>
                 </tr>
                 @endforeach

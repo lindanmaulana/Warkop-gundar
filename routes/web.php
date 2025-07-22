@@ -30,7 +30,7 @@ Route::middleware("guest")
         Route::post("/register", [AuthController::class, 'register'])->name('auth.register');
     });
 
-Route::middleware(['auth', 'otp.not.verified'])->group(function () {
+Route::middleware(['auth', 'otp.not.verified', 'not.suspended'])->group(function () {
     Route::get("/auth/otp", [AuthController::class, 'showOtpForm'])->name('auth.otp');
     Route::post("/otp", [AuthController::class, 'otpVerified'])->name('otp');
     Route::post("/otp/resend", [AuthController::class, 'resendOtp'])->name('otp.resend');
@@ -38,7 +38,7 @@ Route::middleware(['auth', 'otp.not.verified'])->group(function () {
 
 Route::post("/logout", [AuthController::class, 'logout'])->name('auth.logout');
 
-Route::middleware(['auth', 'role:admin,superadmin', 'otp.verified'])
+Route::middleware(['auth', 'role:admin,superadmin', 'otp.verified', 'not.suspended'])
     ->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('/dashboard/setting', [DashboardController::class, 'showDashboardSetting'])->name('dashboard.setting');

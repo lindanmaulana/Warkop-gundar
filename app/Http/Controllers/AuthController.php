@@ -69,6 +69,15 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             $user = Auth::user();
+
+            if ($user->is_suspended) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return redirect()->route('auth.login')->with("error", "Tidak dapat login!, Akun telah ditangguhkan silahkan hubungi admin.");
+            }
+
             if ($user->role === UserRole::Admin) {
                 return redirect()->route("dashboard");
             } else if ($user->role === UserRole::Customer) {

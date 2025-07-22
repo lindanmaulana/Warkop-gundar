@@ -151,6 +151,7 @@
 
             const statusAccount = user.is_suspended ? '<bold class="text-red-500 bg-red-200 px-3 py-1 text-xs rounded">Ditangguhkan</bold>' : '<bold class="text-green-500 bg-green-200 px-3 py-1 text-xs rounded">Aktif</bold>'
             const showActionSuspended = user.role !== "superadmin" ? `<button onclick="handleConfirmSuspended(${user.id}, ${user.is_suspended})" class="text-red-500 text-xs cursor-pointer">${user.is_suspended ? "Aktifkan" : "Non aktifkan"}</button>` : ""
+            const showActionEdit = user.role != "superadmin" ? `<a href="/dashboard/users/update/${user.id}" class="text-green-500 text-xs cursor-pointer">Edit</a>` : ""
             return (
                 `
                     <tr class="hover:bg-dark-blue/20 divide-y divide-gray-200 text-gray-800 *:text-sm *:font-medium">
@@ -162,7 +163,7 @@
                         <td class="px-2 py-4 text-dark-blue">${statusAccount}</td>
                         <td class=" py-4 px-2">
                             <div class="flex items-center gap-2">
-                                <a href="/dashboard/users/update/${user.id}" class="text-green-500 text-xs cursor-pointer">Edit</a>
+                                ${showActionEdit}
                                 ${showActionSuspended}
                             </div>
                         </td>

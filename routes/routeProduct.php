@@ -5,7 +5,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', 'role:admin,customer'])
+Route::middleware(['auth', 'role:admin,customer', 'not.suspended'])
     ->prefix('/products')
     ->group(function () {
         Route::post('/store', [ProductController::class, 'store'])->name('products.store');
@@ -14,7 +14,7 @@ Route::middleware(['auth', 'role:admin,customer'])
     });
 
 
-Route::middleware(['auth'])
+Route::middleware(['auth', 'not.suspended'])
     ->group(function () {
         Route::prefix('/dashboard')
             ->group(function () {

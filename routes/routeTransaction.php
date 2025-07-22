@@ -5,7 +5,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', 'role:admin'])
+Route::middleware(['auth', 'role:admin', 'not.suspended'])
     ->prefix('/dashboard/transactions')
     ->group(function () {
         Route::get("/", [TransactionController::class, 'index'])->name("dashboard.transactions");

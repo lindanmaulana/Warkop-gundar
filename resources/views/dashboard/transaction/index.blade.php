@@ -26,66 +26,184 @@
         <table class="w-full text-left rounded-md overflow-hidden">
             <thead class="*:text-gray-400  *:border-b *:border-dark-blue/10">
                 <th class="font-normal py-2 px-6">No</th>
-                <th class="font-normal p-2">Nama</th>
-                <th class="font-normal p-2">Payment Type</th>
+                <th class="font-normal p-2">Midtrans Id</th>
+                <th class="font-normal p-2">jenis Pembayaran</th>
                 <th class="font-normal p-2">Total Price</th>
-                <th class="font-normal p-2">Information</th>
-                <th class="font-normal p-2">Transaction Date</th>
+                <th class="font-normal p-2">Penyedia</th>
+                <th class="font-normal p-2">Tanggal Transaksi</th>
                 <th class="font-normal p-2 text-center">Aksi</th>
             </thead>
-            <tbody>
-                @if($transactions->isNotEmpty())
-                <?php $no = 1; ?>
-                @foreach($transactions as $transaction)
-                @php
-                $parsedResponse = $transaction->raw_response ? json_decode($transaction->raw_response, true) : [];
-                $vaNumber = null;
-
-                if (isset($parsedResponse['va_numbers'][0]['va_number'])) {
-                    $vaName = $parsedResponse['va_numbers'][0]['bank'];
-                }
-                @endphp
-                <tr class="hover:bg-dark-blue/20 divide-y divide-gray-200 text-gray-800 *:text-sm *:font-medium">
-                    <td class="py-4 px-6">{{ $no++ }}</td>
-                    <td class="px-2 py-4 text-dark-blue">{{ $transaction->midtrans_transaction_id }}</td>
-                    <td class="px-2 py-4 text-dark-blue">{{ $transaction->payment_type }}</td>
-                    <td class="px-2 py-4 text-dark-blue">Rp{{ number_format($transaction->gross_amount, 0, ',', '.') }}</td>
-                    @if($transaction->payment_type == "bank_transfer")
-                    <td class="px-2 py-4 text-dark-blue">
-                        @if ($vaName)
-                        <div class="flex items-center gap-2">
-                            <p class="uppercase">{{ $vaName }}</p>
-                        </div>
-                        @else
-                        -
-                        @endif
-                    </td>
-                    @else
-                    <td class="px-2 py-4 text-dark-blue">-</td>
-                    @endif
-                    <td class="px-2 py-4 text-dark-blue">{{ $transaction->transaction_time }}</td>
-                    <td class=" py-4 px-6">
-                        <div class="flex items-center justify-center gap-3 *:text-sm">
-                            <a href="{{ route('dashboard.transactions.detail', $transaction->id) }}" class="text-green-500 font-medium cursor-pointer">Detail</a>
-                            <a href="{{ route('dashboard.transactions', $transaction->id) }}" class="text-royal-blue font-medium cursor-pointer">Edit</a>
-                            <form action="{{ route('dashboard.transactions', $transaction) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-500 font-medium cursor-pointer">Hapus</button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-                @else
-                <tr>
-                    <td colspan="4" class="text-center py-4 text-red-500">
-                        <p class="flex items-center justify-center gap-2"><x-icon name="package-open" /> Data Category tidak tersedia.</p>
-                    </td>
-                </tr>
-                @endif
+            <tbody id="body-transaction">
             </tbody>
         </table>
+        <div class="flex items-center justify-between py-6 px-4">
+            <div class="flex items-center gap-2">
+                <select name="" id="filter-limit" class="border border-dark-blue/20 rounded-md px-3 py-1 text-sm font-semibold">
+                </select>
+                <p class="text-sm font-semibold text-dark-blue/80">data per halaman.</p>
+            </div>
+
+            <div id="filter-page" class="flex items-center gap-2">
+
+            </div>
+        </div>
     </div>
 </div>
+@endsection
+
+
+@section('script')
+<script>
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const urlParams = new URLSearchParams(window.location.search)
+    const dataFilterLimit = [5, 10, 15, 20]
+
+    document.getElementById("filter-limit").addEventListener("change", function() {
+        const value = this.value
+        urlParams.set("limit", value)
+        urlParams.set("page", 1)
+
+        updateURL()
+        loadDataTransaction()
+    })
+
+    const loadDataTransaction = async () => {
+        try {
+            const response = await fetch(`/api/v1/transactions?${urlParams.toString()}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": csrfToken
+                }
+            })
+
+            const result = await response.json()
+
+            const pages = result.data.links
+            const data = result.data.data
+            showFilterPage(pages)
+            showTransactionList(data)
+
+            return result
+        } catch (err) {
+            console.log({
+                err
+            })
+        }
+    }
+
+    const showTransactionList = (dataTransaction) => {
+        const bodyTransaction = document.getElementById("body-transaction")
+        bodyTransaction.innerHTML = ""
+
+        const row = dataTransaction.length > 0 ? dataTransaction.map((transaction, index) => {
+            let provider = ''
+            let totalPrice;
+
+            const rawResponse = JSON.parse(transaction.raw_response);
+            totalPrice = Intl.NumberFormat("id-ID", {
+                currency: "IDR",
+                style: "currency",
+                maximumFractionDigits: 0
+            }).format(Number(transaction.gross_amount))
+
+            switch (transaction.payment_type) {
+                case "bank_transfer":
+                    provider = rawResponse.va_numbers[0].bank
+                    break
+                default:
+                    provider = rawResponse.issuer
+            }
+
+            return (
+                `
+                 <tr class="hover:bg-dark-blue/20 divide-y divide-gray-200 text-gray-800 *:text-sm *:font-medium">
+                    <td class="py-4 px-6">${index += 1}</td>
+                    <td class="px-2 py-4 text-dark-blue">${transaction.midtrans_transaction_id}</td>
+                    <td class="px-2 py-4 text-dark-blue">${ transaction.payment_type }</td>
+                    <td class="px-2 py-4 text-dark-blue">${totalPrice}</td>
+                    <td class="px-2 py-4 text-dark-blue uppercase">${provider}</td>
+                    <td class="px-2 py-4 text-dark-blue">${ transaction.transaction_time }</td>
+                    <td class=" py-4 px-6">
+                        <a href="/dashboard/transactions/${transaction.id}/detail" class="text-green-500 font-medium cursor-pointer">Detail</a>
+                    </td>
+                </tr>
+                `
+            )
+
+        }).join(" ") : (
+            `
+            <tr>
+            <td colspan="4" class="text-center py-4 text-red-500">
+            <p class="flex items-center justify-center gap-2"><x-icon name="package-open" /> Data Category tidak tersedia.</p>
+            </td>
+            </tr>
+            `
+        )
+
+        bodyTransaction.innerHTML = row
+    }
+
+    const showFilterLimit = () => {
+        const urlParams = new URLSearchParams(window.location.search)
+        const limitParams = urlParams.get("limit") ? urlParams.get("limit") : "5"
+        const paginationFilter = document.getElementById("filter-limit")
+        paginationFilter.innerHTML = ""
+
+        const option = dataFilterLimit.map(limit => (
+            `
+                <option value="${limit}" ${limit == limitParams ? "selected" : ""}>${limit}</option>
+            `
+        ))
+
+        paginationFilter.innerHTML = option
+    }
+
+    const showFilterPage = (pages) => {
+        const urlParams = new URLSearchParams(window.location.search)
+        const pageParams = urlParams.get("page")
+
+        const page = document.getElementById("filter-page")
+        page.innerHTML = ""
+
+        const link = pages.map(page => {
+            const isUrl = page.url
+            const isButton = page.label.length
+            const isPaginationControl = isButton > 1
+
+            const isActive = isUrl && pageParams == page.label
+            const isDisabled = !isUrl
+
+            const styleIsDisabled = isDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+            const styleIsActive = isActive ? "bg-primary text-white" : ""
+
+            return (
+                `
+                    <button onclick="handleFilterPage('${isUrl}')" ${isDisabled || isActive ? "disabled" : ""} class="border px-3 py-1 rounded text-sm ${styleIsActive} ${styleIsDisabled}">${page.label}</button>
+                `
+            )
+        }).join(" ")
+
+        page.innerHTML = link
+    }
+
+    const handleFilterPage = (url) => {
+        const urlObj = new URL(url)
+        const params = new URLSearchParams(urlObj.search)
+        const page = params.get("page")
+
+        urlParams.set("page", page)
+
+        updateURL()
+        loadDataTransaction()
+    }
+
+    function updateURL() {
+        const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
+        window.history.replaceState({}, '', newUrl);
+    }
+
+    loadDataTransaction()
+    showFilterLimit()
+</script>
 @endsection

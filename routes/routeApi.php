@@ -29,7 +29,8 @@ Route::prefix("/api/v1")->group(function () {
             Route::get("/", [OrderController::class, 'getAllOrder']);
         });
 
-        Route::prefix("/transaction")->group(function() {
+        Route::prefix("/transactions")->group(function() {
+            Route::get("/", [TransactionController::class, 'getAllTransaction']);
             Route::post("/snap", [TransactionController::class, 'getSnapToken']);
         });
     });

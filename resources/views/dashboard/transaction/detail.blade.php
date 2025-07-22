@@ -4,7 +4,7 @@
 <div class="max-w-xl mx-auto">
     <div class="w-full flex items-center justify-between py-8">
         <h2 class="text-2xl font-bold">Transaksi Detail</h2>
-        <a href="{{ route('dashboard.transactions') }}" class="flex items-center justify-start max-w-20 gap-1 bg-dark-blue text-sm px-4 py-1 text-white rounded-lg hover:scale-110"><x-icon name="arrow-left" /> Back</a>
+        <a href="{{ route('dashboard.transactions',  ['page' => 1, 'limit' => 5]) }}" class="flex items-center justify-start max-w-20 gap-1 bg-dark-blue text-sm px-4 py-1 text-white rounded-lg hover:scale-110"><x-icon name="arrow-left" /> Back</a>
     </div>
     <ul class="bg-white rounded-lg p-8 shadow-xl">
         <li>

@@ -96,7 +96,7 @@
 
     const loadSnap = async (order_id) => {
         try {
-            const response = await fetch("/api/v1/transaction/snap", {
+            const response = await fetch("/api/v1/transactions/snap", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

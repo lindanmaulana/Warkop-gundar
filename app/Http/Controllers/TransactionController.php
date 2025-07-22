@@ -19,11 +19,30 @@ class TransactionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $transactions = Transaction::all();
+        $queryLimit = $request->query("limit");
+        $limit = max(1, (int)$queryLimit);
+
+        $transactions = Transaction::paginate($limit);
 
         return view('/dashboard/transaction/index', compact('transactions'));
+    }
+
+    public function getAllTransaction(Request $request)
+    {
+        $queryLimit = $request->query("limit");
+        $limit = max(1, (int)$queryLimit);
+
+        if($limit > 5) $limit = 5;
+        
+        $transactions = Transaction::paginate($limit);
+
+
+        return response()->json([
+            "message" => "Data transaksi berhasil di ambil.",
+            "data" => $transactions
+        ]);
     }
 
     /**
@@ -98,11 +117,11 @@ class TransactionController extends Controller
                 'name' => $user->name,
                 'email' => $user->email
             ],
-            'item_details' => $itemsDetail 
+            'item_details' => $itemsDetail
         ];
 
         try {
-            $snapToken = Snap::getSnapToken($params); 
+            $snapToken = Snap::getSnapToken($params);
 
             return response()->json([
                 'message' => 'Transaction',

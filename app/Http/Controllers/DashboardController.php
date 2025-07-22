@@ -22,7 +22,7 @@ class DashboardController extends Controller
         $totalTransactions = Transaction::count();
         $totalRevenue = Transaction::where('transaction_status', 'settlement')->sum('gross_amount');
 
-        $totalOrderPending = Order::where('status', 'pending')->count();
+        $totalOrderPending = Order::whereIn('status', ['pending', 'processing'])->count();
         $latestOrdersData = collect();
 
         $totalOrderByCustomer = 0;

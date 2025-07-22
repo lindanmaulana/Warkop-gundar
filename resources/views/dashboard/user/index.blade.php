@@ -150,7 +150,7 @@
                 ' <bold class="text-xs text-red-500 bg-red-200 px-2 py-1 rounded">Belum</bold>'
 
             const statusAccount = user.is_suspended ? '<bold class="text-red-500 bg-red-200 px-3 py-1 text-xs rounded">Ditangguhkan</bold>' : '<bold class="text-green-500 bg-green-200 px-3 py-1 text-xs rounded">Aktif</bold>'
-            const showActionSuspended = user.role !== "superadmin" ? `<a href="/dashboard/users/update/${user.id}" class="text-red-500 text-xs cursor-pointer">${user.is_suspended ? "Aktifkan" : "Non aktifkan"}</a>` : ""
+            const showActionSuspended = user.role !== "superadmin" ? `<button onclick="handleConfirmSuspended(${user.id}, ${user.is_suspended})" class="text-red-500 text-xs cursor-pointer">${user.is_suspended ? "Aktifkan" : "Non aktifkan"}</button>` : ""
             return (
                 `
                     <tr class="hover:bg-dark-blue/20 divide-y divide-gray-200 text-gray-800 *:text-sm *:font-medium">
@@ -161,7 +161,10 @@
                         <td class="px-2 py-4 text-dark-blue">${ statusVerified }</td>
                         <td class="px-2 py-4 text-dark-blue">${statusAccount}</td>
                         <td class=" py-4 px-2">
-                            ${showActionSuspended}
+                            <div class="flex items-center gap-2">
+                                <a href="/dashboard/users/update/${user.id}" class="text-green-500 text-xs cursor-pointer">Edit</a>
+                                ${showActionSuspended}
+                            </div>
                         </td>
                     </tr>
                 `
@@ -177,7 +180,6 @@
             </tr>
             `
         )
-
         userContent.innerHTML = row
     }
 
@@ -223,6 +225,47 @@
         const newURL = `${window.location.pathname}?${urlParams.toString()}`
 
         window.history.replaceState({}, '', newURL)
+    }
+
+    const handleConfirmSuspended = (userId, is_suspended) => {
+        const urlParams = new URLSearchParams(window.location.search)
+        let question = is_suspended ? "Apakah Anda yakin ingin mengaktifkan kembali akun ini? 🟢 Pengguna akan mendapatkan kembali akses ke sistem." : "Apakah Anda benar-benar yakin ingin menangguhkan akun ini? 🔒 Pengguna akan kehilangan akses ke sistem."
+        let suspended = is_suspended ? "0" : "1"
+
+        Swall.fire({
+            title: question,
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                suspendedAccount(suspended, userId)
+                window.location.href = `/dashboard/users?${urlParams.toString()}`
+                Swall.fire("Updated", "", "success");
+            }
+        })
+    }
+
+    const suspendedAccount = async (is_suspended, userId) => {
+        try {
+            const response = await fetch(`/api/v1/users/suspended/${userId}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": csrfToken
+                },
+                body: JSON.stringify({is_suspended})
+            })
+
+            Swall.fire({
+                title: "Status akun berhasil di ubah",
+                icon: "success"
+            })
+        } catch (err) {
+            Swall.fire({
+                title: "Status akun gagal di ubah!",
+                icon: "error"
+            })
+        }
     }
 
     showFilterLimit()

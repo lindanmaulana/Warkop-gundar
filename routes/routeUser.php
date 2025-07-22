@@ -21,6 +21,8 @@ Route::middleware(['auth'])->prefix("/dashboard")->group(function() {
 
     Route::middleware(['role:superadmin'])->group(function() {
         Route::get("/users/update/{user}", [UserController::class, 'edit'])->name("dashboard.users.update");
+        Route::patch("/users/update/{user}", [UserController::class, 'updateBySuperadmin'])->name("users.update");
+
         Route::patch("/users/suspendaccount/{user}", [UserController::class, 'suspendAccount'])->name('users.suspendaccount');
     });
 });

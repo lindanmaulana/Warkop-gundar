@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix("/api/v1")->group(function () {
     Route::middleware(['auth'])->group(function () {
+        Route::middleware(["role:superadmin"])->group(function() {
+            Route::patch("/users/suspended/{user}", [UserController::class, 'suspendAccount']);
+        });
+
         Route::middleware('role:admin,superadmin')->group(function () {
             Route::get('/users', [UserController::class, 'getAllUser']);
         });

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -20,10 +22,7 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.
@@ -70,11 +69,29 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
+
+    public function updateBySuperadmin(Request $request, User $user)
+    {
+        $userLogin = Auth::user();
+
+        if ($userLogin->role->value != UserRole::Superadmin) return redirect()->route("dashboard.users")->with("error", "Unauthorized");
+
+        $validatedData = $request->validate([
+            'name' => 'required|string',
+            'role' => 'nullable|string'
+        ]);
+
+        if($validatedData['role'] == UserRole::Superadmin) return redirect()->route("dashboard.users")->with("error", "Unauthorized");
+
+        $user->update($validatedData);
+
+        return redirect()->route("dashboard.users", ["page" => 1, "limit" => 5])->with("success", "Akun berhasil di ubah.");
+    }
+    
     public function update(Request $request, User $user)
     {
         $validatedData = $request->validate([
             'name' => 'required|string',
-            'phone' => 'nullable|string'
         ]);
 
         $user->update($validatedData);
@@ -101,10 +118,10 @@ class UserController extends Controller
 
         if ($limit > 20) $limit = 5;
 
-        $users = User::when($queryKeyword, function($query) use($queryKeyword) {
+        $users = User::when($queryKeyword, function ($query) use ($queryKeyword) {
             $query->where("name", "like", "%{$queryKeyword}%");
         })
-                ->paginate($limit);
+            ->paginate($limit);
 
         $users->getCollection()->makeHidden('password', 'remember_token');
 

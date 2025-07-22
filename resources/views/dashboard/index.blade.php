@@ -26,8 +26,8 @@
     <h2 class="text-lg font-semibold text-primary">Overview</h2>
     <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-3 py-4 md:py-4">
         <div class="hover:-translate-y-2 transition-global duration-300 flex gap-2 max-h-[120px] bg-white border border-dark-blue/10 shadow-md p-5 rounded-md space-y-5 *:text-royal-blue">
-            <div class="bg-royal-blue/30 size-10 rounded-full flex items-center justify-center">
-                <x-icon name="trending-up" />
+            <div class="bg-[#E0F2FE] size-10 rounded-full flex items-center justify-center">
+                <x-icon name="trending-up" class="text-[#1D4ED8]" />
             </div>
             <div>
                 <h3 class="text-dark-blue/80 font-semibold text-sm">Total Pendapatan</h3>
@@ -35,8 +35,8 @@
             </div>
         </div>
         <div class="hover:-translate-y-2 transition-global duration-300 flex gap-2 max-h-[120px] bg-white border border-dark-blue/10 shadow-md p-5 rounded-md space-y-5 *:text-royal-blue">
-            <div class="bg-royal-blue/30 size-10 rounded-full flex items-center justify-center">
-                <x-icon name="toolskitchen" />
+            <div class="bg-[#E0F7FA]/20 size-10 rounded-full flex items-center justify-center">
+                <x-icon name="toolskitchen" class="text-[#0288D1]" />
             </div>
             <div>
                 <h3 class="text-dark-blue/80 font-semibold text-sm">Total Menu</h3>
@@ -44,8 +44,8 @@
             </div>
         </div>
         <div class="hover:-translate-y-2 transition-global duration-300 flex gap-2 max-h-[120px] bg-white border border-dark-blue/10 shadow-md p-5 rounded-md space-y-5 *:text-royal-blue">
-            <div class="bg-dark-blue/30 size-10 rounded-full flex items-center justify-center">
-                <x-icon name="shopping-cart" class="text-dark-blue" />
+            <div class="bg-[#ECEFF1] size-10 rounded-full flex items-center justify-center">
+                <x-icon name="shopping-cart" class="text-[#37474F]" />
             </div>
             <div>
                 <h3 class="text-dark-blue/80 font-semibold text-sm">Total Pesanan</h3>
@@ -53,8 +53,8 @@
             </div>
         </div>
         <div class="hover:-translate-y-2 transition-global duration-300 flex gap-2 max-h-[120px] bg-white border border-dark-blue/10 shadow-md p-5 rounded-md space-y-5 *:text-royal-blue">
-            <div class="bg-green-100 size-10 rounded-full flex items-center justify-center">
-                <x-icon name="transaction" class="text-green-500" />
+            <div class="bg-[#E8F5E9] size-10 rounded-full flex items-center justify-center">
+                <x-icon name="transaction" class="text-[#2E7D32]" />
             </div>
             <div>
                 <h3 class="text-dark-blue/80 font-semibold text-sm">Total Transaksi</h3>

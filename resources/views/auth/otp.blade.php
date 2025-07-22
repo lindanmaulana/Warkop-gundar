@@ -1,12 +1,12 @@
 @extends('layouts.auth')
 
 @section('content')
-<div class="shadow-md shadow-gray-300 px-4 py-6 w-[400px] min-h-[400px] flex flex-col items-center justify-center rounded-md">
-    <div class="bg-royal-blue/10 rounded-full p-4 mb-2">
+<div class="shadow-md shadow-gray-300 bg-secondary px-4 py-6 w-[400px] min-h-[400px] flex flex-col items-center justify-center rounded-md">
+    <div class="bg-white rounded-full p-4 mb-2">
         <x-icon name="fingerprint" class="text-center text-royal-blue" />
     </div>
-    <h2 class="text-lg font-semibold">Verify Your Account</h2>
-    <p class="text-xs text-gray-500">OTP telah dikirim ke email Anda.</p>
+    <h2 class="text-xl text-white font-semibold">Verify Your Account</h2>
+    <p class="text-xs text-white/60">OTP telah dikirim ke email Anda.</p>
 
     @if(session('success'))
     <div id="alert-success" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
@@ -26,9 +26,9 @@
             <input type="text" maxlength="1" class="otp-box border border-gray-300 size-9 rounded">
             <input type="text" maxlength="1" class="otp-box border border-gray-300 size-9 rounded">
         </div>
-        <p class="text-center text-xs text-gray-500">Didn't receive code? <button type="button" onclick="handleResendOtp(event)" class="text-royal-blue">Resend now</button></p>
+        <p class="text-center text-xs text-gray-500">Didn't receive code? <button type="button" onclick="handleResendOtp(event)" class="text-primary">Resend now</button></p>
 
-        <button type="submit" class="w-full text-center bg-royal-blue/80 rounded px-4 py-1 text-sm text-white">Verify Account</button>
+        <button type="submit" class="w-full text-center font-semibold  bg-white rounded p-3 text-sm text-secondary hover:scale-105">Verify Account</button>
     </form>
 
     <form id="otp-resend" action="{{ route('otp.resend') }}" method="POST">

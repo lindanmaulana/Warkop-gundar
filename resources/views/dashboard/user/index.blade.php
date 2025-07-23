@@ -8,6 +8,10 @@
 @endsection
 
 @section('content')
+@php
+    $isSuperadmin = Auth::user()->role->value === "superadmin";
+    $isAdmin = Auth::user()->role->value === "admin";
+@endphp
 <div class="space-y-4">
     <div class="p-2 flex items-center justify-between">
         <h2 class="text-xl font-semibold text-primary">Daftar Pengguna</h2>
@@ -31,9 +35,11 @@
                 <th class="font-normal p-2">Role</th>
                 <th class="font-normal p-2">Verifikasi Email</th>
                 <th class="font-normal p-2">Status Akun</th>
-                <th class="font-normal p-2">Aksi</th>
+                @if($isSuperadmin)
+                    <th class="font-normal p-2">Aksi</th>
+                @endif
             </thead>
-            <tbody id="user-content">
+            <tbody id="user-content" data-role-access="{{ $isAdmin }}">
 
             </tbody>
         </table>
@@ -142,6 +148,7 @@
     const showUserContent = (dataUser) => {
         const userContent = document.getElementById("user-content")
         userContent.innerHTML = ""
+        const isAdmin = userContent.dataset.roleAccess
 
         const row = dataUser.length > 0 ? dataUser.map((user, index) => {
             const isVerified = user.is_email_verified
@@ -150,8 +157,14 @@
                 ' <bold class="text-xs text-red-500 bg-red-200 px-2 py-1 rounded">Belum</bold>'
 
             const statusAccount = user.is_suspended ? '<bold class="text-red-500 bg-red-200 px-3 py-1 text-xs rounded">Ditangguhkan</bold>' : '<bold class="text-green-500 bg-green-200 px-3 py-1 text-xs rounded">Aktif</bold>'
-            const showActionSuspended = user.role !== "superadmin" ? `<button onclick="handleConfirmSuspended(${user.id}, ${user.is_suspended})" class="text-red-500 text-xs cursor-pointer">${user.is_suspended ? "Aktifkan" : "Non aktifkan"}</button>` : ""
-            const showActionEdit = user.role != "superadmin" ? `<a href="/dashboard/users/update/${user.id}" class="text-green-500 text-xs cursor-pointer">Edit</a>` : ""
+            let showActionSuspended = user.role != "superadmin" ? `<button onclick="handleConfirmSuspended(${user.id}, ${user.is_suspended})" class="text-red-500 text-xs cursor-pointer">${user.is_suspended ? "Aktifkan" : "Non aktifkan"}</button>` : ""
+            let showActionEdit = user.role != "superadmin" ? `<a href="/dashboard/users/update/${user.id}" class="text-green-500 text-xs cursor-pointer">Edit</a>` : ""
+
+            if(isAdmin) {
+                showActionSuspended = ""
+                showActionEdit = ""
+            }
+
             return (
                 `
                     <tr class="hover:bg-dark-blue/20 divide-y divide-gray-200 text-gray-800 *:text-sm *:font-medium">

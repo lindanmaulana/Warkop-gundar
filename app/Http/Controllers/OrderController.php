@@ -44,6 +44,14 @@ class OrderController extends Controller
     {
         $order->load('orderItems.product', 'transactions');
 
+        if($order->transactions) {
+            if($order->transactions->raw_response) {
+                $order->transactions->parsed_raw_response = json_decode($order->transactions->raw_response, true);
+            } else {
+                $order->transactions->parsed_raw_resopnse = [];
+            }
+        }
+
         return view('dashboard.order.detail', compact('order'));
     }
 
@@ -170,11 +178,13 @@ class OrderController extends Controller
     public function update(Request $request, Order $order)
     {
 
-        if ($order->status === "done" || $order->status === "cancelled") return redirect()->route('dashboard.order', compact('order'))->with('error', 'Gagal perbarui status order.');
+        if ($order->status == OrderStatus::Done->value || $order->status == OrderStatus::cancelled->value) return redirect()->route('dashboard.orders', compact('order'))->with('error', 'Pesanan ini sudah berakhir tidak dapat di ubah.');
 
         $validatedData = $request->validate([
             'status' => ['required', new Enum(OrderStatus::class)],
         ]);
+
+        if($validatedData['status'] == OrderStatus::Pending->value) return redirect()->route("dashboard.orders", ['page' => 1, "limit" => 5])->with("error", "Pesanan sudah melewati tahap Pending. Perubahan ke status tersebut tidak diizinkan.");
 
         $order->update($validatedData);
 

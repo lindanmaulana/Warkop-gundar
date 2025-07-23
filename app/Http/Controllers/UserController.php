@@ -6,6 +6,7 @@ use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules\Enum;
 
 class UserController extends Controller
 {
@@ -77,7 +78,7 @@ class UserController extends Controller
         if ($userLogin->role != UserRole::Superadmin) return redirect()->route("dashboard.users", ['page' => 1, 'limit' => 5])->with("error", "Unauthorized");
 
         $validatedData = $request->validate([
-            'role' => 'nullable|string'
+            'role' => ['required', new Enum(UserRole::class)]
         ]);
 
         if($validatedData['role'] == UserRole::Superadmin->value) return redirect()->route("dashboard.users", ['page' => 1, 'limit' => 5])->with("error", "Unauthorized");

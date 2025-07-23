@@ -14,27 +14,42 @@
                 $statusText = '';
                 switch ($transaction->transaction_status) {
                 case 'settlement':
-                    $statusClass = 'bg-emerald-100 text-emerald-800';
-                    $statusText = 'Pembayaran Lunas';
+                $statusClass = 'bg-emerald-100 text-emerald-800';
+                $statusText = 'Pembayaran Lunas';
                 break;
                 case 'pending':
-                    $statusClass = 'bg-yellow-100 text-yellow-800';
-                    $statusText = 'Menunggu Pembayaran';
+                $statusClass = 'bg-yellow-100 text-yellow-800';
+                $statusText = 'Menunggu Pembayaran';
                 break;
                 case 'expire':
-                    $statusClass = 'bg-red-100 text-red-800';
-                    $statusText = 'Pembayaran Kedaluwarsa';
+                $statusClass = 'bg-red-100 text-red-800';
+                $statusText = 'Pembayaran Kedaluwarsa';
                 break;
                 case 'cancel':
                 case 'deny':
                 case 'refund':
-                    $statusClass = 'bg-red-100 text-red-800';
-                    $statusText = 'Pembayaran Dibatalkan';
+                $statusClass = 'bg-red-100 text-red-800';
+                $statusText = 'Pembayaran Dibatalkan';
                 break;
                 default:
-                    $statusClass = 'bg-gray-100 text-gray-800';
-                    $statusText = 'Status Tidak Dikenal';
+                $statusClass = 'bg-gray-100 text-gray-800';
+                $statusText = 'Status Tidak Dikenal';
                 }
+
+                $parsedData = $transaction->parsed_raw_response ?? [];
+                $data = null;
+                $penyediaLayanan = null;
+
+                if(isset($parsedData['va_numbers'][0])) $data = $parsedData['va_numbers'][0];
+
+                switch($transaction->payment_type) {
+                    case "bank_transfer":
+                        if(isset($parsedData['va_numbers'][0])) $penyediaLayanan = $parsedData['va_numbers'][0]['bank'];
+                    break;
+                    default:
+                        $penyediaLayanan = $parsedData['issuer'];
+                };
+
                 @endphp
                 <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold {{ $statusClass }}">
                     @if($transaction->transaction_status == 'settlement')
@@ -72,11 +87,17 @@
                     <span class="text-gray-600 font-medium">Metode Pembayaran:</span>
                     <span class="text-gray-800">{{ ucwords(str_replace('_', ' ', $transaction->payment_type)) }}</span>
                 </div>
+                <div class="flex justify-between items-center border-b pb-2">
+                    <span class="text-gray-600 font-medium">Penyedia Layanan:</span>
+                    <span class="text-gray-800 uppercase">{{ ucwords(str_replace('_', ' ', $penyediaLayanan)) }}</span>
+                </div>
                 <div class="flex justify-between items-center">
                     <span class="text-gray-600 font-medium">Waktu Transaksi:</span>
                     <span class="text-gray-800">{{ \Carbon\Carbon::parse($transaction->transaction_time)->format('d M Y, H:i:s T') }}</span>
                 </div>
             </div>
+            {{$transaction}}
+
         </li>
         <li>
             @if ($transaction->transaction_status == 'pending')

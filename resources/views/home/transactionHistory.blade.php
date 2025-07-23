@@ -46,6 +46,9 @@
                         $statusClass = 'bg-gray-100 text-gray-800';
                         $statusText = 'Status Tidak Dikenal';
                         }
+
+                        $parsedData = $order->transactions->parsed_raw_response ?? [];
+
                         @endphp
                         <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold {{ $statusClass }}">
                             @if($order->transactions->transaction_status == 'settlement')
@@ -94,32 +97,23 @@
                     <div class="bg-blue-50 border-l-4 border-blue-400 text-blue-800 p-4 mb-8 rounded-lg">
                         <h3 class="text-lg font-semibold mb-2">Instruksi Pembayaran</h3>
                         @if ($order->transactions->payment_type == 'bank_transfer' && isset($order->transactions->parsed_raw_response['va_numbers'][0]))
-                        <p class="mb-1">Silakan transfer ke Virtual Account berikut:</p>
-                        <p class="mb-1"><strong>Bank:</strong> <span class="font-bold text-blue-900">{{ strtoupper($order->transactions->parsed_raw_response['va_numbers'][0]['bank']) }}</span></p>
-                        <p class="mb-4"><strong>Nomor Virtual Account:</strong> <span class="font-bold text-blue-900 text-lg select-all">{{ $order->transactions->parsed_raw_response['va_numbers'][0]['va_number'] }}</span></p>
+                            <p class="mb-1">Silakan transfer ke Virtual Account berikut:</p>
+                            <p class="mb-1"><strong>Bank:</strong> <span class="font-bold text-blue-900">{{ strtoupper($order->transactions->parsed_raw_response['va_numbers'][0]['bank']) }}</span></p>
+                            <p class="mb-4"><strong>Nomor Virtual Account:</strong> <span class="font-bold text-blue-900 text-lg select-all">{{ $order->transactions->parsed_raw_response['va_numbers'][0]['va_number'] }}</span></p>
                         @elseif ($order->transactions->payment_type == 'qris')
-                        <p class="mb-2">Scan QR code ini dari aplikasi e-wallet Anda.</p>
-                        @if (isset($order->transactions->parsed_raw_response['actions']))
-                        @foreach ($order->transactions->parsed_raw_response['actions'] as $action)
-                        @if ($action['name'] == 'generate_qr_code' && isset($action['url']))
-                        <img src="{{ $action['url'] }}" alt="QR Code" class="w-48 h-48 mx-auto border border-gray-300 rounded-lg mb-4">
-                        @endif
-                        @endforeach
-                        @endif
-
-                        @if (isset($order->transactions->parsed_raw_response['acquirer']))
-                        <p class="mb-1">Penyedia QR: <strong>{{ strtoupper($order->transactions->parsed_raw_response['acquirer']) }}</strong></p>
-                        @endif
-
+                        <p class="mb-2">Lakukan pembayaran pesanan ini segera.</p>
+                            @if (isset($parsedData['issuer']))
+                            <p class="mb-1">Penyedia QR: <strong>{{ strtoupper($parsedData['issuer']) }}</strong></p>
+                            @endif
                         @elseif (in_array($order->transactions->payment_type, ['gopay', 'shopeepay', 'ovo', 'dana']))
                         <p class="mb-1">Selesaikan pembayaran melalui aplikasi {{ strtoupper($order->transactions->payment_type) }}.</p>
-                        @if (isset($order->transactions->parsed_raw_response['actions']))
-                        @foreach ($order->transactions->parsed_raw_response['actions'] as $action)
-                        @if ($action['name'] == 'deeplink' && isset($action['url']))
-                        <p class="mb-2">Klik <a href="{{ $action['url'] }}" target="_blank" class="text-blue-600 hover:underline font-semibold">tautan ini</a> untuk membuka aplikasi {{ strtoupper($order->transactions->payment_type) }}.</p>
-                        @endif
-                        @endforeach
-                        @endif
+                            @if (isset($order->transactions->parsed_raw_response['actions']))
+                                @foreach ($order->transactions->parsed_raw_response['actions'] as $action)
+                                    @if ($action['name'] == 'deeplink' && isset($action['url']))
+                                    <p class="mb-2">Klik <a href="{{ $action['url'] }}" target="_blank" class="text-blue-600 hover:underline font-semibold">tautan ini</a> untuk membuka aplikasi {{ strtoupper($order->transactions->payment_type) }}.</p>
+                                    @endif
+                                @endforeach
+                            @endif
                         @endif
 
                         @if (isset($order->transactions->parsed_raw_response['expiry_time']))

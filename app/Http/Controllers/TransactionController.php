@@ -7,6 +7,7 @@ use App\Models\Transaction;
 use App\Services\OrderServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Midtrans\Snap;
 
 class TransactionController extends Controller
@@ -34,8 +35,8 @@ class TransactionController extends Controller
         $queryLimit = $request->query("limit");
         $limit = max(1, (int)$queryLimit);
 
-        if($limit > 5) $limit = 5;
-        
+        if ($limit > 5) $limit = 5;
+
         $transactions = Transaction::paginate($limit);
 
 
@@ -67,6 +68,13 @@ class TransactionController extends Controller
     public function show(Transaction $transaction)
     {
         $transaction->load('order.user');
+
+        if ($transaction->raw_response) {
+            $transaction->parsed_raw_response = json_decode($transaction->raw_response, true);
+        } else {
+            $transaction->parsed_raw_response = [];
+        }
+
         return view("/dashboard/transaction/detail", compact("transaction"));
     }
 
@@ -106,15 +114,16 @@ class TransactionController extends Controller
             ->where('user_id', $user->id)
             ->firstOrFail();
 
+        $midtransOrderId = $order->id . '-' . time();
         $itemsDetail = $this->orderService->getItemDetails($order);
 
         $params = [
             'transaction_details' => [
-                'order_id' => $order->id,
+                'order_id' => $midtransOrderId,
                 'gross_amount' => $order->total_price
             ],
             'customer_details' => [
-                'name' => $user->name,
+                'first_name' => $user->name,
                 'email' => $user->email
             ],
             'item_details' => $itemsDetail

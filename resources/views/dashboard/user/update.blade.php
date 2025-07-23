@@ -34,7 +34,6 @@
                             <option value="admin" {{$user->role->value == "admin" ? "selected" : ""}}>Admin</option>
                             <option value="customer" {{$user->role->value == "customer" ? "selected" : ""}}>Customer</option>
                         </select>
-                        <input type="text" id="name" name="name" value="{{ old('name', $user->role) }}" class="w-full border border-dark-blue/20 px-4 py-2 rounded-sm opacity-50" readonly>
                     </label>
                     <label for="is_suspended" class="flex flex-col gap-3">
                         @php

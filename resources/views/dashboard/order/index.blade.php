@@ -8,6 +8,9 @@
 @endsection
 
 @section('content')
+@php
+    $isAdmin = Auth::user()->role->value == "admin"
+@endphp
 <div class="space-y-4">
     <div class="flex items-center justify-between">
         <h2 class="text-xl font-semibold text-primary">Order</h2>
@@ -27,7 +30,7 @@
                 <th class="font-normal px-2 py-4">Waktu</th>
                 <th class="font-normal px-2 py-4"></th>
             </thead>
-            <tbody id="order-content" data-detail-url="{{ route('dashboard.orders.detail', ':id') }}" data-update-url="{{ route('dashboard.orders.update', ':id') }}">
+            <tbody id="order-content" data-role-access="{{ $isAdmin }}" data-update-url="{{ route('dashboard.orders.update', ':id') }}">
 
             </tbody>
         </table>
@@ -107,31 +110,30 @@
     const showOrderContent = (dataOrder) => {
         const userContent = document.getElementById("order-content")
         userContent.innerHTML = ""
-
-        const detailUrlTemplate = userContent.dataset.detailUrl;
-        const updateUrlTemplate = userContent.dataset.updateUrl;
+        const isAdmin = userContent.dataset.roleAccess
 
         const row = dataOrder.length > 0 ? dataOrder.map((order, index) => {
-            const detailUrl = detailUrlTemplate.replace(':id', order.id);
-            const updateUrl = updateUrlTemplate.replace(':id', order.id);
-
             let statusOrder = ''
-            let handleUpdate = ""
+            let actionUpdate = ""
 
             switch (order.status) {
                 case "pending":
                     statusOrder = '<p class="text-sm rounded px-2 py-1 text-center bg-yellow-600 text-white">Pending</p>'
-                    handleUpdate = `<a href="${updateUrl}" class="text-royal-blue cursor-pointer"><x-icon name="pencil" /></a>`
+                    actionUpdate = `<a href="/dashboard/orders/${order.id}/update" class="text-royal-blue cursor-pointer"><x-icon name="pencil" /></a>`
                     break;
                     case "processing":
                         statusOrder = '<p class="text-sm rounded px-2 py-1 text-center bg-blue-800 text-white">Processing</p>'
-                        handleUpdate = `<a href="${updateUrl}" class="text-royal-blue cursor-pointer"><x-icon name="pencil" /></a>`
+                        actionUpdate = `<a href="/dashboard/orders/${order.id}/update" class="text-royal-blue cursor-pointer"><x-icon name="pencil" /></a>`
                     break
                 case "done":
                     statusOrder = '<p class="text-sm rounded px-2 py-1 text-center bg-green-800 text-white">Done</p>'
                     break
                 default:
                     statusOrder = '<p class="text-sm rounded px-2 py-1 text-center bg-red-800 text-white">Cancelled</p>'
+            }
+
+            if(!isAdmin) {
+                actionUpdate = ""
             }
 
             const totalPrice = utilCurrency(order.total_price)
@@ -151,8 +153,8 @@
                     <td>${createdAt}</td>
                     <td class="px-2 py-4">
                         <div class="flex items-center gap-2">
-                            <a href="${detailUrl}" class="text-green-500 cursor-pointer"><x-icon name="receipt-text" /></a>
-                            ${handleUpdate}
+                            <a href="/dashboard/orders/${order.id}/detail" class="text-green-500 cursor-pointer"><x-icon name="receipt-text" /></a>
+                            ${actionUpdate}
                         </div>
                     </td>
                 </tr>

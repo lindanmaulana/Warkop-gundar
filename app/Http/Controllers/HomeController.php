@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\ValidationException;
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -96,8 +97,37 @@ class HomeController extends Controller
     public function showDetailOrder(Order $order)
     {
         $order->load('orderItems.product');
-        
-        return view('home.orderDetail', compact('order'));
+        $transactionTime = "N/A";
+        $expiryTime = "N/A";
+        $settlementTime = "N/A";
+
+        if ($order->transactions) {
+            if ($order->transactions->raw_response) {
+                $order->transactions->parsed_raw_response = json_decode($order->transactions->raw_response, true);
+            } else {
+                $order->transactions->parsed_raw_response = [];
+            }
+
+            if ($order->transactions->transaction_time) {
+                $transactionTime = Carbon::parse($order->transactions->transaction_time)
+                    ->setTimezone('Asia/Jakarta')
+                    ->format('d M Y, H:i:s') . ' WIB';
+            }
+
+            if (isset($order->transactions->parsed_raw_response['expiry_time'])) {
+                $expiryTime = Carbon::parse($order->transactions->parsed_raw_response['expiry_time'])
+                    ->setTimezone('Asia/Jakarta')
+                    ->format('d M Y, H:i:s') . ' WIB';
+            }
+
+            if (isset($order->transactions->parsed_raw_response['settlement_time'])) {
+                $settlementTime = Carbon::parse($order->transactions->parsed_raw_response['settlement_time'])
+                    ->setTimezone('Asia/Jakarta')
+                    ->format('d M Y, H:i:s') . ' WIB';
+            }
+        };
+
+        return view('home.orderDetail', compact('order', 'transactionTime', 'expiryTime', 'settlementTime'));
     }
 
     public function showPayment(Order $order)
@@ -108,14 +138,26 @@ class HomeController extends Controller
         return view('home.payment', compact('order', 'payments', 'paymentProof'));
     }
 
-    public function showTransaction(Order $order) {
+    public function showTransaction(Order $order)
+    {
         $order = Order::with("orderItems.product")->findOrFail($order->id);
 
         return view("home.transaction", compact("order"));
     }
 
-    public function showTransactionHistory(Order $order) {
+    public function showTransactionHistory(Order $order)
+    {
         $order->load("transactions", 'user');
+
+        if ($order->transactions) {
+            if ($order->transactions->raw_response) {
+                $order->transactions->parsed_raw_response = json_decode($order->transactions->raw_response, true);
+            } else {
+                $order->transactions->parsed_raw_response = [];
+            }
+        } else {
+            return redirect()->route("home.order")->with("error", "Pembayaran di batalkan.");
+        }
 
         return view("/home/transactionHistory", compact("order"));
     }

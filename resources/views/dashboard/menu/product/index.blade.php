@@ -9,6 +9,9 @@
 
 
 @section('content')
+@php
+$isAdmin = Auth::user()->role->value == "admin"
+@endphp
 <div class="space-y-4">
     <div class="p-2 flex items-center justify-between">
         <h2 class="text-xl font-semibold text-primary">Menu</h2>
@@ -19,9 +22,11 @@
                 </select>
             </form>
             <input id="filter-search" type="text" placeholder="Cari..." class="border border-dark-blue/20 rounded-lg px-4 py-1">
+            @if($isAdmin)
             <a href="{{ route('dashboard.menu.products.create') }}" class="flex items-center rounded px-3 py-1 text-white bg-green-500 hover:bg-green-300 cursor-pointer">
                 Tambah
             </a>
+            @endif
         </div>
     </div>
 
@@ -45,9 +50,8 @@
                 <th class="font-normal p-2">Deskripsi</th>
                 <th class="font-normal p-2 text-center">Aksi</th>
             </thead>
-            <tbody id="body-product" data-edit-url="{{ route('dashboard.menu.products.edit', ':id') }}"
-                data-detail-url="{{ route('dashboard.menu.products.detail', ':id') }}"
-                data-delete-url="{{ route('products.destroy', ':id') }}">
+            <tbody id="body-product" data-role-access="{{ $isAdmin }}">
+
             </tbody>
         </table>
         <div class="flex items-center justify-between py-6 px-4">
@@ -158,22 +162,21 @@
     const showProductList = (dataProduct) => {
         const bodyProduct = document.getElementById("body-product")
         bodyProduct.innerHTML = ""
-        const editUrlTemplate = bodyProduct.dataset.editUrl;
-        const detailUrlTemplate = bodyProduct.dataset.detailUrl;
-        const deleteUrlTemplate = bodyProduct.dataset.deleteUrl;
+        const roleAccess = bodyProduct.dataset.roleAccess
 
+        console.log({roleAccess})
 
         const row = dataProduct.length > 0 ? dataProduct.map((product, index) => {
             let imageUrl = product.image_url ? `/storage/${product.image_url}` : "/images/image-placeholder.png"
-            const editUrl = editUrlTemplate.replace(':id', product.id);
-            const detailUrl = detailUrlTemplate.replace(':id', product.id);
-            const deleteUrl = deleteUrlTemplate.replace(':id', product.id);
 
             const price = Intl.NumberFormat("id-ID", {
                 currency: "IDR",
                 style: "currency",
                 maximumFractionDigits: 0
             }).format(product.price)
+
+            const actionUpdate = roleAccess ? `<a href="/dashboard/menu/products/${product.id}/edit" class="text-royal-blue font-medium cursor-pointer">Edit</a>` : ``
+            const actionDelete = roleAccess ? `<button type="submit" class="text-red-500 font-medium cursor-pointer">Hapus</button>` : ``
 
             return (
                 `
@@ -189,12 +192,12 @@
                     <td class="px-2 py-4 text-dark-blue">${product.description ?? "-"}</td>
                     <td class="px-2 py-4 text-dark-blue">
                         <div class="flex items-center justify-center gap-3 *:text-sm">
-                            <a href="${editUrl}" class="text-royal-blue font-medium cursor-pointer">Edit</a>
-                            <a href="${detailUrl}" class="text-green-500 font-medium cursor-pointer">Detail</a>
-                            <form action="${deleteUrl}" method="POST">
+                            ${actionUpdate}
+                            <a href="/dashboard/menu/products/${product.id}/detail" class="text-green-500 font-medium cursor-pointer">Detail</a>
+                            <form action="/products/${product.id}/destroy" method="POST">
                                 <input type="hidden" name="_token" value="${csrfToken}">
                                 <input type="hidden" name="_method" value="DELETE">
-                                <button type="submit" class="text-red-500 font-medium cursor-pointer">Hapus</button>
+                                ${actionDelete}
                             </form>
                         </div>
                     </td>

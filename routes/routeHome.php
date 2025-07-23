@@ -22,6 +22,7 @@ Route::middleware(['auth', 'role:customer', 'not.suspended'])
             Route::get('/order', [HomeController::class, 'showOrder'])->name('home.order');
             Route::get('/order/{order}/detail', [HomeController::class, 'showDetailOrder'])->name('home.order.detail');
             Route::get('/order/{order}/payment', [HomeController::class, 'showPayment'])->name('home.order.payment');
+            
             Route::get("/transaction/{order}", [HomeController::class, 'showTransaction'])->name('home.transaction');
             Route::get("/transaction/{order}/history", [HomeController::class, 'showTransactionHistory'])->name("home.transaction.history");
     

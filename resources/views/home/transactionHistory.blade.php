@@ -86,9 +86,13 @@
                             <span class="text-gray-600 font-medium">Metode Pembayaran:</span>
                             <span class="text-gray-800">{{ ucwords(str_replace('_', ' ', $order->transactions->payment_type)) }}</span>
                         </div>
+                        <div class="flex justify-between items-center border-b pb-2">
+                            <span class="text-gray-600 font-medium">Penyedia Layanan:</span>
+                            <span class="text-gray-800">{{ ucwords(str_replace('_', ' ', $provider)) }}</span>
+                        </div>
                         <div class="flex justify-between items-center">
                             <span class="text-gray-600 font-medium">Waktu Transaksi:</span>
-                            <span class="text-gray-800">{{ \Carbon\Carbon::parse($order->transactions->transaction_time)->format('d M Y, H:i:s T') }}</span>
+                            <span class="text-gray-800">{{ $transactionTime }}</span>
                         </div>
                     </div>
                 </li>
@@ -126,7 +130,7 @@
                         <h3 class="text-lg font-semibold mb-2">Detail Konfirmasi Pembayaran</h3>
                         <p>Pembayaran telah berhasil dikonfirmasi oleh Midtrans.</p>
                         @if (isset($order->transactions->parsed_raw_response['settlement_time']))
-                        <p><strong>Waktu Konfirmasi:</strong> {{ \Carbon\Carbon::parse($order->transactions->parsed_raw_response['settlement_time'])->format('d M Y, H:i:s T') }}</p>
+                        <p><strong>Waktu Konfirmasi:</strong> {{ $settlementTime }}</p>
                         @endif
                         @if (isset($order->transactions->parsed_raw_response['masked_card']) && $order->transactions->payment_type == 'credit_card')
                         <p><strong>Kartu Kredit:</strong> {{ $order->transactions->parsed_raw_response['masked_card'] }}</p>

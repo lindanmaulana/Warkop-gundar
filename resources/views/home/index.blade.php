@@ -309,19 +309,19 @@
                 </article>
                 <article data-aos="fade-left" data-aos-duration="1000" class="min-w-[200px] md:w-full relative h-[260px] bg-white border-3 border-primary/30 rounded-sm shadow-lg space-y-3">
                     <figure data-aos="fade-left" data-aos-duration="1000" class="rounded-sm overflow-hidden">
-                        <img src="/images/pendiri1.jpg" alt="Pendiri Warkop 1" class="w-full h-full object-cover">
+                        <img src="/images/pendiri2.jpg" alt="Pendiri Warkop 1" class="w-full h-full object-cover">
                     </figure>
-                    <div data-aos="fade-left" data-aos-duration="1000" class="absolute w-[200px] -right-8 bottom-6 bg-pale-peach px-2 py-1 rounded-lg border-2 border-primary/10">
-                        <h3 class="text-base font-medium text-secondary">Tahudin</h3>
+                    <div data-aos="fade-left" data-aos-duration="1000" class="absolute w-[200px] -right-8 top-6 bg-pale-peach px-2 py-1 rounded-lg border-2 border-primary/10">
+                        <h3 class="text-base font-medium text-secondary">Didin Tahudin</h3>
                         <p class="text-sm text-secondary">Bukan sekadar kopi, tapi tempat pulang...</p>
                     </div>
                 </article>
                 <article data-aos="fade-left" data-aos-duration="1000" class="min-w-[200px] md:w-full relative h-[260px] bg-white border-3 border-primary/30 rounded-sm shadow-lg space-y-3">
                     <figure data-aos="fade-left" data-aos-duration="1000" class="rounded-sm overflow-hidden">
-                        <img src="/images/pendiri1.jpg" alt="Pendiri Warkop 1" class="w-full h-full object-cover">
+                        <img src="/images/pendiri3.jpg" alt="Pendiri Warkop 1" class="w-full h-full object-cover">
                     </figure>
                     <div data-aos="fade-left" data-aos-duration="1000" class="absolute w-[200px] -right-8 bottom-6 bg-pale-peach px-2 py-1 rounded-lg border-2 border-primary/10">
-                        <h3 class="text-base font-medium text-secondary">Iyan Rudiansah</h3>
+                        <h3 class="text-base font-medium text-secondary">Dian Rudiansah</h3>
                         <p class="text-sm text-secondary">Ngopi tenang, layani sepenuh hati...</p>
                     </div>
                 </article>

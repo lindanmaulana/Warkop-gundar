@@ -76,7 +76,6 @@
                 <th class="font-medium py-4">Lokasi Antar</th>
                 <th class="font-medium py-4">Total</th>
                 <th class="font-medium py-4">Status</th>
-                <th class="font-medium py-4">Deskripsi</th>
                 <th class="font-medium py-4">Waktu</th>
             </thead>
             @if($latestOrdersData->isNotEmpty())
@@ -103,7 +102,6 @@
                     <p class="text-sm rounded px-2 py-1 text-center bg-red-800 text-white">Cancelled</p>
                     @endif
                 </td>
-                <td class="text-gray-500 px-2 py-3 line-clamp-1 truncate max-w-[160px]">{{ $order->description }} </td>
                 <td class="text-gray-500">
                     <?php if ($order->created_at): ?>
                         {{ $order->created_at->format('d M Y H:i') }}

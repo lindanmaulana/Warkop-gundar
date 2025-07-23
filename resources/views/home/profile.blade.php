@@ -15,9 +15,18 @@
                 </h2>
                 <p class="text-secondary/80 max-w-80">Masukkan informasi yang valid agar proses pesanan lebih mudah</p>
             </div>
+
+            @if(session('success'))
+            <div id="alert-success" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+                <p class="text-green-700 ">
+                    <strong class="bold">Success!</strong> {{session('success')}}
+                </p>
+            </div>
+            @endif
+            
             <div class="flex items-center gap-2">
                 @if(!$user->is_email_verified)
-                    <a href="{{ route('auth.otp') }}" class="text-sm text-red-500 border border-red-500 rounded px-2 py-1 hover:bg-red-500 hover:text-white hover:border-none transition-global">Verifikasi</a>
+                <a href="{{ route('auth.otp') }}" class="text-sm text-red-500 border border-red-500 rounded px-2 py-1 hover:bg-red-500 hover:text-white hover:border-none transition-global">Verifikasi</a>
                 @endif
                 <a href="{{ route('home') }}" class="hidden md:block bg-secondary px-4 py-1 text-white rounded">Kembali</a>
             </div>

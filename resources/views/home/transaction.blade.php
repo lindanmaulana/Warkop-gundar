@@ -81,6 +81,7 @@
 
 
 @section('script')
+@parent
 <script src="https://app.sandbox.midtrans.com/snap/snap.js"
     data-client-key="{{ config('midtrans.client_key') }}" onload="console.log('Snap.js berhasil dimuat!');">
 </script>

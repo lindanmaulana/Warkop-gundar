@@ -148,6 +148,9 @@ class HomeController extends Controller
     public function showTransactionHistory(Order $order)
     {
         $order->load("transactions", 'user');
+        $provider = "Unknow";
+        $transactionTime = "N/A";
+        $settlementTime = "N/A";
 
         if ($order->transactions) {
             if ($order->transactions->raw_response) {
@@ -155,11 +158,39 @@ class HomeController extends Controller
             } else {
                 $order->transactions->parsed_raw_response = [];
             }
+
+            switch ($order->transactions->payment_type) {
+                case "bank_transfer":
+                    if (isset($order->transactions->parsed_raw_response['va_numbers'])) {
+                        $provider = $order->transactions->parsed_raw_response['va_numbers'][0]['bank'];
+                    } elseif (isset($order->transactions->parsed_raw_response['permata_va_number'])) {
+                        $provider = 'Permata';
+                    }
+                    break;
+                case "qris":
+                    $provider = $order->transactions->parsed_raw_response['issuer'];
+                    break;
+                default:
+                    $provider = "Unknow";
+            }
+
+
+            if ($order->transactions->transaction_time) {
+                $transactionTime = Carbon::parse($order->transactions->transaction_time)
+                    ->setTimezone('Asia/Jakarta')
+                    ->format('d M Y, H:i:s') . ' WIB';
+            }
+
+            if (isset($order->transactions->parsed_raw_response['settlement_time'])) {
+                $settlementTime = Carbon::parse($order->transactions->parsed_raw_response['settlement_time'])
+                    ->setTimezone('Asia/Jakarta')
+                    ->format('d M Y, H:i:s') . ' WIB';
+            }
         } else {
             return redirect()->route("home.order")->with("error", "Pembayaran di batalkan.");
         }
 
-        return view("/home/transactionHistory", compact("order"));
+        return view("/home/transactionHistory", compact("order", "provider", "transactionTime", "settlementTime"));
     }
 
     public function createOrder(Request $request)
@@ -257,7 +288,7 @@ class HomeController extends Controller
 
         $user->update($userValidated);
 
-        return redirect()->route('home.profile')->with('message', 'Profile berhasil di perbarui.');
+        return redirect()->route('home.profile')->with('success', 'Profile berhasil di perbarui.');
     }
 
     public function cancelOrder(Order $order)

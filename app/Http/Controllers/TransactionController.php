@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Transaction;
 use App\Services\OrderServices;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -69,13 +70,37 @@ class TransactionController extends Controller
     {
         $transaction->load('order.user');
 
-        if ($transaction->raw_response) {
-            $transaction->parsed_raw_response = json_decode($transaction->raw_response, true);
-        } else {
-            $transaction->parsed_raw_response = [];
-        }
+        $transactionTime = "N/A";
+        $expiryTime = "N/A";
+        $settlementTime = "N/A";
 
-        return view("/dashboard/transaction/detail", compact("transaction"));
+        if ($transaction) {
+            if ($transaction->raw_response) {
+                $transaction->parsed_raw_response = json_decode($transaction->raw_response, true);
+            } else {
+                $transaction->parsed_raw_response = [];
+            }
+
+            if ($transaction->transaction_time) {
+                $transactionTime = Carbon::parse($transaction->transaction_time)
+                    ->setTimezone('Asia/Jakarta')
+                    ->format('d M Y, H:i:s') . ' WIB';
+            }
+
+            if (isset($transaction->parsed_raw_response['expiry_time'])) {
+                $expiryTime = Carbon::parse($transaction->parsed_raw_response['expiry_time'])
+                    ->setTimezone('Asia/Jakarta')
+                    ->format('d M Y, H:i:s') . ' WIB';
+            }
+
+            if (isset($transaction->parsed_raw_response['settlement_time'])) {
+                $settlementTime = Carbon::parse($transaction->parsed_raw_response['settlement_time'])
+                    ->setTimezone('Asia/Jakarta')
+                    ->format('d M Y, H:i:s') . ' WIB';
+            }
+        };
+
+        return view("/dashboard/transaction/detail", compact("transaction", "transactionTime", "expiryTime", "settlementTime"));
     }
 
     /**

@@ -26,10 +26,11 @@
         <table class="w-full text-left rounded-md overflow-hidden">
             <thead class="*:text-gray-400  *:border-b *:border-dark-blue/10">
                 <th class="font-normal py-2 px-6">No</th>
-                <th class="font-normal p-2">Midtrans Id</th>
+                <th class="font-normal p-2">Midtrans OrderId</th>
                 <th class="font-normal p-2">jenis Pembayaran</th>
                 <th class="font-normal p-2">Total Price</th>
                 <th class="font-normal p-2">Penyedia</th>
+                <th class="font-normal p-2">Status</th>
                 <th class="font-normal p-2">Tanggal Transaksi</th>
                 <th class="font-normal p-2 text-center">Aksi</th>
             </thead>
@@ -81,6 +82,7 @@
 
             const pages = result.data.links
             const data = result.data.data
+
             showFilterPage(pages)
             showTransactionList(data)
 
@@ -99,30 +101,67 @@
         const row = dataTransaction.length > 0 ? dataTransaction.map((transaction, index) => {
             let provider = ''
             let totalPrice;
+            let transactionStatus = ""
 
             const rawResponse = JSON.parse(transaction.raw_response);
+
             totalPrice = Intl.NumberFormat("id-ID", {
                 currency: "IDR",
                 style: "currency",
                 maximumFractionDigits: 0
             }).format(Number(transaction.gross_amount))
+        
 
             switch (transaction.payment_type) {
                 case "bank_transfer":
-                    provider = rawResponse.va_numbers[0].bank
+                    if(rawResponse.va_numbers) {
+                        provider = rawResponse.va_numbers[0].bank;
+
+                    } else if(rawResponse.permata_va_number) {
+                        provider = "Permata";
+
+                    } else {
+                        provider = rawResponse.va_numbers
+                    }
                     break
+                case "qris":
+                    rawResponse.transaction_status == "pending" ? provider = "-" : provider = rawResponse.issuer;
+                break;
                 default:
-                    provider = rawResponse.issuer
+                    provider = rawResponse.transaction_status
             }
+
+
+            switch(transaction.transaction_status) {
+                case "pending":
+                    transactionStatus = "pending"
+                break;
+                case "settlement":
+                    transactionStatus = "Lunas"
+                break;
+                case "deny":
+                    transactionStatus = "Ditolak"
+                break;
+                case "expire":
+                    transactionStatus = "Kedaluarsa"
+                break;
+                case "cancel":
+                    transactionStatus = "Dibatalkan"
+                break;
+                default:
+                    transactionStatus = "Dikembalikan"
+            }
+
 
             return (
                 `
                  <tr class="hover:bg-dark-blue/20 divide-y divide-gray-200 text-gray-800 *:text-sm *:font-medium">
                     <td class="py-4 px-6">${index += 1}</td>
-                    <td class="px-2 py-4 text-dark-blue">${transaction.midtrans_transaction_id}</td>
+                    <td class="px-2 py-4 text-dark-blue">${transaction.midtrans_order_id}</td>
                     <td class="px-2 py-4 text-dark-blue">${ transaction.payment_type }</td>
                     <td class="px-2 py-4 text-dark-blue">${totalPrice}</td>
                     <td class="px-2 py-4 text-dark-blue uppercase">${provider}</td>
+                    <td class="px-2 py-4 text-dark-blue uppercase">${transactionStatus}</td>
                     <td class="px-2 py-4 text-dark-blue">${ transaction.transaction_time }</td>
                     <td class=" py-4 px-6">
                         <a href="/dashboard/transactions/${transaction.id}/detail" class="text-green-500 font-medium cursor-pointer">Detail</a>

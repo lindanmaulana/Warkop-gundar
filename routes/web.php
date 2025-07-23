@@ -21,11 +21,12 @@ Route::get('/dev/otp', function () {
     return view('components/');
 });
 
-Route::middleware("guest")
+Route::middleware(["guest"])
     ->prefix('/auth')
     ->group(function () {
         Route::get("/login", [AuthController::class, 'showLoginForm'])->name('auth.login');
         Route::get("/register", [AuthController::class, 'showRegisterForm'])->name('auth.register');
+        
         Route::post("/login", [AuthController::class, 'login'])->name('auth.login');
         Route::post("/register", [AuthController::class, 'register'])->name('auth.register');
     });

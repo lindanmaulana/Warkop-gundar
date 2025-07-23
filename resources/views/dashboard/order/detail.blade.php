@@ -95,7 +95,12 @@
                         if(isset($parsedData['va_numbers'][0])) $penyediaLayanan = $parsedData['va_numbers'][0]['bank'];
                         break;
                         case "qris":
-                            $penyediaLayanan = $parsedData['issuer'];
+                            if($order->transactions->transaction_status == "pending") {
+                                $penyediaLayanan = "--";
+                            } else {
+                                $penyediaLayanan = $parsedData['issuer'];
+                            }
+                        break;
                         default:
                             $penyediaLayanan = "";
                         }

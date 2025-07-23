@@ -23,12 +23,9 @@ class DashboardController extends Controller
         $totalRevenue = Transaction::where('transaction_status', 'settlement')->sum('gross_amount');
 
         $totalOrderPending = Order::whereIn('status', ['pending', 'processing'])->count();
-        $latestOrdersData = collect();
-
+        
         $totalOrderByCustomer = 0;
-        if ($user->role === UserRole::Admin) {
-            $latestOrdersData = Order::with('orderItems.product')->latest()->take(3)->get();
-        }
+        $latestOrdersData = Order::with('orderItems.product')->latest()->take(3)->get();
 
         return view('dashboard.index', compact('totalProducts', 'totalOrders', 'totalTransactions', 'totalRevenue' ,'totalOrderPending', 'latestOrdersData', 'totalOrderByCustomer'));
     }

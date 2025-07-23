@@ -73,7 +73,7 @@
                         @endif
                     </ul>
                     @if($order->transactions)
-                    <ul id="detail-transaction" class="h-full overflow-hidden">
+                    <ul id="detail-transaction" class="h-0 overflow-hidden">
                         <li>
                             <div class="text-center mb-8">
                                 @php
@@ -170,10 +170,6 @@
                                     @endif
                                     @endforeach
                                     @endif
-                                    @endif
-
-                                    @if (isset($order->transactions->parsed_raw_response['expiry_time']))
-                                    <p class="mt-4"><strong>Batas Waktu Pembayaran:</strong> <span class="font-semibold text-red-600">{{ $expiryTime }}</span></p>
                                     @endif
                                     <p class="text-sm italic mt-2">Pastikan jumlah yang ditransfer/dibayar sesuai dengan Total Pembayaran.</p>
                                 </div>

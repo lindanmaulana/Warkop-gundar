@@ -78,12 +78,16 @@ class AuthController extends Controller
                 return redirect()->route('auth.login')->with("error", "Tidak dapat login!, Akun telah ditangguhkan silahkan hubungi admin.");
             }
 
-            if ($user->role === UserRole::Admin) {
+            if ($user->role == UserRole::Admin || $user->role == UserRole::Superadmin) {
                 return redirect()->route("dashboard");
-            } else if ($user->role === UserRole::Customer) {
+            } elseif ($user->role == UserRole::Customer) {
                 return redirect()->route("home");
             } else {
-                return redirect()->route("dashboard");
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return redirect()->route("auth.login");
             }
         }
 

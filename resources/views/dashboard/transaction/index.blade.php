@@ -11,6 +11,15 @@
 <div class="space-y-4">
     <div class="p-2 flex items-center justify-between">
         <h2 class="text-xl font-semibold text-primary">Daftar Transaksi</h2>
+
+        <div>
+            <select name="status" id="filter-status" class="bg-secondary text-white px-2 rounded py-1">
+
+            </select>
+            <select name="status" id="filter-payment-type" class="bg-secondary text-white px-2 rounded py-1">
+
+            </select>
+        </div>
     </div>
 
     @if(session('success'))
@@ -57,7 +66,33 @@
 <script>
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const urlParams = new URLSearchParams(window.location.search)
+    const filterStatus = document.getElementById("filter-status")
+    const filterPaymentType = document.getElementById("filter-payment-type")
+
     const dataFilterLimit = [5, 10, 15, 20]
+    const dataFilterStatus = [
+        {status: "pending", value: "pending"}, 
+        {status: "lunas", value: "settlement"}, 
+        {status: "ditolak", value: "deny"}, 
+        {status: "kedaluarsa", value: "expire"}, 
+        {status: "refund", value: "refund"}, 
+        {status: "chargeback", value: "chargeback"}]
+    const dataFilterPaymentType = ['bank_transfer', 'qris']
+
+    filterStatus.addEventListener("change", function() {
+        const value = this.value
+
+        switch(value) {
+            case "": 
+                urlParams.delete("status")
+            break;
+            default:
+                urlParams.set("status", value)
+        }
+
+        updateURL()
+        loadDataTransaction()
+    })
 
     document.getElementById("filter-limit").addEventListener("change", function() {
         const value = this.value
@@ -94,6 +129,26 @@
         }
     }
 
+    const showFilterStatus = () => {
+        filterStatus.innerHTML = ""
+
+        const row = dataFilterStatus.map(filter => {
+
+            return (
+                `
+                <option value="${filter.value}">${filter.status}</option>
+                `
+            )
+        }).join(" ")
+
+        const rows = `
+            <option value="">All</option>
+            ${row}
+        `
+
+        filterStatus.innerHTML = rows;
+    }
+
     const showTransactionList = (dataTransaction) => {
         const bodyTransaction = document.getElementById("body-transaction")
         bodyTransaction.innerHTML = ""
@@ -110,14 +165,14 @@
                 style: "currency",
                 maximumFractionDigits: 0
             }).format(Number(transaction.gross_amount))
-        
+
 
             switch (transaction.payment_type) {
                 case "bank_transfer":
-                    if(rawResponse.va_numbers) {
+                    if (rawResponse.va_numbers) {
                         provider = rawResponse.va_numbers[0].bank;
 
-                    } else if(rawResponse.permata_va_number) {
+                    } else if (rawResponse.permata_va_number) {
                         provider = "Permata";
 
                     } else {
@@ -126,28 +181,28 @@
                     break
                 case "qris":
                     rawResponse.transaction_status == "pending" ? provider = "-" : provider = rawResponse.issuer;
-                break;
+                    break;
                 default:
                     provider = rawResponse.transaction_status
             }
 
 
-            switch(transaction.transaction_status) {
+            switch (transaction.transaction_status) {
                 case "pending":
                     transactionStatus = "pending"
-                break;
+                    break;
                 case "settlement":
                     transactionStatus = "Lunas"
-                break;
+                    break;
                 case "deny":
                     transactionStatus = "Ditolak"
-                break;
+                    break;
                 case "expire":
                     transactionStatus = "Kedaluarsa"
-                break;
+                    break;
                 case "cancel":
                     transactionStatus = "Dibatalkan"
-                break;
+                    break;
                 default:
                     transactionStatus = "Dikembalikan"
             }
@@ -173,9 +228,9 @@
         }).join(" ") : (
             `
             <tr>
-            <td colspan="4" class="text-center py-4 text-red-500">
-            <p class="flex items-center justify-center gap-2"><x-icon name="package-open" /> Data Category tidak tersedia.</p>
-            </td>
+                <td colspan="8" class="text-center py-4 text-red-500">
+                <p class="flex items-center justify-center gap-2"><x-icon name="package-open" /> Data Transaksi tidak tersedia.</p>
+                </td>
             </tr>
             `
         )
@@ -243,6 +298,7 @@
     }
 
     loadDataTransaction()
+    showFilterStatus()
     showFilterLimit()
 </script>
 @endsection

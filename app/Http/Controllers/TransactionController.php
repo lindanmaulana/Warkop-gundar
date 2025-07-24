@@ -36,9 +36,14 @@ class TransactionController extends Controller
         $queryLimit = $request->query("limit");
         $limit = max(1, (int)$queryLimit);
 
-        if ($limit > 5) $limit = 5;
+        $queryStatus = $request->query("status");
 
-        $transactions = Transaction::paginate($limit);
+        if ($limit > 20) $limit = 5;
+
+        $transactions = Transaction::when($queryStatus, function($query) use ($queryStatus) {
+            $query->where("transaction_status", $queryStatus);
+        })
+        ->paginate($limit);
 
 
         return response()->json([

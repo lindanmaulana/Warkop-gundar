@@ -78,6 +78,10 @@ class AuthController extends Controller
                 return redirect()->route('auth.login')->with("error", "Tidak dapat login!, Akun telah ditangguhkan silahkan hubungi admin.");
             }
 
+            if(!$user->is_email_verified && $user->role == UserRole::Admin) {
+                return redirect()->route("auth.otp")->with("error", "Email anda belum terverifikasi, Harap verifikasi dulu");
+            }
+
             if ($user->role == UserRole::Admin || $user->role == UserRole::Superadmin) {
                 return redirect()->route("dashboard");
             } elseif ($user->role == UserRole::Customer) {

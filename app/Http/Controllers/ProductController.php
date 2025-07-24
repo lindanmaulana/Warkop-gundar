@@ -23,7 +23,7 @@ class ProductController extends Controller
     public function getAllProduct(Request $request)
     {
         $queryKeyword = $request->query("keyword");
-        $queryCategoryId = $request->query('category');
+        $queryCategory = $request->query('category');
         $queryPage = $request->query("page");
         $queryLimit = $request->query("limit");
 
@@ -34,8 +34,10 @@ class ProductController extends Controller
         
         $products = Product::with('category')
                         ->latest()
-                        ->when($queryCategoryId, function($query) use($queryCategoryId) {
-                            $query->where('category_id', $queryCategoryId);
+                        ->when($queryCategory, function($query) use($queryCategory) {
+                            $query->whereHas('category', function($q) use ($queryCategory) {
+                                $q->where('name', 'like', "%{$queryCategory}%");
+                            });
                         })
                         ->when($queryKeyword, function($query) use($queryKeyword) {
                             $query->where("name", "like", "%{$queryKeyword}%");

@@ -20,7 +20,7 @@
         @csrf
         <input type="hidden" id="user-id" name="user_id" value="{{ Auth::user()->id}}">
         <input type="hidden" name="otp" id="otp-hidden">
-        <div class="w-[54%] grid grid-cols-4 gap-2 place-self-center *:text-center">
+        <div class="w-[54%] grid grid-cols-4 text-white gap-2 place-self-center *:text-center">
             <input type="text" maxlength="1" class="otp-box border border-gray-300 size-9 rounded">
             <input type="text" maxlength="1" class="otp-box border border-gray-300 size-9 rounded">
             <input type="text" maxlength="1" class="otp-box border border-gray-300 size-9 rounded">

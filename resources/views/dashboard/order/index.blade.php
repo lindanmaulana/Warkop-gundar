@@ -87,6 +87,7 @@ $isAdmin = Auth::user()->role->value == "admin"
                 break;
             default:
                 urlParams.set("keyword", value)
+                urlParams.set("page", 1)
                 break
         }
 
@@ -103,6 +104,7 @@ $isAdmin = Auth::user()->role->value == "admin"
                 break;
             default:
                 urlParams.set("status", value)
+                urlParams.set("page", 1)
         }
 
         updateURL()
@@ -118,6 +120,7 @@ $isAdmin = Auth::user()->role->value == "admin"
                 break;
             default:
                 urlParams.set("date", value)
+                urlParams.set("page", 1)
         }
 
         showBtnReset()

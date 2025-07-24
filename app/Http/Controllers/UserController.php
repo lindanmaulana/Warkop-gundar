@@ -77,6 +77,8 @@ class UserController extends Controller
 
         if ($userLogin->role != UserRole::Superadmin) return redirect()->route("dashboard.users", ['page' => 1, 'limit' => 5])->with("error", "Unauthorized");
 
+        if(!$user->is_email_verified) return redirect()->route("dashboard.users", ["page" => 1, "limit" => 5])->with("error", "Akun belum verifikasi email.");
+
         $validatedData = $request->validate([
             'role' => ['required', new Enum(UserRole::class)]
         ]);

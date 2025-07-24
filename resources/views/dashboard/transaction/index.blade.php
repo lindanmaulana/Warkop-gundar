@@ -74,6 +74,7 @@
     const filterDate = document.getElementById("filter-date")
     const btnReset = document.getElementById("btn-reset")
 
+
     const dataFilterLimit = [5, 10, 15, 20]
     const dataFilterStatus = [{
             status: "pending",
@@ -112,6 +113,7 @@
                 break;
             default:
                 urlParams.set("status", value)
+                urlParams.set("page", 1)
         }
 
         updateURL()
@@ -127,6 +129,7 @@
                 break;
             default:
                 urlParams.set("payment-type", value)
+                urlParams.set("page", 1)
         }
 
         updateURL()
@@ -142,6 +145,7 @@
                 break;
             default:
                 urlParams.set("date", value)
+                urlParams.set("page", 1)
         }
 
         showBtnReset()
@@ -195,12 +199,13 @@
 
     const showFilterStatus = () => {
         filterStatus.innerHTML = ""
+        const params = new URLSearchParams(window.location.search)
+        const isParamsStatus = params.get("status") ? params.get("status").toString() : ""
 
         const row = dataFilterStatus.map(filter => {
-
             return (
                 `
-                <option value="${filter.value}">${filter.status}</option>
+                <option value="${filter.value}" ${isParamsStatus === filter.value ? "selected" : ""}>${filter.status}</option>
                 `
             )
         }).join(" ")

@@ -102,6 +102,7 @@
                 break;
             default:
                 urlParams.set("keyword", value)
+                urlParams.set("page", 1)
                 break
         }
 
@@ -126,6 +127,7 @@
             updateURL();
         } else {
             urlParams.set("category", value)
+            urlParams.set("page", 1)
         }
 
         updateURL()
@@ -242,7 +244,7 @@
 
         const list = dataCategory.map(category => (
             `
-                <option value="${category.id}" ${category.id == categoryParams ? "selected" : ""}  >${category.name}</option>
+                <option value="${category.name}" ${category.id == categoryParams ? "selected" : ""}  >${category.name}</option>
             `
         )).join("")
 

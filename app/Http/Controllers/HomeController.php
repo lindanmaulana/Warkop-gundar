@@ -393,6 +393,7 @@ class HomeController extends Controller
         $queryPage = $request->query("page");
         $queryLimit = $request->query("limit");
         $queryKeyword = $request->query("keyword");
+        $queryCategory = $request->query("category");
 
         $limit = max(1, (int)$queryLimit);
 
@@ -402,6 +403,11 @@ class HomeController extends Controller
             ->where('stock', '>', 0)
             ->when($queryKeyword, function ($query) use ($queryKeyword) {
                 $query->where("name", "like", "%{$queryKeyword}%");
+            })
+            ->when($queryCategory, function ($query) use ($queryCategory) {
+                $query->whereHas('category', function ($q) use ($queryCategory) {
+                    $q->where('name', 'like', "%{$queryCategory}%");
+                });
             })
             ->paginate($limit);
 

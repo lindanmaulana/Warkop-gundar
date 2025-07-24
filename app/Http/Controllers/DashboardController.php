@@ -10,6 +10,7 @@ use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Transaction;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -20,7 +21,9 @@ class DashboardController extends Controller
         $totalProducts = Product::count();
         $totalOrders = Order::count();
         $totalTransactions = Transaction::count();
-        $totalRevenue = Transaction::where('transaction_status', 'settlement')->sum('gross_amount');
+        $totalRevenue = Transaction::where('transaction_status', 'settlement')
+                                    ->whereDate('transaction_time', Carbon::today())
+                                    ->sum('gross_amount');
 
         $totalOrderPending = Order::whereIn('status', ['pending', 'processing'])->count();
         

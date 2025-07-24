@@ -48,9 +48,14 @@
 
 <section class="my-20">
     <div class="container max-w-6xl mx-auto space-y-4 px-4 md:px-">
-        <h2 class="text-secondary text-3xl lg:text-5xl font-semibold text-center tracking-widest">MENU TERSEDIA</h2>
-        <div class="flex items-center justify-end">
-            <input id="filter-search" type="text" placeholder="cari..." class="border border-secondary/40 rounded-lg px-4 py-1">
+        <div class="flex items-center justify-between">
+            <h2 class="text-secondary text-3xl lg:text-5xl font-semibold text-center tracking-widest">MENU TERSEDIA</h2>
+            <div class="flex items-center gap-3">
+                <select name="filter-category" id="filter-category" class="bg-primary rounded px-2 py-1 text-white">
+
+                </select>
+                <input id="filter-search" type="text" placeholder="cari..." class="border border-secondary/40 rounded-lg px-4 py-1">
+            </div>
         </div>
         <article id="menu-list" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-2 gap-y-4">
 
@@ -77,6 +82,7 @@
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
     let urlParams = new URLSearchParams(window.location.search)
+    const filterCategory = document.getElementById("filter-category")
 
     const dataFilterLimit = [5, 10, 15, 20]
 
@@ -89,6 +95,22 @@
         };
     }
 
+    filterCategory.addEventListener("change", function() {
+        const value = this.value
+
+        switch(value) {
+            case "": 
+                urlParams.delete("category")
+            break;
+            default:
+                urlParams.set("category", value)
+                urlParams.set("page", 1)
+        }
+
+        updateURL()
+        loadDataProduct()
+    })
+
     const filterSearch = document.getElementById("filter-search")
     filterSearch.defaultValue = urlParams.get("keyword") ? urlParams.get("keyword").toString() : ""
     filterSearch.addEventListener("input", debounce(function() {
@@ -100,6 +122,7 @@
                 break
             default:
                 urlParams.set("keyword", value)
+                urlParams.set("page", 1)
                 break
         }
 
@@ -155,6 +178,25 @@
         } catch (err) {
             console.log({
                 err
+            })
+        }
+    }
+
+    const loadDataCategory = async () => {
+        try {
+            const response = await fetch('/api/v1/categories', {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": csrfToken
+                }
+            })
+
+            const result = await response.json()
+            showFilterCategory(result.data)
+        } catch (err) {
+            alert({
+                error: `terjadi kesalahan di get data categories ${err}`
             })
         }
     }
@@ -258,6 +300,23 @@
         filterPage.innerHTML = buttonPagination
     }
 
+    const showFilterCategory = (dataCategory) => {
+        filterCategory.innerHTML = ""
+
+        const row = dataCategory.map(category => (
+            `
+            <option value="${category.name}">${category.name}</option>
+            `
+        )).join(" ")
+
+        const rows = `
+            <option value="">All</option>
+            ${row}
+        `
+
+        filterCategory.innerHTML = rows
+    }
+
     const handleFilterPage = (url) => {
         const urlObj = new URL(url)
         const params = new URLSearchParams(urlObj.search)
@@ -306,5 +365,6 @@
 
     showFilterLimit()
     loadDataProduct()
+    loadDataCategory()
 </script>
 @endsection

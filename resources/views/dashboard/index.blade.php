@@ -30,7 +30,7 @@
                 <x-icon name="trending-up" class="text-[#1D4ED8]" />
             </div>
             <div>
-                <h3 class="text-dark-blue/80 font-semibold text-sm">Total Pendapatan</h3>
+                <h3 class="text-dark-blue/80 font-semibold text-sm">Total Hari Ini</h3>
                 <p class="text-xl font-bold text-dark-blue ">Rp{{ number_format($totalRevenue, 0, ',', '.') }}</p>
             </div>
         </div>

@@ -87,6 +87,7 @@
                 break;
             default:
                 urlParams.set("keyword", value)
+                urlParams.set("page", 1)
                 break
         }
 

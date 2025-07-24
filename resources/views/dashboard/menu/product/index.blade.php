@@ -244,7 +244,7 @@
 
         const list = dataCategory.map(category => (
             `
-                <option value="${category.name}" ${category.id == categoryParams ? "selected" : ""}  >${category.name}</option>
+                <option value="${category.name}" ${category.name == categoryParams ? "selected" : ""}  >${category.name}</option>
             `
         )).join("")
 

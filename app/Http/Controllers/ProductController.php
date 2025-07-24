@@ -83,8 +83,8 @@ class ProductController extends Controller
             'name' => 'required|string|max:150',
             'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'description' => 'nullable|string',
-            'price' => 'nullable|numeric|min:0',
-            'stock' => 'nullable|numeric|min:0'
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|numeric|min:0'
         ]);
 
         $imagePath = null;

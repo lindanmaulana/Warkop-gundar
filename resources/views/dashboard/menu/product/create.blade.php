@@ -41,18 +41,18 @@
                         <label for="price" class="flex flex-col gap-3">
                             <span class="text-dark-blue font-semibold">Harga:</span>
                             <input type="number" id="price" name="price" placeholder="80xxx" class="w-full border border-dark-blue/20 px-4 py-2 rounded">
+                            @error('price')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            @enderror
                         </label>
-                        @error('price')
-                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
-                        @enderror
 
                         <label for="stock" class="flex flex-col gap-3">
                             <span class="text-dark-blue font-semibold">Stock:</span>
                             <input type="number" id="stock" name="stock" placeholder="4xxx" class="w-full border border-dark-blue/20 px-4 py-2 rounded">
+                            @error('stock')
+                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                            @enderror
                         </label>
-                        @error('stock')
-                        <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
-                        @enderror
                     </div>
 
                     <label for="description" class="flex flex-col gap-3 rounded-md">

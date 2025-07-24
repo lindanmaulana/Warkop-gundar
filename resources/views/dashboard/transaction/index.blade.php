@@ -219,12 +219,15 @@
     }
 
     const showFilterPaymentType = () => {
+        const params = new URLSearchParams(window.location.search)
         filterPaymentType.innerHTML = ""
+
+        const isPaymentType = params.get("payment-type") ? params.get("payment-type").toString() : ""
 
         const row = dataFilterPaymentType.map(type => {
             return (
                 `
-                <option value="${type}">${type}</option>
+                <option value="${type}" ${isPaymentType === type ? "selected" : ""}>${type}</option>
                 `
             )
         }).join(" ")

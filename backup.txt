@@ -990,3 +990,24 @@ return new class extends Migration
     loadDataProduct()
 </script>
 @endsection
+
+
+//category destroy
+   public function destroy(Category $category)
+    {
+        Category::destroy($category->id);
+
+        $productsInThisCategory = $category->products;
+
+        foreach ($productsInThisCategory as $product) {
+            if ($product->image_url && Storage::disk('public')->exists($product->image_url)) {
+                Storage::disk('public')->delete($product->image_url);
+                // Log untuk debugging:
+                Log::info('Deleted product image: ' . $product->image_url . ' for product ID: ' . $product->id);
+            }
+        }
+
+        $category->delete(); 
+
+        return redirect()->route('dashboard.categories')->with('success', 'Kategori berhasil di hapus.');
+    }

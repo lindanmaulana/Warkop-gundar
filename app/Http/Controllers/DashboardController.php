@@ -25,10 +25,10 @@ class DashboardController extends Controller
                                     ->whereDate('transaction_time', Carbon::today())
                                     ->sum('gross_amount');
 
-        $totalOrderPending = Order::whereIn('status', ['pending', 'processing'])->count();
+        $totalOrderPending = Order::whereIn('status', ['pending', 'processing'])->whereDate('created_at', Carbon::today())->count();
         
         $totalOrderByCustomer = 0;
-        $latestOrdersData = Order::with('orderItems.product')->latest()->take(3)->get();
+        $latestOrdersData = Order::with('orderItems.product')->whereDate("created_at", Carbon::today())->take(5)->get();
 
         return view('dashboard.index', compact('totalProducts', 'totalOrders', 'totalTransactions', 'totalRevenue' ,'totalOrderPending', 'latestOrdersData', 'totalOrderByCustomer'));
     }

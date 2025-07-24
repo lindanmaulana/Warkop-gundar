@@ -18,7 +18,7 @@ $isAdmin = Auth::user()->role->value == "admin"
             <select name="status" id="filter-status" class="bg-secondary text-white px-2 rounded py-1">
 
             </select>
-            <input id="filter-search" type="text" placeholder="Cari..." class="border border-dark-blue/20 rounded-lg px-4 py-1">
+            <input id="filter-search" type="text" placeholder="Cari Nama..." class="border border-dark-blue/20 rounded-lg px-4 py-1">
             <input id="filter-date" type="date" placeholder="Tanggal Transaksi" class="border border-secondary/20 text-secondary px-2 rounded py-1">
             <button id="btn-reset" class="hidden bg-red-500 text-sm px-2 py-1 rounded text-white">Reset</button>
         </div>
@@ -59,9 +59,11 @@ $isAdmin = Auth::user()->role->value == "admin"
 <script>
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const urlParams = new URLSearchParams(window.location.search)
+
     const filterStatus = document.getElementById("filter-status")
     const filterSearch = document.getElementById("filter-search")
     const filterDate = document.getElementById("filter-date")
+    const filterLimit = document.getElementById("filter-limit")
     const btnReset = document.getElementById("btn-reset")
 
     const dataFilterLimit = [5, 10, 15, 20]
@@ -137,7 +139,7 @@ $isAdmin = Auth::user()->role->value == "admin"
         loadDataOrder()
     })
 
-    document.getElementById("filter-limit").addEventListener("change", function() {
+    filterLimit.addEventListener("change", function() {
         const value = this.value
         urlParams.set("limit", value)
         urlParams.set("page", 1)
@@ -367,6 +369,7 @@ $isAdmin = Auth::user()->role->value == "admin"
     showFilterLimit()
     showFilterStatus()
     showBtnReset()
+    showFilterDate()
     loadDataOrder()
 </script>
 @endsection

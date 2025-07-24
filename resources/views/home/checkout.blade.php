@@ -34,8 +34,8 @@
                                 <span class="text-secondary text-sm font-medium">Lokasi Warkop:</span>
                                 <select name="branch" id="branch" class="w-full border border-gray-300 text-gray-800 px-4 py-2 rounded-lg bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200">
                                     <option value="wg-sudirman">WG-Sudirman</option>
-                                    <option value="wg-tebet">WG-Tebet</option>
-                                    <option value="wg-depok">WG-Depok</option>
+                                    <option value="wg-tebet" disabled>WG-Tebet</option>
+                                    <option value="wg-depok" disabled>WG-Depok</option>
                                 </select>
                             </label>
 

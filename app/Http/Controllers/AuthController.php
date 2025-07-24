@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
@@ -98,6 +99,27 @@ class AuthController extends Controller
         return back()->withErrors([
             'email' => 'Invalid Credentials'
         ])->onlyInput('email');
+    }
+
+    public function updatePassword(Request $request) {
+        $request->validate([
+            "current_password" => ['required', 'string'],
+            'new_password' => ["required", "string", "min:8", "confirmed"]
+        ]);
+
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        if(!Hash::check($request->current_password, $user->password)) {
+            throw ValidationException::withMessages([
+                'current_password' => ['Password lama yang Anda masukkan salah.'],
+            ]);
+        }
+
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return back()->with("success", "Password anda berhasil di ubah.");
     }
 
     public function logout(Request $request)

@@ -19,6 +19,8 @@
             <select name="status" id="filter-payment-type" class="bg-secondary text-white px-2 rounded py-1">
 
             </select>
+            <input id="filter-date" type="date" placeholder="Tanggal Transaksi" class="border border-secondary text-secondary px-2 rounded py-1">
+            <button id="btn-reset" class="hidden bg-red-500 text-sm px-2 py-1 rounded text-white">Reset</button>
         </div>
     </div>
 
@@ -66,26 +68,56 @@
 <script>
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const urlParams = new URLSearchParams(window.location.search)
+    const filterLimit = document.getElementById("filter-limit")
     const filterStatus = document.getElementById("filter-status")
     const filterPaymentType = document.getElementById("filter-payment-type")
+    const filterDate = document.getElementById("filter-date")
+    const btnReset = document.getElementById("btn-reset")
 
     const dataFilterLimit = [5, 10, 15, 20]
-    const dataFilterStatus = [
-        {status: "pending", value: "pending"}, 
-        {status: "lunas", value: "settlement"}, 
-        {status: "ditolak", value: "deny"}, 
-        {status: "kedaluarsa", value: "expire"}, 
-        {status: "refund", value: "refund"}, 
-        {status: "chargeback", value: "chargeback"}]
+    const dataFilterStatus = [{
+            status: "pending",
+            value: "pending"
+        },
+        {
+            status: "lunas",
+            value: "settlement"
+        },
+        {
+            status: "ditolak",
+            value: "deny"
+        },
+        {
+            status: "kedaluarsa",
+            value: "expire"
+        },
+        {
+            status: "refund",
+            value: "refund"
+        },
+        {
+            status: "chargeback",
+            value: "chargeback"
+        }
+    ]
     const dataFilterPaymentType = ['bank_transfer', 'qris']
+
+    btnReset.addEventListener("click", function() {
+        urlParams.delete("date")
+
+        showFilterDate()
+        showBtnReset()
+        updateURL()
+        loadDataTransaction()
+    })
 
     filterStatus.addEventListener("change", function() {
         const value = this.value
 
-        switch(value) {
-            case "": 
+        switch (value) {
+            case "":
                 urlParams.delete("status")
-            break;
+                break;
             default:
                 urlParams.set("status", value)
         }
@@ -94,7 +126,38 @@
         loadDataTransaction()
     })
 
-    document.getElementById("filter-limit").addEventListener("change", function() {
+    filterPaymentType.addEventListener("change", function() {
+        const value = this.value
+
+        switch (value) {
+            case "":
+                urlParams.delete("payment-type")
+                break;
+            default:
+                urlParams.set("payment-type", value)
+        }
+
+        updateURL()
+        loadDataTransaction()
+    })
+
+    filterDate.addEventListener("change", function() {
+        const value = this.value
+
+        switch (value) {
+            case "":
+                urlParams.delete("date")
+                break;
+            default:
+                urlParams.set("date", value)
+        }
+
+        showBtnReset()
+        updateURL()
+        loadDataTransaction()
+    })
+
+    filterLimit.addEventListener("change", function() {
         const value = this.value
         urlParams.set("limit", value)
         urlParams.set("page", 1)
@@ -142,11 +205,51 @@
         }).join(" ")
 
         const rows = `
-            <option value="">All</option>
+            <option value="">Status</option>
             ${row}
         `
 
         filterStatus.innerHTML = rows;
+    }
+
+    const showFilterPaymentType = () => {
+        filterPaymentType.innerHTML = ""
+
+        const row = dataFilterPaymentType.map(type => {
+            return (
+                `
+                <option value="${type}">${type}</option>
+                `
+            )
+        }).join(" ")
+
+        const rows = `
+            <option value="">Payment Type</option>
+            ${row}
+        `
+
+        filterPaymentType.innerHTML = rows
+    }
+
+    const showFilterDate = () => {
+        const isShow = urlParams.get("date") ? true : false
+
+        isShow ? filterDate.value = urlParams.get("date").toString() : filterDate.value = ""
+    }
+
+    const showBtnReset = () => {
+        const isShow = urlParams.get("date") ? true : false
+
+        switch (isShow) {
+            case true:
+                btnReset.classList.remove("hidden")
+                break;
+            case false:
+                btnReset.classList.add("hidden")
+                break;
+            default:
+                btnReset.classList.add("hidden")
+        }
     }
 
     const showTransactionList = (dataTransaction) => {
@@ -299,6 +402,9 @@
 
     loadDataTransaction()
     showFilterStatus()
+    showFilterPaymentType()
+    showBtnReset()
+    showFilterDate()
     showFilterLimit()
 </script>
 @endsection

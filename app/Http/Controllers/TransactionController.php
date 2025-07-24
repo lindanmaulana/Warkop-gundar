@@ -37,11 +37,19 @@ class TransactionController extends Controller
         $limit = max(1, (int)$queryLimit);
 
         $queryStatus = $request->query("status");
+        $queryPaymentType = $request->query("payment-type");
+        $queryDate = $request->query("date");
 
         if ($limit > 20) $limit = 5;
 
         $transactions = Transaction::when($queryStatus, function($query) use ($queryStatus) {
             $query->where("transaction_status", $queryStatus);
+        })
+        ->when($queryPaymentType, function($query) use ($queryPaymentType) {
+            $query->where("payment_type", $queryPaymentType);
+        })
+        ->when($queryDate, function($query) use ($queryDate) {
+            $query->whereDate("transaction_time", $queryDate);
         })
         ->paginate($limit);
 

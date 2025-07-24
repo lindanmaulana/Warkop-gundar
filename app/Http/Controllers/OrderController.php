@@ -33,7 +33,6 @@ class OrderController extends Controller
         if ($user->role === UserRole::Customer) {
             $orders = Order::where('user_id', $user->id)->with('orderItems')->get();
         } else {
-
             $orders = Order::with('user', 'orderItems')->get();
         }
 
@@ -44,8 +43,8 @@ class OrderController extends Controller
     {
         $order->load('orderItems.product', 'transactions');
 
-        if($order->transactions) {
-            if($order->transactions->raw_response) {
+        if ($order->transactions) {
+            if ($order->transactions->raw_response) {
                 $order->transactions->parsed_raw_response = json_decode($order->transactions->raw_response, true);
             } else {
                 $order->transactions->parsed_raw_resopnse = [];
@@ -184,7 +183,7 @@ class OrderController extends Controller
             'status' => ['required', new Enum(OrderStatus::class)],
         ]);
 
-        if($validatedData['status'] == OrderStatus::Pending->value) return redirect()->route("dashboard.orders", ['page' => 1, "limit" => 5])->with("error", "Pesanan sudah melewati tahap Pending. Perubahan ke status tersebut tidak diizinkan.");
+        if ($validatedData['status'] == OrderStatus::Pending->value) return redirect()->route("dashboard.orders", ['page' => 1, "limit" => 5])->with("error", "Pesanan sudah melewati tahap Pending. Perubahan ke status tersebut tidak diizinkan.");
 
         $order->update($validatedData);
 
@@ -218,12 +217,24 @@ class OrderController extends Controller
         $queryPage = $request->query('page');
         $queryLimit = $request->query('limit');
 
+        $queryStatus = $request->query("status");
+        $queryKeyword = $request->query("keyword");
+
         $page = max(1, (int)$queryPage);
         $limit = max(1, (int)$queryLimit);
 
         if ($limit > 20) $limit = 5;
 
-        $orders = Order::with('user', 'orderItems')->paginate($limit);
+        $orders = Order::with('user', 'orderItems')
+            ->when($queryStatus, function ($query) use ($queryStatus) {
+                $query->where('status', $queryStatus);
+            })
+            ->when($queryKeyword, function ($query) use ($queryKeyword) {
+                $query->whereHas('user', function ($q) use ($queryKeyword) {
+                    $q->where('name', 'like', "%{$queryKeyword}%");
+                });
+            })
+            ->paginate($limit);
 
         $orders->getCollection()->each(function ($order) {
             if ($order->relationLoaded('user') && $order->user) {
@@ -243,7 +254,7 @@ class OrderController extends Controller
         $items = [];
 
         foreach ($order->items as $item) {
-            $items[] = [ 
+            $items[] = [
                 'id' => $item->product_id,
                 'price' => $item->price,
                 'quantity' => $item->quantity,

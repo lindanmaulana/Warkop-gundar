@@ -9,14 +9,17 @@
 
 @section('content')
 @php
-    $isAdmin = Auth::user()->role->value == "admin"
+$isAdmin = Auth::user()->role->value == "admin"
 @endphp
 <div class="space-y-4">
     <div class="flex items-center justify-between">
         <h2 class="text-xl font-semibold text-primary">Order</h2>
-        <select name="" id="filter-status">
-            
-        </select>
+        <div>
+            <select name="status" id="filter-status" class="bg-secondary text-white px-2 rounded py-1">
+
+            </select>
+            <input id="filter-search" type="text" placeholder="Cari..." class="border border-dark-blue/20 rounded-lg px-4 py-1">
+        </div>
     </div>
     <div class="overflow-x-auto bg-white p-2 rounded-lg shadow-sm shadow-dark-blue/10">
         <table class="w-full text-left rounded-md overflow-hidden">
@@ -54,8 +57,53 @@
 <script>
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const urlParams = new URLSearchParams(window.location.search)
+    const filterStatus = document.getElementById("filter-status")
+    const filterSearch = document.getElementById("filter-search")
 
     const dataFilterLimit = [5, 10, 15, 20]
+    const dataFilterStatus = ["pending", "processing", "done", "cancelled"]
+
+
+    function debounce(fn, delay) {
+        let timeout;
+
+        return function(...args) {
+            clearTimeout(timeout)
+            timeout = setTimeout(() => fn.apply(this, args), delay)
+        }
+    }
+
+    filterSearch.defaultValue = urlParams.get("keyword") ? urlParams.get("keyword").toString() : ""
+    filterSearch.addEventListener("input", debounce(function() {
+        const value = this.value
+
+        switch (value) {
+            case "":
+                urlParams.delete("keyword")
+                break;
+            default:
+                urlParams.set("keyword", value)
+            break
+        }
+
+        updateURL()
+        loadDataOrder()
+    }, 1000))
+
+    filterStatus.addEventListener("change", function() {
+        const value = this.value
+
+        switch (value) {
+            case "":
+                urlParams.delete("status")
+                break;
+            default:
+                urlParams.set("status", value)
+        }
+
+        updateURL()
+        loadDataOrder()
+    })
 
     document.getElementById("filter-limit").addEventListener("change", function() {
         const value = this.value
@@ -65,6 +113,28 @@
         updateURL()
         loadDataOrder()
     })
+
+    const showFilterStatus = () => {
+        const params = new URLSearchParams(window.location.search)
+        const queryStatus = params.get("status") ? params.get("status").toString() : ""
+        filterStatus.innerHTML = ""
+
+        const row = dataFilterStatus.map((status) => {
+
+            return (
+                `
+                <option value="${status}" ${status === queryStatus ? "selected" : ""}>${status}</option>
+                `
+            )
+        }).join(" ")
+
+        const rowStatus = `
+        <option value="">All</option>
+        ${row}
+        `
+
+        filterStatus.innerHTML = rowStatus;
+    }
 
     const showFilterLimit = () => {
         const urlParams = new URLSearchParams(window.location.search)
@@ -121,9 +191,9 @@
                     statusOrder = '<p class="text-sm rounded px-2 py-1 text-center bg-yellow-600 text-white">Pending</p>'
                     actionUpdate = `<a href="/dashboard/orders/${order.id}/update" class="text-royal-blue cursor-pointer"><x-icon name="pencil" /></a>`
                     break;
-                    case "processing":
-                        statusOrder = '<p class="text-sm rounded px-2 py-1 text-center bg-blue-800 text-white">Processing</p>'
-                        actionUpdate = `<a href="/dashboard/orders/${order.id}/update" class="text-royal-blue cursor-pointer"><x-icon name="pencil" /></a>`
+                case "processing":
+                    statusOrder = '<p class="text-sm rounded px-2 py-1 text-center bg-blue-800 text-white">Processing</p>'
+                    actionUpdate = `<a href="/dashboard/orders/${order.id}/update" class="text-royal-blue cursor-pointer"><x-icon name="pencil" /></a>`
                     break
                 case "done":
                     statusOrder = '<p class="text-sm rounded px-2 py-1 text-center bg-green-800 text-white">Done</p>'
@@ -132,7 +202,7 @@
                     statusOrder = '<p class="text-sm rounded px-2 py-1 text-center bg-red-800 text-white">Cancelled</p>'
             }
 
-            if(!isAdmin) {
+            if (!isAdmin) {
                 actionUpdate = ""
             }
 
@@ -242,6 +312,7 @@
     }
 
     showFilterLimit()
+    showFilterStatus()
     loadDataOrder()
 </script>
 @endsection

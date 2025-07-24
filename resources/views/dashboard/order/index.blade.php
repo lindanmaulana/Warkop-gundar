@@ -19,6 +19,8 @@ $isAdmin = Auth::user()->role->value == "admin"
 
             </select>
             <input id="filter-search" type="text" placeholder="Cari..." class="border border-dark-blue/20 rounded-lg px-4 py-1">
+            <input id="filter-date" type="date" placeholder="Tanggal Transaksi" class="border border-secondary/20 text-secondary px-2 rounded py-1">
+            <button id="btn-reset" class="hidden bg-red-500 text-sm px-2 py-1 rounded text-white">Reset</button>
         </div>
     </div>
     <div class="overflow-x-auto bg-white p-2 rounded-lg shadow-sm shadow-dark-blue/10">
@@ -59,6 +61,8 @@ $isAdmin = Auth::user()->role->value == "admin"
     const urlParams = new URLSearchParams(window.location.search)
     const filterStatus = document.getElementById("filter-status")
     const filterSearch = document.getElementById("filter-search")
+    const filterDate = document.getElementById("filter-date")
+    const btnReset = document.getElementById("btn-reset")
 
     const dataFilterLimit = [5, 10, 15, 20]
     const dataFilterStatus = ["pending", "processing", "done", "cancelled"]
@@ -83,7 +87,7 @@ $isAdmin = Auth::user()->role->value == "admin"
                 break;
             default:
                 urlParams.set("keyword", value)
-            break
+                break
         }
 
         updateURL()
@@ -101,6 +105,31 @@ $isAdmin = Auth::user()->role->value == "admin"
                 urlParams.set("status", value)
         }
 
+        updateURL()
+        loadDataOrder()
+    })
+
+    filterDate.addEventListener("change", function() {
+        const value = this.value
+
+        switch (value) {
+            case "":
+                urlParams.delete("date")
+                break;
+            default:
+                urlParams.set("date", value)
+        }
+
+        showBtnReset()
+        updateURL()
+        loadDataOrder()
+    })
+
+    btnReset.addEventListener("click", function() {
+        urlParams.delete("date")
+
+        showBtnReset()
+        showFilterDate()
         updateURL()
         loadDataOrder()
     })
@@ -134,6 +163,27 @@ $isAdmin = Auth::user()->role->value == "admin"
         `
 
         filterStatus.innerHTML = rowStatus;
+    }
+
+    const showFilterDate = () => {
+        const isShow = urlParams.get("date") ? true : false
+
+        isShow ? filterDate.value = urlParams.get("date").toString() : filterDate.value = ""
+    }
+
+    const showBtnReset = () => {
+        const isShow = urlParams.get("date") ? true : false
+
+        switch (isShow) {
+            case true:
+                btnReset.classList.remove("hidden")
+                break;
+            case false:
+                btnReset.classList.add("hidden")
+                break;
+            default:
+                btnReset.classList.add("hidden")
+        }
     }
 
     const showFilterLimit = () => {
@@ -313,6 +363,7 @@ $isAdmin = Auth::user()->role->value == "admin"
 
     showFilterLimit()
     showFilterStatus()
+    showBtnReset()
     loadDataOrder()
 </script>
 @endsection

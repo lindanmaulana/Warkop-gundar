@@ -102,14 +102,6 @@
     ]
     const dataFilterPaymentType = ['bank_transfer', 'qris']
 
-    btnReset.addEventListener("click", function() {
-        urlParams.delete("date")
-
-        showFilterDate()
-        showBtnReset()
-        updateURL()
-        loadDataTransaction()
-    })
 
     filterStatus.addEventListener("change", function() {
         const value = this.value
@@ -152,6 +144,15 @@
                 urlParams.set("date", value)
         }
 
+        showBtnReset()
+        updateURL()
+        loadDataTransaction()
+    })
+
+    btnReset.addEventListener("click", function() {
+        urlParams.delete("date")
+
+        showFilterDate()
         showBtnReset()
         updateURL()
         loadDataTransaction()

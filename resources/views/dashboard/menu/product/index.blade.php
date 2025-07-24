@@ -10,7 +10,7 @@
 
 @section('content')
 @php
-$isAdmin = Auth::user()->role->value == "admin"
+    $isAdmin = Auth::user()->role->value == "admin"
 @endphp
 <div class="space-y-4">
     <div class="p-2 flex items-center justify-between">
@@ -18,7 +18,7 @@ $isAdmin = Auth::user()->role->value == "admin"
         <div class="flex items-center gap-2">
             <form id="categoryFilterForm" action="{{ route('dashboard.menu.products') }}" method="GET">
                 <select name="category" id="category_filter" class="bg-secondary text-white px-2 rounded py-1">
-                    
+
                 </select>
             </form>
             <input id="filter-search" type="text" placeholder="Cari..." class="border border-dark-blue/20 rounded-lg px-4 py-1">

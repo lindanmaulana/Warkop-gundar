@@ -219,6 +219,7 @@ class OrderController extends Controller
 
         $queryStatus = $request->query("status");
         $queryKeyword = $request->query("keyword");
+        $queryDate = $request->query("date");
 
         $page = max(1, (int)$queryPage);
         $limit = max(1, (int)$queryLimit);
@@ -233,6 +234,9 @@ class OrderController extends Controller
                 $query->whereHas('user', function ($q) use ($queryKeyword) {
                     $q->where('name', 'like', "%{$queryKeyword}%");
                 });
+            })
+            ->when($queryDate, function($query) use ($queryDate) {
+                $query->whereDate("created_at", $queryDate);
             })
             ->paginate($limit);
 

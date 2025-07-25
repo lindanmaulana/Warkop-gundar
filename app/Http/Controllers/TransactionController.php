@@ -51,6 +51,7 @@ class TransactionController extends Controller
         ->when($queryDate, function($query) use ($queryDate) {
             $query->whereDate("transaction_time", $queryDate);
         })
+        ->latest()
         ->paginate($limit);
 
 

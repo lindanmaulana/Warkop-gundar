@@ -227,6 +227,7 @@ class OrderController extends Controller
         if ($limit > 20) $limit = 5;
 
         $orders = Order::with('user', 'orderItems')
+            ->latest()
             ->when($queryStatus, function ($query) use ($queryStatus) {
                 $query->where('status', $queryStatus);
             })
